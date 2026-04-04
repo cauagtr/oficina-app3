@@ -418,12 +418,20 @@ function doBusca(){
 function buscarPorCPF(cpf){
   var clean = cpf.replace(/\D/g,'');
   if(clean.length < 8){ document.getElementById('busca-erro').textContent='CPF inválido.'; document.getElementById('busca-resultado').innerHTML=''; return; }
-  sb().from('clientes').select('*').ilike('cpf','%'+clean+'%').limit(3).then(function(res){
+  // Busca com máscara (000.000.000-00) E sem máscara (só números) — cobre qualquer formato salvo no banco
+  var comMascara = clean.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  Promise.all([
+    sb().from('clientes').select('*').ilike('cpf','%'+comMascara+'%').limit(3),
+    sb().from('clientes').select('*').ilike('cpf','%'+clean+'%').limit(3)
+  ]).then(function(results){
     document.getElementById('busca-resultado').innerHTML = '';
-    var lista = res.data||[];
-    if(!lista.length){ mostrarNaoEncontrado('CPF'); return; }
-    if(lista.length===1){ mostrarCliente(lista[0]); return; }
-    mostrarListaClientes(lista);
+    var todos = results[0].data||[];
+    (results[1].data||[]).forEach(function(c){
+      if(!todos.find(function(x){ return x.id===c.id; })) todos.push(c);
+    });
+    if(!todos.length){ mostrarNaoEncontrado('CPF'); return; }
+    if(todos.length===1){ mostrarCliente(todos[0]); return; }
+    mostrarListaClientes(todos);
   });
 }
 
