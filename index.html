@@ -4,176 +4,293 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Acompanhe seu Veículo</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#1a2332;--amber:#f59e0b;--amber2:#fbbf24;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;--blue:#3b82f6;--bg:#f0f2f5;--card:#ffffff;--border:#e2e8f0;--text:#0f172a;--muted:#64748b;--radius:0.85rem}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{min-height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text)}
+:root{
+  --navy:#111827;--amber:#f59e0b;--amber2:#fbbf24;--green:#10b981;
+  --red:#ef4444;--blue:#3b82f6;--orange:#f97316;
+  --bg:#f8f9fa;--card:#ffffff;--border:#e5e7eb;--text:#111827;--muted:#6b7280;
+  --radius:0.8rem;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
 .hidden{display:none!important}
 
 /* HERO */
-.hero{background:var(--navy);padding:2.5rem 1.25rem 2rem;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(245,158,11,.18) 0%,transparent 60%)}
-.hero-icon{font-size:2.5rem;margin-bottom:.5rem;position:relative;z-index:1}
-.hero-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#fff;position:relative;z-index:1}
+.hero{background:var(--navy);padding:2.75rem 1.25rem 2.25rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(245,158,11,.15) 0%,transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(59,130,246,.08) 0%,transparent 50%)}
+.hero-logo{font-size:.7rem;font-weight:800;letter-spacing:.18em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:1.25rem;position:relative;z-index:1}
+.hero-title{font-size:1.85rem;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.15;position:relative;z-index:1}
 .hero-title span{color:var(--amber)}
-.hero-sub{color:rgba(255,255,255,.5);font-size:.88rem;margin-top:.35rem;margin-bottom:1.75rem;position:relative;z-index:1}
+.hero-sub{color:rgba(255,255,255,.45);font-size:.85rem;margin-top:.4rem;margin-bottom:2rem;position:relative;z-index:1;font-weight:500}
 
-/* SEARCH */
-.search-wrap{position:relative;z-index:1}
-.search-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:.85rem}
-.search-tab{padding:.4rem 1rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.2);background:none;color:rgba(255,255,255,.6);font-size:.82rem;font-weight:600;cursor:pointer;transition:.2s}
+/* BUSCA */
+.search-wrap{position:relative;z-index:1;max-width:440px;margin:0 auto}
+.search-tabs{display:flex;gap:.4rem;justify-content:center;margin-bottom:.85rem}
+.search-tab{padding:.38rem .9rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.18);background:none;color:rgba(255,255,255,.55);font-size:.78rem;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit;letter-spacing:.02em}
 .search-tab.active{background:var(--amber);border-color:var(--amber);color:var(--navy)}
-.search-box{display:flex;gap:.5rem;align-items:center;max-width:420px;margin:0 auto}
-.search-input{flex:1;padding:.8rem 1rem;border-radius:.65rem;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.1);color:#fff;font-size:1rem;font-family:'DM Sans',sans-serif;outline:none;transition:.2s}
-.search-input::placeholder{color:rgba(255,255,255,.4)}
-.search-input:focus{border-color:var(--amber);background:rgba(245,158,11,.08)}
-.btn-search{padding:.8rem 1.2rem;background:var(--amber);border:none;border-radius:.65rem;color:var(--navy);font-weight:700;font-size:.95rem;cursor:pointer;transition:.2s;white-space:nowrap}
-.btn-search:active{background:var(--amber2);transform:scale(.97)}
+.search-row{display:flex;gap:.45rem;align-items:stretch}
+.search-input{flex:1;padding:.82rem 1rem;border-radius:.65rem;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.09);color:#fff;font-size:.95rem;font-family:inherit;outline:none;transition:.2s}
+.search-input::placeholder{color:rgba(255,255,255,.35)}
+.search-input:focus{border-color:var(--amber);background:rgba(245,158,11,.07)}
+.btn-buscar{padding:.82rem 1.15rem;background:var(--amber);border:none;border-radius:.65rem;color:var(--navy);font-weight:800;font-size:.9rem;cursor:pointer;white-space:nowrap;font-family:inherit;transition:.2s;flex-shrink:0}
+.btn-buscar:active{background:var(--amber2);transform:scale(.97)}
+.busca-erro{color:#fca5a5;font-size:.8rem;margin-top:.65rem;min-height:1.1rem;text-align:center;font-weight:500}
 
-/* CONTEÚDO */
-.container{max-width:560px;margin:0 auto;padding:1.25rem 1rem}
-.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:.85rem}
-.card-header{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-family:'Syne',sans-serif;font-size:.92rem;font-weight:700}
-.card-body{padding:1.1rem}
+/* CONTAINER */
+.container{max-width:540px;margin:0 auto;padding:1.1rem 1rem}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:.8rem;overflow:hidden}
+.card-header{padding:.82rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:.82rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em}
+.card-body{padding:1rem 1.1rem}
+
+/* STATUS DESTAQUE */
+.status-box{border-radius:var(--radius);padding:1.4rem 1.1rem;margin-bottom:.8rem;text-align:center;cursor:pointer;transition:.15s}
+.status-box:active{transform:scale(.99)}
+.status-box.na_fila{background:#f8fafc;border:2px solid #cbd5e1}
+.status-box.em_manutencao{background:#eff6ff;border:2px solid #93c5fd}
+.status-box.aguardando_peca{background:#fffbeb;border:2px solid #fcd34d}
+.status-box.pronto_retirada{background:#f0fdf4;border:2px solid #4ade80}
+.status-box.pronto_retirada .s-titulo{color:#065f46}
+.status-emoji{font-size:2.25rem;margin-bottom:.35rem;line-height:1}
+.s-titulo{font-size:1rem;font-weight:800;margin-bottom:.2rem;letter-spacing:-.02em}
+.s-sub{font-size:.82rem;color:var(--muted);font-weight:500}
 
 /* TABS */
-.tabs{display:flex;gap:.3rem;background:#f1f5f9;padding:.3rem;border-radius:.6rem;margin-bottom:1rem}
-.tab{flex:1;padding:.5rem .5rem;border-radius:.45rem;border:none;background:none;cursor:pointer;font-size:.78rem;font-weight:600;color:var(--muted);transition:.2s;text-align:center}
+.tabs{display:flex;gap:.25rem;background:#f1f5f9;padding:.28rem;border-radius:.65rem;margin-bottom:.85rem}
+.tab{flex:1;padding:.48rem .3rem;border-radius:.45rem;border:none;background:none;cursor:pointer;font-size:.75rem;font-weight:700;color:var(--muted);transition:.2s;text-align:center;font-family:inherit;white-space:nowrap}
 .tab.active{background:var(--card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .tab-content{display:none}
 .tab-content.active{display:block}
 
 /* BADGES */
-.badge{display:inline-block;padding:.28rem .65rem;border-radius:999px;font-size:.72rem;font-weight:700;line-height:1}
-.badge-na-fila{background:#f1f5f9;color:#64748b}
-.badge-manutencao{background:#dbeafe;color:#1d4ed8}
-.badge-aguardando{background:#ffedd5;color:#c2410c}
-.badge-pronto{background:#d1fae5;color:#065f46}
-.badge-pago{background:#064e3b;color:#a7f3d0}
-.badge-cancelado{background:#fee2e2;color:#b91c1c}
-.badge-novo{background:#f1f5f9;color:#64748b}
-.badge-vip{background:#fef3c7;color:#92400e}
+.badge{display:inline-flex;align-items:center;padding:.22rem .6rem;border-radius:999px;font-size:.67rem;font-weight:800;line-height:1;letter-spacing:.02em;white-space:nowrap}
+.b-fila{background:#f1f5f9;color:#475569}
+.b-manut{background:#dbeafe;color:#1d4ed8}
+.b-aguard{background:#fef3c7;color:#92400e}
+.b-pronto{background:#d1fae5;color:#065f46}
+.b-pago{background:#064e3b;color:#a7f3d0}
+.b-cancelado{background:#fee2e2;color:#b91c1c}
+.b-novo{background:#f1f5f9;color:#475569}
+.b-vip{background:#fef3c7;color:#92400e}
 
-/* STATUS DESTAQUE */
-.status-destaque{border-radius:var(--radius);padding:1.25rem;margin-bottom:.85rem;text-align:center}
-.status-destaque.na_fila{background:#f8fafc;border:2px solid #cbd5e1}
-.status-destaque.em_manutencao{background:#eff6ff;border:2px solid #93c5fd}
-.status-destaque.aguardando_peca{background:#fff7ed;border:2px solid #fdba74}
-.status-destaque.pronto_retirada{background:#f0fdf4;border:2px solid #86efac}
-.status-destaque.pago{background:#f0fdf4;border:2px solid #86efac}
-.status-emoji{font-size:2.5rem;margin-bottom:.35rem}
-.status-titulo{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.2rem}
-.status-sub{font-size:.82rem;color:var(--muted)}
-
-/* OS CARD */
-.os-item{padding:.85rem 1.1rem;border-bottom:1px solid var(--border)}
+/* OS ITEMS */
+.os-item{padding:.9rem 1.1rem;border-bottom:1px solid var(--border)}
 .os-item:last-child{border-bottom:none}
-.os-num{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700}
-.os-data{font-size:.75rem;color:var(--muted);margin-top:.1rem}
-.os-servicos{margin-top:.5rem}
-.os-servico-row{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:.35rem;margin-top:.2rem}
-.os-total{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--green)}
+.os-num{font-size:.9rem;font-weight:800;letter-spacing:-.02em}
+.os-data{font-size:.73rem;color:var(--muted);margin-top:.08rem;font-weight:500}
+.os-serv-row{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.3rem;margin-top:.2rem}
+.os-total{font-size:.95rem;font-weight:800;color:var(--green)}
 
 /* PREVENTIVO */
-.prev-item{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.1rem;border-bottom:1px solid var(--border)}
+.prev-item{display:flex;align-items:flex-start;gap:.75rem;padding:.82rem 1.1rem;border-bottom:1px solid var(--border)}
 .prev-item:last-child{border-bottom:none}
-.prev-dot{width:.55rem;height:.55rem;border-radius:50%;flex-shrink:0}
-.prev-nome{font-weight:600;font-size:.88rem}
-.prev-data{font-size:.75rem;color:var(--muted);margin-top:.1rem}
-.prev-badge{margin-left:auto;flex-shrink:0}
+.prev-dot{width:.5rem;height:.5rem;border-radius:50%;flex-shrink:0;margin-top:.35rem}
+.prev-nome{font-weight:700;font-size:.88rem}
+.prev-data{font-size:.73rem;color:var(--muted);margin-top:.1rem;font-weight:500}
 
-/* AVALIAÇÃO */
-.star-wrap{display:flex;gap:.5rem;justify-content:center;margin:.75rem 0}
-.star-btn{font-size:2rem;background:none;border:none;cursor:pointer;transition:.2s;line-height:1;opacity:.35}
-.star-btn.ativo{opacity:1}
-.star-btn:hover{transform:scale(1.2);opacity:1}
-
-/* VEIC CARD */
-.veic-card{display:flex;align-items:center;gap:.85rem;padding:.85rem 1.1rem;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border)}
+/* VEÍCULO CARD */
+.veic-card{display:flex;align-items:center;gap:.85rem;padding:.9rem 1.1rem;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border)}
 .veic-card:last-child{border-bottom:none}
 .veic-card:active{background:#f8fafc}
-.veic-placa{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;background:var(--navy);color:#fff;padding:.25rem .6rem;border-radius:.4rem;letter-spacing:.06em}
-.veic-info{flex:1}
-.veic-nome{font-weight:600;font-size:.9rem}
-.veic-sub{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+.veic-placa{background:var(--navy);color:#fff;font-size:.88rem;font-weight:800;padding:.28rem .65rem;border-radius:.4rem;letter-spacing:.06em;flex-shrink:0}
+.veic-nome{font-weight:700;font-size:.9rem}
+.veic-sub{font-size:.73rem;color:var(--muted);margin-top:.1rem;font-weight:500}
 
 /* BOTÕES */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.7rem 1.2rem;border-radius:.65rem;border:none;font-size:.9rem;font-weight:600;cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.7rem 1.2rem;border-radius:.65rem;border:none;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;text-decoration:none}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--amber);color:var(--navy)}
 .btn-whatsapp{background:#25d366;color:#fff}
-.btn-secondary{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.btn-secondary{background:var(--bg);color:var(--text);border:1.5px solid var(--border)}
 .btn-full{width:100%;display:flex}
-.btn-outline{background:none;border:1.5px solid var(--border);color:var(--muted)}
+.btn-lg{padding:.82rem 1.4rem;font-size:.92rem;border-radius:.7rem}
 
 /* SAUDAÇÃO */
-.saudacao{padding:1.1rem;display:flex;align-items:center;justify-content:space-between}
-.saudacao-nome{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800}
-.saudacao-sub{font-size:.8rem;color:var(--muted);margin-top:.1rem}
+.saudacao{padding:1rem 1.1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.saud-nome{font-size:1.05rem;font-weight:800;letter-spacing:-.02em}
+.saud-sub{font-size:.75rem;color:var(--muted);margin-top:.1rem;font-weight:500}
 
-/* LOADING / EMPTY */
-.loading{text-align:center;padding:2.5rem;color:var(--muted)}
-.loading-spin{font-size:1.5rem;animation:spin .8s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty{text-align:center;padding:2rem;color:var(--muted)}
-.empty-icon{font-size:2.5rem;margin-bottom:.5rem}
-.empty-msg{font-size:.88rem}
+/* STARS */
+.star-wrap{display:flex;gap:.4rem;justify-content:center;margin:.65rem 0}
+.star-btn{font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:.3;transition:.2s;line-height:1}
+.star-btn.ativo{opacity:1}
 
-/* ALERT */
-.alert{padding:.85rem 1rem;border-radius:.65rem;font-size:.85rem;margin-bottom:.85rem}
-.alert-success{background:#d1fae5;color:#065f46;border-left:4px solid var(--green)}
-.alert-warning{background:#fef3c7;color:#92400e;border-left:4px solid var(--yellow)}
-.alert-info{background:#dbeafe;color:#1d4ed8;border-left:4px solid var(--blue)}
+/* BACK BAR */
+.back-bar{display:flex;align-items:center;gap:.6rem;padding:.8rem 1rem;background:var(--card);border-bottom:1px solid var(--border);cursor:pointer;position:sticky;top:0;z-index:50}
+.back-bar span{font-size:.88rem;font-weight:600;color:var(--muted)}
+.back-bar strong{font-size:.88rem;font-weight:700;color:var(--text)}
+
+/* ALERTS */
+.alert{padding:.8rem 1rem;border-radius:.65rem;font-size:.82rem;margin-bottom:.75rem;border-left:3px solid;font-weight:500}
+.alert-success{background:#f0fdf4;color:#065f46;border-color:var(--green)}
+.alert-info{background:#eff6ff;color:#1d4ed8;border-color:var(--blue)}
+.alert-warning{background:#fffbeb;color:#92400e;border-color:var(--amber)}
 
 /* TOAST */
-#toast{position:fixed;bottom:1.5rem;left:1rem;right:1rem;max-width:480px;margin:0 auto;padding:.85rem 1.1rem;border-radius:.75rem;font-size:.9rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);text-align:center}
-#toast.success{background:#0f172a;color:#a7f3d0;border-left:4px solid var(--green)}
-#toast.error{background:#0f172a;color:#fca5a5;border-left:4px solid var(--red)}
+#toast{position:fixed;bottom:1.25rem;left:1rem;right:1rem;max-width:480px;margin:0 auto;padding:.82rem 1.1rem;border-radius:.7rem;font-size:.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.18);text-align:center}
+#toast.success{background:#0f172a;color:#a7f3d0;border-left:3px solid var(--green)}
+#toast.error{background:#0f172a;color:#fca5a5;border-left:3px solid var(--red)}
 
-/* BACK BTN */
-.back-bar{display:flex;align-items:center;gap:.6rem;padding:.85rem 1rem;background:var(--card);border-bottom:1px solid var(--border);cursor:pointer}
-.back-bar span{font-size:.88rem;font-weight:600;color:var(--muted)}
+/* LOADING */
+.loading{text-align:center;padding:2.5rem;color:var(--muted)}
+.spinner{width:20px;height:20px;border:2.5px solid var(--border);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
 
+/* VAZIO */
+.empty{text-align:center;padding:2rem;color:var(--muted)}
+.empty-icon{font-size:2.25rem;margin-bottom:.5rem}
+.empty-msg{font-size:.85rem;line-height:1.6;font-weight:500}
+
+/* SEÇÃO SERVIÇOS */
+.servicos-section{background:var(--card);border-top:1px solid var(--border)}
+.servicos-inner{max-width:540px;margin:0 auto;padding:2rem 1rem 1.5rem}
+.servicos-label{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:.4rem}
+.servicos-title{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;color:var(--navy);margin-bottom:.35rem}
+.servicos-sub{font-size:.82rem;color:var(--muted);font-weight:500;margin-bottom:1.5rem;line-height:1.6}
+.servicos-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.5rem}
+.serv-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.75rem;padding:.9rem;transition:.2s;cursor:default}
+.serv-card:hover{border-color:var(--amber);background:#fffbeb}
+.serv-icon{font-size:1.5rem;margin-bottom:.45rem;line-height:1}
+.serv-nome{font-size:.85rem;font-weight:800;color:var(--navy);margin-bottom:.15rem;letter-spacing:-.01em}
+.serv-desc{font-size:.72rem;color:var(--muted);font-weight:500;line-height:1.45}
+.servicos-cta{background:var(--navy);border-radius:.75rem;padding:1.25rem;text-align:center;margin-bottom:1rem}
+.servicos-cta p{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:.75rem;font-weight:500}
+.btn-wa-cta{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:#25d366;color:#fff;padding:.75rem 1.5rem;border-radius:.65rem;font-weight:800;font-size:.9rem;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:.2s;width:100%}
+.btn-wa-cta:active{transform:scale(.97)}
+.diferenciais{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1.25rem}
+.dif-item{text-align:center;padding:.75rem .4rem;background:var(--bg);border-radius:.65rem;border:1px solid var(--border)}
+.dif-icon{font-size:1.2rem;margin-bottom:.25rem}
+.dif-txt{font-size:.68rem;font-weight:700;color:var(--navy);line-height:1.3}
 /* FOOTER */
-.footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.78rem}
+.footer{text-align:center;padding:2rem 1rem 2.5rem;color:var(--muted);font-size:.75rem;font-weight:500}
 
-/* PRINT */
+/* PLACA DISPLAY */
+.placa-display{background:var(--navy);color:#fff;font-size:1.15rem;font-weight:800;padding:.4rem .9rem;border-radius:.5rem;letter-spacing:.08em;display:inline-block}
+
+/* URL CPF AUTO */
+.url-hint{color:rgba(255,255,255,.35);font-size:.72rem;margin-top:.5rem;text-align:center}
+
+@media(max-width:360px){
+  .hero-title{font-size:1.6rem}
+  .search-tab{padding:.35rem .7rem;font-size:.75rem}
+}
 @media print{.hero,.back-bar,.btn-whatsapp,.star-wrap,#toast{display:none!important}.container{padding:0}}
 </style>
 </head>
 <body>
 
-<!-- ═══ HERO / BUSCA ══════════════════════════════════════ -->
+<!-- TELA BUSCA -->
 <div id="tela-busca">
   <div class="hero">
-    <div class="hero-icon">🔧</div>
-    <div class="hero-title">Oficina <span>Online</span></div>
-    <div class="hero-sub">Acompanhe seu veículo em tempo real</div>
+    <div class="hero-logo">Oficina Digital</div>
+    <div class="hero-title">Acompanhe seu <span>veículo</span></div>
+    <div class="hero-sub">Status em tempo real, histórico e revisões</div>
 
     <div class="search-wrap">
       <div class="search-tabs">
-        <button class="search-tab active" id="tab-cpf" onclick="setModo('cpf')">🪪 Buscar por CPF</button>
-        <button class="search-tab" id="tab-placa" onclick="setModo('placa')">🚗 Buscar por Placa</button>
+        <button class="search-tab active" id="tab-cpf"   onclick="setModo('cpf')">CPF</button>
+        <button class="search-tab"        id="tab-placa" onclick="setModo('placa')">Placa</button>
+        <button class="search-tab"        id="tab-nome"  onclick="setModo('nome')">Nome</button>
       </div>
-      <div class="search-box">
+      <div class="search-row">
         <input class="search-input" type="text" id="busca-input"
-          placeholder="000.000.000-00" inputmode="text" autocomplete="off"
-          onkeyup="if(event.key==='Enter')doBusca()">
-        <button class="btn-search" onclick="doBusca()">Buscar</button>
+          placeholder="000.000.000-00" autocomplete="off"
+          onkeydown="if(event.key==='Enter')doBusca()">
+        <button class="btn-buscar" onclick="doBusca()">Buscar</button>
       </div>
-      <div id="busca-erro" style="color:#fca5a5;font-size:.82rem;margin-top:.75rem;min-height:1.2rem;text-align:center"></div>
+      <div class="busca-erro" id="busca-erro"></div>
     </div>
   </div>
+
   <div id="busca-resultado"></div>
-  <div class="footer">Dúvidas? Fale com a gente pelo WhatsApp</div>
+
+  <!-- SERVIÇOS -->
+  <div class="servicos-section" id="secao-servicos">
+    <div class="servicos-inner">
+
+      <div class="servicos-label">Nossos Serviços</div>
+      <div class="servicos-title" id="svc-titulo">O que fazemos por você</div>
+      <div class="servicos-sub">Atendimento especializado com qualidade e transparência em cada serviço.</div>
+
+      <div class="servicos-grid">
+        <div class="serv-card">
+          <div class="serv-icon">🔧</div>
+          <div class="serv-nome">Revisão Geral</div>
+          <div class="serv-desc">Inspeção completa de motor, freios, suspensão e fluidos</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">🛢️</div>
+          <div class="serv-nome">Troca de Óleo</div>
+          <div class="serv-desc">Troca de óleo e filtros com os melhores lubrificantes do mercado</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">🛑</div>
+          <div class="serv-nome">Freios</div>
+          <div class="serv-desc">Pastilhas, discos, tambores e fluido de freio</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">⚙️</div>
+          <div class="serv-nome">Suspensão</div>
+          <div class="serv-desc">Amortecedores, bieletas, buchas e balanceamento</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">❄️</div>
+          <div class="serv-nome">Ar-Condicionado</div>
+          <div class="serv-desc">Recarga, limpeza e manutenção do sistema de climatização</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">⚡</div>
+          <div class="serv-nome">Elétrica</div>
+          <div class="serv-desc">Diagnóstico eletrônico, bateria, alternador e motor de arranque</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">🔄</div>
+          <div class="serv-nome">Câmbio</div>
+          <div class="serv-desc">Manutenção e troca de óleo de câmbio automático e manual</div>
+        </div>
+        <div class="serv-card">
+          <div class="serv-icon">🚗</div>
+          <div class="serv-nome">Alinhamento</div>
+          <div class="serv-desc">Alinhamento e balanceamento para maior vida útil dos pneus</div>
+        </div>
+      </div>
+
+      <div class="diferenciais">
+        <div class="dif-item">
+          <div class="dif-icon">📱</div>
+          <div class="dif-txt">Acompanhe online</div>
+        </div>
+        <div class="dif-item">
+          <div class="dif-icon">🔎</div>
+          <div class="dif-txt">Diagnóstico digital</div>
+        </div>
+        <div class="dif-item">
+          <div class="dif-icon">✅</div>
+          <div class="dif-txt">Orçamento aprovado</div>
+        </div>
+      </div>
+
+      <div class="servicos-cta">
+        <p id="svc-cta-txt">Agende sua revisão agora mesmo — sem sair de casa</p>
+        <a class="btn-wa-cta" id="btn-wa-agendar" href="#" target="_blank">
+          Agendar via WhatsApp
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer" id="footer-txt">Dúvidas? Fale com a oficina pelo WhatsApp</div>
 </div>
 
-<!-- ═══ CLIENTE (lista veículos) ════════════════════════ -->
+<!-- TELA CLIENTE (lista veículos) -->
 <div id="tela-cliente" class="hidden">
   <div class="back-bar" onclick="voltarBusca()">
-    <span>←</span><span>Nova busca</span>
+    <span>←</span><strong>Nova busca</strong>
   </div>
   <div class="container">
     <div id="cliente-header"></div>
@@ -181,10 +298,10 @@ html,body{min-height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;
   </div>
 </div>
 
-<!-- ═══ VEÍCULO (detalhe completo) ══════════════════════ -->
+<!-- TELA VEÍCULO (detalhe) -->
 <div id="tela-veiculo" class="hidden">
-  <div class="back-bar" id="back-veiculo" onclick="voltarCliente()">
-    <span>←</span><span id="back-veiculo-label">Voltar</span>
+  <div class="back-bar" id="back-bar-veic" onclick="voltarCliente()">
+    <span>←</span><strong id="back-label">Voltar</strong>
   </div>
   <div class="container">
     <div id="veiculo-content"></div>
@@ -195,394 +312,466 @@ html,body{min-height:100%;background:var(--bg);font-family:'DM Sans',sans-serif;
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = 'https://phmtiulbrlnwjllcrjcf.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBobXRpdWxicmxud2psbGNyamNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NjgwODksImV4cCI6MjA5MDU0NDA4OX0.vsM7EZckDErY4rGLM-BTfmthW4ern9sT1TnIN6FT4ss';
+var SUPA_URL = 'https://phmtiulbrlnwjllcrjcf.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBobXRpdWxicmxud2psbGNyamNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NjgwODksImV4cCI6MjA5MDU0NDA4OX0.vsM7EZckDErY4rGLM-BTfmthW4ern9sT1TnIN6FT4ss';
 
-let _sb = null;
-function getSB(){ if(!_sb) _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); return _sb; }
+var _sb = null;
+function sb(){ if(!_sb) _sb = supabase.createClient(SUPA_URL, SUPA_KEY); return _sb; }
 
-// ── HELPERS ───────────────────────────────────────────────
-const brl    = v => 'R$\u00a0' + Math.abs(Number(v)||0).toLocaleString('pt-BR',{minimumFractionDigits:2});
-const brData = iso => { if(!iso) return '—'; const p=iso.substring(0,10).split('-'); return `${p[2]}/${p[1]}/${p[0]}`; };
-const maskCPF= v => v.replace(/\D/g,'').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-const isoHoje= () => new Date().toISOString().substring(0,10);
+// HELPERS
+function brl(v){ return 'R$\u00a0'+Math.abs(Number(v)||0).toLocaleString('pt-BR',{minimumFractionDigits:2}); }
+function dataBR(iso){ if(!iso) return '—'; var p=iso.substring(0,10).split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function maskCPF(v){ return v.replace(/\D/g,'').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); }
+function hoje(){ return new Date().toISOString().substring(0,10); }
 
-let _toastTimer;
-function toast(msg, tipo='success'){
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.className=`toast ${tipo}`;
+var _tTimer;
+function toast(msg, tipo){
+  tipo = tipo||'success';
+  var el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast '+tipo;
   el.classList.remove('hidden');
-  clearTimeout(_toastTimer);
-  _toastTimer=setTimeout(()=>el.classList.add('hidden'),3500);
+  clearTimeout(_tTimer);
+  _tTimer = setTimeout(function(){ el.classList.add('hidden'); }, 3500);
 }
 
-// ── MODO BUSCA ─────────────────────────────────────────────
-let _modo = 'cpf';
+// CARREGAR CONFIGURAÇÕES E PREENCHER SEÇÃO DE SERVIÇOS
+(function carregarConfigs(){
+  sb().from('configuracoes').select('chave,valor').then(function(res){
+    var cfg = {};
+    (res.data||[]).forEach(function(c){ cfg[c.chave]=c.valor; });
+    var nome  = cfg['nome_mecanica']  || '';
+    var tel   = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
+    var end   = cfg['endereco_mecanica'] || '';
+
+    // Título da seção
+    if(nome){
+      var tit = document.getElementById('svc-titulo');
+      if(tit) tit.textContent = 'Serviços da ' + nome;
+      var heroLogo = document.querySelector('.hero-logo');
+      if(heroLogo) heroLogo.textContent = nome;
+      var footer = document.getElementById('footer-txt');
+      if(footer) footer.textContent = nome + (end ? ' · ' + end : '');
+    }
+
+    // Botão WhatsApp
+    if(tel){
+      var msg = 'Olá'+(nome?' '+nome:'')+', gostaria de agendar um serviço!';
+      var btn = document.getElementById('btn-wa-agendar');
+      if(btn) btn.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msg);
+      var cta = document.getElementById('svc-cta-txt');
+      if(cta) cta.textContent = 'Agende pelo WhatsApp — respondemos na hora';
+    } else {
+      // Sem telefone: esconder botão WA
+      var btnEl = document.getElementById('btn-wa-agendar');
+      if(btnEl) btnEl.closest('.servicos-cta').style.display='none';
+    }
+  });
+})();
+var _modo = 'cpf';
 function setModo(m){
   _modo = m;
   document.getElementById('tab-cpf').classList.toggle('active', m==='cpf');
   document.getElementById('tab-placa').classList.toggle('active', m==='placa');
-  const inp = document.getElementById('busca-input');
+  document.getElementById('tab-nome').classList.toggle('active', m==='nome');
+  var inp = document.getElementById('busca-input');
   inp.value = '';
-  inp.placeholder = m==='cpf' ? '000.000.000-00' : 'ABC-1234';
-  inp.inputMode = m==='cpf' ? 'numeric' : 'text';
+  var ph = {cpf:'000.000.000-00', placa:'ABC-1234', nome:'Nome do cliente'};
+  inp.placeholder = ph[m]||'';
   document.getElementById('busca-erro').textContent = '';
   document.getElementById('busca-resultado').innerHTML = '';
 }
 
 document.getElementById('busca-input').addEventListener('input', function(){
   if(_modo==='cpf') this.value = maskCPF(this.value);
-  else this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g,'');
+  else if(_modo==='placa') this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g,'');
 });
 
-// ── BUSCA ──────────────────────────────────────────────────
-async function doBusca(){
-  const q = document.getElementById('busca-input').value.trim();
-  const erroEl = document.getElementById('busca-erro');
+// DETECTAR CPF NA URL (?cpf=...)
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var cpf = params.get('cpf');
+  var placa = params.get('placa');
+  if(cpf){
+    setModo('cpf');
+    document.getElementById('busca-input').value = maskCPF(cpf);
+    setTimeout(doBusca, 400);
+  } else if(placa){
+    setModo('placa');
+    document.getElementById('busca-input').value = placa.toUpperCase();
+    setTimeout(doBusca, 400);
+  }
+})();
+
+// BUSCA
+function doBusca(){
+  var q = document.getElementById('busca-input').value.trim();
+  var erroEl = document.getElementById('busca-erro');
   erroEl.textContent = '';
-  if(!q){ erroEl.textContent = 'Digite um CPF ou placa para buscar.'; return; }
-
+  if(!q){ erroEl.textContent = 'Preencha o campo para buscar.'; return; }
   document.getElementById('busca-resultado').innerHTML =
-    '<div class="loading" style="color:rgba(255,255,255,.6)"><div class="loading-spin">⏳</div></div>';
-
-  if(_modo === 'placa'){
-    await buscarPorPlaca(q);
-  } else {
-    await buscarPorCPF(q);
-  }
+    '<div class="loading" style="color:rgba(255,255,255,.5)"><div class="spinner"></div></div>';
+  if(_modo==='placa') buscarPorPlaca(q);
+  else if(_modo==='nome') buscarPorNome(q);
+  else buscarPorCPF(q);
 }
 
-async function buscarPorCPF(cpf){
-  const sb = getSB();
-  const clean = cpf.replace(/\D/g,'');
-  if(clean.length < 11){ document.getElementById('busca-erro').textContent = 'CPF inválido.'; document.getElementById('busca-resultado').innerHTML=''; return; }
-
-  const {data:cli} = await sb.from('clientes').select('*').ilike('cpf','%'+clean+'%').limit(1).single();
-  document.getElementById('busca-resultado').innerHTML = '';
-
-  if(!cli){
-    document.getElementById('busca-resultado').innerHTML = `
-      <div style="padding:1.5rem 1rem;text-align:center">
-        <div class="empty" style="color:rgba(255,255,255,.6)">
-          <div class="empty-icon">😕</div>
-          <div class="empty-msg">CPF não encontrado no sistema.<br>Entre em contato com a oficina.</div>
-        </div>
-      </div>`;
-    return;
-  }
-  mostrarCliente(cli);
+function buscarPorCPF(cpf){
+  var clean = cpf.replace(/\D/g,'');
+  if(clean.length < 8){ document.getElementById('busca-erro').textContent='CPF inválido.'; document.getElementById('busca-resultado').innerHTML=''; return; }
+  sb().from('clientes').select('*').ilike('cpf','%'+clean+'%').limit(3).then(function(res){
+    document.getElementById('busca-resultado').innerHTML = '';
+    var lista = res.data||[];
+    if(!lista.length){ mostrarNaoEncontrado('CPF'); return; }
+    if(lista.length===1){ mostrarCliente(lista[0]); return; }
+    mostrarListaClientes(lista);
+  });
 }
 
-async function buscarPorPlaca(placa){
-  const sb = getSB();
-  const p = placa.replace(/[^A-Z0-9]/g,'');
-  const {data:veic} = await sb.from('veiculos').select('*,clientes(*)').ilike('placa','%'+p+'%').limit(1).single();
-  document.getElementById('busca-resultado').innerHTML = '';
-
-  if(!veic){
-    document.getElementById('busca-resultado').innerHTML = `
-      <div style="padding:1.5rem 1rem;text-align:center">
-        <div class="empty" style="color:rgba(255,255,255,.6)">
-          <div class="empty-icon">🚗</div>
-          <div class="empty-msg">Placa não encontrada no sistema.<br>Entre em contato com a oficina.</div>
-        </div>
-      </div>`;
-    return;
-  }
-  // Ir direto para o veículo
-  abrirVeiculo(veic, veic.clientes);
+function buscarPorPlaca(placa){
+  var p = placa.replace(/[^A-Z0-9]/g,'');
+  sb().from('veiculos').select('*,clientes(*)').ilike('placa','%'+p+'%').limit(3).then(function(res){
+    document.getElementById('busca-resultado').innerHTML = '';
+    var lista = res.data||[];
+    if(!lista.length){ mostrarNaoEncontrado('placa'); return; }
+    if(lista.length===1 && lista[0].clientes){ abrirVeiculo(lista[0], lista[0].clientes); return; }
+    // Múltiplos resultados
+    var html = '<div style="padding:.75rem 1rem;background:var(--card);margin-top:0;border-top:1px solid rgba(255,255,255,.1)">' +
+      '<div style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem">'+lista.length+' resultado(s)</div>';
+    lista.forEach(function(v){
+      html += '<div style="display:flex;align-items:center;gap:.75rem;padding:.82rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.4rem;cursor:pointer;background:#fff" onclick="abrirVeiculoById(\''+v.id+'\')">'+
+        '<div class="veic-placa">'+v.placa+'</div>'+
+        '<div><div class="veic-nome">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+'</div>'+
+        '<div class="veic-sub">'+(v.clientes?v.clientes.nome:'')+'</div></div>'+
+        '<span style="color:var(--muted);margin-left:auto">›</span></div>';
+    });
+    html += '</div>';
+    document.getElementById('busca-resultado').innerHTML = html;
+  });
 }
 
-// ── TELA CLIENTE ───────────────────────────────────────────
-let _clienteAtual = null;
+function buscarPorNome(nome){
+  if(nome.length<2){ document.getElementById('busca-erro').textContent='Digite ao menos 2 letras.'; document.getElementById('busca-resultado').innerHTML=''; return; }
+  sb().from('clientes').select('*').ilike('nome','%'+nome+'%').limit(5).then(function(res){
+    document.getElementById('busca-resultado').innerHTML = '';
+    var lista = res.data||[];
+    if(!lista.length){ mostrarNaoEncontrado('nome'); return; }
+    if(lista.length===1){ mostrarCliente(lista[0]); return; }
+    mostrarListaClientes(lista);
+  });
+}
 
-async function mostrarCliente(cli){
+function mostrarNaoEncontrado(tipo){
+  var msg = tipo==='CPF' ? 'CPF não encontrado. Entre em contato com a oficina.' : tipo==='placa' ? 'Placa não encontrada no sistema.' : 'Nenhum cliente encontrado.';
+  document.getElementById('busca-resultado').innerHTML =
+    '<div style="padding:1.5rem 1rem;text-align:center;color:rgba(255,255,255,.5)">'+
+    '<div style="font-size:2rem;margin-bottom:.5rem">?</div>'+
+    '<div style="font-size:.85rem;font-weight:500">'+msg+'</div></div>';
+}
+
+function mostrarListaClientes(lista){
+  var html = '<div style="padding:.75rem;background:var(--card);border-top:1px solid rgba(255,255,255,.1)">'+
+    '<div style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem;padding:.25rem">'+lista.length+' cliente(s) encontrado(s)</div>';
+  lista.forEach(function(c){
+    html += '<div style="display:flex;align-items:center;gap:.75rem;padding:.82rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.4rem;cursor:pointer;background:#fff" onclick="mostrarClienteById(\''+c.id+'\')">'+
+      '<div style="width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.88rem;flex-shrink:0">'+c.nome.charAt(0).toUpperCase()+'</div>'+
+      '<div><div style="font-weight:700;font-size:.9rem">'+c.nome+'</div>'+
+      '<div style="font-size:.75rem;color:var(--muted);margin-top:.05rem">'+(c.cpf||'')+(c.telefone?' · '+c.telefone:'')+'</div></div>'+
+      '<span style="color:var(--muted);margin-left:auto">›</span></div>';
+  });
+  html += '</div>';
+  document.getElementById('busca-resultado').innerHTML = html;
+}
+
+function mostrarClienteById(id){
+  sb().from('clientes').select('*').eq('id',id).single().then(function(res){
+    if(res.data) mostrarCliente(res.data);
+  });
+}
+
+function abrirVeiculoById(id){
+  sb().from('veiculos').select('*,clientes(*)').eq('id',id).single().then(function(res){
+    if(res.data) abrirVeiculo(res.data, res.data.clientes);
+  });
+}
+
+// TELA CLIENTE
+var _clienteAtual = null;
+
+function mostrarCliente(cli){
   _clienteAtual = cli;
-  const sb = getSB();
-  const {data:veics} = await sb.from('veiculos').select('*').eq('cliente_id', cli.id).order('created_at');
+  var el = document.getElementById('page-content');
 
-  // Verificar OS ativas
-  const {data:osAtivas} = await sb.from('ordens_servico')
-    .select('id,numero,status,veiculos(placa,modelo)')
-    .eq('cliente_id', cli.id)
-    .in('status',['na_fila','em_manutencao','aguardando_peca','pronto_retirada'])
-    .order('data_entrada',{ascending:false});
+  Promise.all([
+    sb().from('veiculos').select('*').eq('cliente_id',cli.id).order('created_at'),
+    sb().from('ordens_servico').select('id,numero,status,veiculos(placa,modelo,marca)').eq('cliente_id',cli.id).in('status',['na_fila','em_manutencao','aguardando_peca','pronto_retirada']).order('data_entrada',{ascending:false})
+  ]).then(function(results){
+    var veics = results[0].data||[];
+    var osAtivas = results[1].data||[];
 
-  const statusInfo = {
-    'na_fila':       {emoji:'🕐', txt:'Na Fila',             cor:'na_fila'},
-    'em_manutencao': {emoji:'🔧', txt:'Em Manutenção',       cor:'em_manutencao'},
-    'aguardando_peca':{emoji:'⏳',txt:'Aguardando Peça',     cor:'aguardando_peca'},
-    'pronto_retirada':{emoji:'✅',txt:'Pronto para Retirada!',cor:'pronto_retirada'},
-  };
+    var statusInfo = {
+      'na_fila':        {emoji:'🕐', txt:'Na Fila',              desc:'Seu veículo está na fila.', cls:'na_fila'},
+      'em_manutencao':  {emoji:'🔧', txt:'Em Manutenção',        desc:'Mecânicos trabalhando agora.', cls:'em_manutencao'},
+      'aguardando_peca':{emoji:'⏳', txt:'Aguardando Peça',      desc:'Aguardando chegada da peça.', cls:'aguardando_peca'},
+      'pronto_retirada':{emoji:'✅', txt:'Pronto para Retirada!',desc:'Pode vir buscar seu veículo.', cls:'pronto_retirada'}
+    };
 
-  let osAtivasHtml = '';
-  if(osAtivas && osAtivas.length > 0){
-    osAtivasHtml = osAtivas.map(os => {
-      const s = statusInfo[os.status] || {emoji:'🔧',txt:os.status,cor:''};
-      return `
-        <div class="status-destaque ${s.cor}" onclick="abrirVeiculoPorOS('${os.id}')">
-          <div class="status-emoji">${s.emoji}</div>
-          <div class="status-titulo">${s.txt}</div>
-          <div class="status-sub">🚗 ${os.veiculos?.placa||''} ${os.veiculos?.modelo||''} — OS ${os.numero}</div>
-          ${os.status==='pronto_retirada'?'<div style="margin-top:.5rem;font-size:.82rem;font-weight:600;color:#065f46">Seu carro está pronto! Venha buscar 🎉</div>':''}
-          <div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">Toque para ver detalhes →</div>
-        </div>`;
-    }).join('');
-  }
+    var osAtivasHtml = '';
+    osAtivas.forEach(function(os){
+      var s = statusInfo[os.status]||{emoji:'🔧',txt:os.status,desc:'',cls:''};
+      osAtivasHtml += '<div class="status-box '+s.cls+'" onclick="abrirVeiculoPorOS(\''+os.id+'\')">' +
+        '<div class="status-emoji">'+s.emoji+'</div>'+
+        '<div class="s-titulo">'+s.txt+'</div>'+
+        '<div class="s-sub">'+(os.veiculos?os.veiculos.placa+' — '+(os.veiculos.marca||'')+' '+(os.veiculos.modelo||''):'')+'</div>'+
+        '<div style="font-size:.72rem;color:var(--muted);margin-top:.35rem">OS '+os.numero+' · Toque para detalhes →</div>'+
+        '</div>';
+    });
 
-  document.getElementById('cliente-header').innerHTML = `
-    <div class="saudacao">
-      <div>
-        <div class="saudacao-nome">Olá, ${cli.nome.split(' ')[0]}! 👋</div>
-        <div class="saudacao-sub">${cli.cpf||''} • <span class="badge badge-${cli.status||'novo'}">${(cli.status||'novo').toUpperCase()}</span></div>
-      </div>
-    </div>
-    ${osAtivasHtml}
-  `;
+    var veicsHtml = '';
+    if(!veics.length){
+      veicsHtml = '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-msg">Nenhum veículo cadastrado.</div></div>';
+    } else {
+      veics.forEach(function(v){
+        veicsHtml += '<div class="veic-card" onclick="abrirVeiculo('+JSON.stringify(v).replace(/"/g,'&quot;')+','+JSON.stringify(cli).replace(/"/g,'&quot;')+')">' +
+          '<div class="veic-placa">'+v.placa+'</div>'+
+          '<div class="veic-info">'+
+          '<div class="veic-nome">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+'</div>'+
+          '<div class="veic-sub">'+(v.cor||'')+(v.combustivel?' · '+v.combustivel:'')+'</div>'+
+          '</div><span style="color:var(--muted)">›</span></div>';
+      });
+    }
 
-  document.getElementById('cliente-veiculos').innerHTML = `
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">🚗 Seus Veículos</div>
-      </div>
-      ${(veics||[]).length === 0
-        ? '<div class="empty" style="padding:1.5rem"><div class="empty-msg">Nenhum veículo cadastrado.</div></div>'
-        : (veics||[]).map(v=>`
-          <div class="veic-card" onclick="abrirVeiculo(${JSON.stringify(v).replace(/"/g,'&quot;')}, ${JSON.stringify(cli).replace(/"/g,'&quot;')})">
-            <div class="veic-placa">${v.placa}</div>
-            <div class="veic-info">
-              <div class="veic-nome">${v.marca||''} ${v.modelo||''} ${v.ano||''}</div>
-              <div class="veic-sub">${v.cor||''} ${v.combustivel?'• '+v.combustivel:''}</div>
-            </div>
-            <span style="color:var(--muted)">›</span>
-          </div>`).join('')}
-    </div>
-  `;
+    var primeiroNome = cli.nome ? cli.nome.split(' ')[0] : cli.nome;
+    document.getElementById('cliente-header').innerHTML =
+      '<div class="card" style="margin-bottom:.8rem">'+
+      '<div class="saudacao">'+
+      '<div>'+
+      '<div class="saud-nome">Olá, '+primeiroNome+'!</div>'+
+      '<div class="saud-sub">'+(cli.cpf||'')+(cli.telefone?' · '+cli.telefone:'')+'</div>'+
+      '</div>'+
+      '<span class="badge b-'+(cli.status||'novo')+'">'+(cli.status||'NOVO').toUpperCase()+'</span>'+
+      '</div></div>'+
+      osAtivasHtml;
 
-  document.getElementById('tela-busca').classList.add('hidden');
-  document.getElementById('tela-cliente').classList.remove('hidden');
-  document.getElementById('tela-veiculo').classList.add('hidden');
-  window.scrollTo(0,0);
+    document.getElementById('cliente-veiculos').innerHTML =
+      '<div class="card">'+
+      '<div class="card-header"><div class="card-title">Seus Veículos</div></div>'+
+      veicsHtml+
+      '</div>';
+
+    document.getElementById('tela-busca').classList.add('hidden');
+    document.getElementById('tela-cliente').classList.remove('hidden');
+    document.getElementById('tela-veiculo').classList.add('hidden');
+    window.scrollTo(0,0);
+  });
 }
 
-async function abrirVeiculoPorOS(osId){
-  const {data:os} = await getSB().from('ordens_servico').select('veiculo_id,veiculos(*),clientes(*)').eq('id',osId).single();
-  if(os?.veiculos) abrirVeiculo(os.veiculos, os.clientes);
+function abrirVeiculoPorOS(osId){
+  sb().from('ordens_servico').select('veiculo_id,veiculos(*),clientes(*)').eq('id',osId).single().then(function(res){
+    if(res.data && res.data.veiculos) abrirVeiculo(res.data.veiculos, res.data.clientes);
+  });
 }
 
-// ── TELA VEÍCULO ───────────────────────────────────────────
-let _veiculoAtual = null;
+// TELA VEÍCULO
+var _veicAtual = null;
 
-async function abrirVeiculo(veic, cli){
-  _veiculoAtual = veic;
-  _clienteAtual = cli || _clienteAtual;
-
-  document.getElementById('back-veiculo-label').textContent = cli ? `${cli.nome?.split(' ')[0] || 'Voltar'}` : 'Voltar';
-
-  const el = document.getElementById('veiculo-content');
-  el.innerHTML = '<div class="loading"><div class="loading-spin">⏳</div></div>';
-
+function abrirVeiculo(veic, cli){
+  _veicAtual = veic;
+  _clienteAtual = cli||_clienteAtual;
+  var primeiroNome = (_clienteAtual && _clienteAtual.nome) ? _clienteAtual.nome.split(' ')[0] : 'Voltar';
+  document.getElementById('back-label').textContent = primeiroNome;
+  var el = document.getElementById('veiculo-content');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
   document.getElementById('tela-busca').classList.add('hidden');
   document.getElementById('tela-cliente').classList.add('hidden');
   document.getElementById('tela-veiculo').classList.remove('hidden');
   window.scrollTo(0,0);
-
-  await renderVeiculo(el, veic, _clienteAtual);
+  renderVeiculo(el, veic, _clienteAtual);
 }
 
-async function renderVeiculo(el, veic, cli){
-  const sb = getSB();
-  const [
-    {data:osList},
-    {data:prevList}
-  ] = await Promise.all([
-    sb.from('ordens_servico').select('*,os_itens(*)').eq('veiculo_id', veic.id).order('data_entrada',{ascending:false}),
-    sb.from('plano_preventivo').select('*').eq('veiculo_id', veic.id).order('proxima_revisao')
-  ]);
+function renderVeiculo(el, veic, cli){
+  Promise.all([
+    sb().from('ordens_servico').select('*,os_itens(*)').eq('veiculo_id',veic.id).order('data_entrada',{ascending:false}),
+    sb().from('plano_preventivo').select('*').eq('veiculo_id',veic.id).order('proxima_revisao'),
+    sb().from('configuracoes').select('chave,valor')
+  ]).then(function(results){
+    var osList  = results[0].data||[];
+    var prevList= results[1].data||[];
+    var cfgArr  = results[2].data||[];
+    var cfg = {};
+    cfgArr.forEach(function(c){ cfg[c.chave]=c.valor; });
+    var nomeOf = cfg['nome_mecanica']||'Oficina';
+    var telOf  = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
 
-  // OS ativa (última não paga/cancelada)
-  const osAtiva = (osList||[]).find(o=>!['pago','cancelado'].includes(o.status));
+    var osAtiva = osList.find(function(o){ return ['na_fila','em_manutencao','aguardando_peca','pronto_retirada'].indexOf(o.status)>=0; });
 
-  const statusInfo = {
-    'na_fila':        {emoji:'🕐',txt:'Na Fila',             desc:'Seu veículo está na fila de atendimento.',cor:'na_fila'},
-    'em_manutencao':  {emoji:'🔧',txt:'Em Manutenção',       desc:'Nossos mecânicos estão trabalhando no seu veículo.',cor:'em_manutencao'},
-    'aguardando_peca':{emoji:'⏳',txt:'Aguardando Peça',     desc:'Estamos aguardando a chegada de uma peça.',cor:'aguardando_peca'},
-    'pronto_retirada':{emoji:'✅',txt:'Pronto para Retirada!',desc:'Seu veículo está pronto! Pode vir buscar.',cor:'pronto_retirada'},
-  };
+    var statusInfo = {
+      'na_fila':        {emoji:'🕐',txt:'Na Fila',              desc:'Seu veículo está na fila de atendimento.',cls:'na_fila'},
+      'em_manutencao':  {emoji:'🔧',txt:'Em Manutenção',        desc:'Nossos mecânicos estão trabalhando agora.',cls:'em_manutencao'},
+      'aguardando_peca':{emoji:'⏳',txt:'Aguardando Peça',      desc:'Aguardando chegada de uma peça.',cls:'aguardando_peca'},
+      'pronto_retirada':{emoji:'✅',txt:'Pronto para Retirada!',desc:'Seu veículo está pronto. Pode vir buscar!',cls:'pronto_retirada'}
+    };
 
-  // Telefone da oficina para WhatsApp
-  const telOficina = '5500000000000'; // será substituído pelas configs
+    var html = '';
 
-  const {data:cfgs} = await sb.from('configuracoes').select('chave,valor');
-  const cfg = {}; (cfgs||[]).forEach(c=>cfg[c.chave]=c.valor);
-  const nomeOficina = cfg['nome_mecanica'] || 'Oficina';
-  const telOf = cfg['telefone_mecanica']?.replace(/\D/g,'') || '';
+    // Card do veículo
+    html += '<div class="card" style="margin-bottom:.8rem">'+
+      '<div class="card-body">'+
+      '<div style="display:flex;align-items:center;gap:.85rem">'+
+      '<div class="placa-display">'+veic.placa+'</div>'+
+      '<div>'+
+      '<div style="font-weight:800;font-size:1rem">'+(veic.marca||'')+' '+(veic.modelo||'')+'</div>'+
+      '<div style="font-size:.75rem;color:var(--muted);margin-top:.1rem;font-weight:500">'+
+      (veic.ano||'')+(veic.cor?' · '+veic.cor:'')+(veic.combustivel?' · '+veic.combustivel:'')+
+      '</div></div></div>'+
+      '</div></div>';
 
-  // Header do veículo
-  let html = `
-    <div class="card" style="margin-bottom:.85rem">
-      <div class="card-body">
-        <div style="display:flex;align-items:center;gap:.85rem">
-          <div style="background:var(--navy);color:#fff;font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;padding:.4rem .85rem;border-radius:.5rem;letter-spacing:.07em">${veic.placa}</div>
-          <div>
-            <div style="font-weight:700;font-size:1rem">${veic.marca||''} ${veic.modelo||''}</div>
-            <div style="font-size:.78rem;color:var(--muted)">${veic.ano||''} ${veic.cor?'• '+veic.cor:''} ${veic.combustivel?'• '+veic.combustivel:''}</div>
-          </div>
-        </div>
-      </div>
-    </div>`;
+    // Status OS ativa
+    if(osAtiva){
+      var s = statusInfo[osAtiva.status]||{emoji:'🔧',txt:osAtiva.status,desc:'',cls:''};
+      html += '<div class="status-box '+s.cls+'">'+
+        '<div class="status-emoji">'+s.emoji+'</div>'+
+        '<div class="s-titulo">'+s.txt+'</div>'+
+        '<div class="s-sub">'+s.desc+'</div>'+
+        (osAtiva.data_previsao?'<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">Previsão: '+dataBR(osAtiva.data_previsao)+'</div>':'')+
+        '<div style="font-size:.72rem;color:var(--muted);margin-top:.2rem">OS '+osAtiva.numero+'</div>'+
+        '</div>';
+    }
 
-  // Status da OS ativa
-  if(osAtiva){
-    const s = statusInfo[osAtiva.status] || {emoji:'🔧',txt:osAtiva.status,desc:'',cor:''};
-    html += `
-      <div class="status-destaque ${s.cor}">
-        <div class="status-emoji">${s.emoji}</div>
-        <div class="status-titulo">${s.txt}</div>
-        <div class="status-sub">${s.desc}</div>
-        ${osAtiva.data_previsao?`<div style="font-size:.78rem;color:var(--muted);margin-top:.35rem">Previsão: ${brData(osAtiva.data_previsao)}</div>`:''}
-        <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem">OS ${osAtiva.numero}</div>
-      </div>`;
-  }
+    // WhatsApp agendar
+    if(telOf){
+      var msgWA = 'Olá '+nomeOf+'! Gostaria de agendar uma revisão para o veículo '+veic.placa+(veic.marca?' ('+veic.marca+' '+veic.modelo+')':'')+'.'
+      html += '<a class="btn btn-whatsapp btn-full btn-lg" style="margin-bottom:.85rem" href="https://wa.me/55'+telOf+'?text='+encodeURIComponent(msgWA)+'" target="_blank">Agendar Revisão via WhatsApp</a>';
+    }
 
-  // Botão agendar via WhatsApp
-  if(telOf){
-    const msg = encodeURIComponent(`Olá ${nomeOficina}! Gostaria de agendar uma revisão para meu veículo ${veic.placa} (${veic.marca||''} ${veic.modelo||''}).`);
-    html += `<a class="btn btn-whatsapp btn-full" style="margin-bottom:.85rem" href="https://wa.me/55${telOf}?text=${msg}" target="_blank">💬 Agendar Revisão via WhatsApp</a>`;
-  }
+    // TABS
+    html += '<div class="tabs">'+
+      '<button class="tab active" onclick="swTab(\'t-hist\',this)">Histórico</button>'+
+      '<button class="tab" onclick="swTab(\'t-prev\',this)">Preventivo</button>'+
+      '<button class="tab" onclick="swTab(\'t-aval\',this)">Avaliar</button>'+
+      '</div>';
 
-  // TABS
-  html += `
-    <div class="tabs">
-      <button class="tab active" onclick="switchTabVeic('tab-historico',this)">📋 Histórico</button>
-      <button class="tab" onclick="switchTabVeic('tab-preventivo',this)">🛡️ Preventivo</button>
-      <button class="tab" onclick="switchTabVeic('tab-avaliar',this)">⭐ Avaliar</button>
-    </div>`;
+    // TAB HISTÓRICO
+    var badgeMap = {'na_fila':'b-fila','em_manutencao':'b-manut','aguardando_peca':'b-aguard','pronto_retirada':'b-pronto','pago':'b-pago','cancelado':'b-cancelado'};
+    var labelMap = {'na_fila':'Na Fila','em_manutencao':'Em Manutenção','aguardando_peca':'Aguard. Peça','pronto_retirada':'Pronto','pago':'Pago','cancelado':'Cancelado'};
 
-  // TAB HISTÓRICO
-  const osHtml = (osList||[]).length === 0
-    ? '<div class="empty"><div class="empty-icon">📋</div><div class="empty-msg">Nenhuma OS encontrada.</div></div>'
-    : (osList||[]).map(os=>{
-        const itensSvcs = (os.os_itens||[]).filter(i=>i.tipo==='servico');
-        const itensPecs = (os.os_itens||[]).filter(i=>i.tipo==='peca');
-        const badgeMap  = {'na_fila':'badge-na-fila','em_manutencao':'badge-manutencao','aguardando_peca':'badge-aguardando','pronto_retirada':'badge-pronto','pago':'badge-pago','cancelado':'badge-cancelado'};
-        const labelMap  = {'na_fila':'Na Fila','em_manutencao':'Em Manutenção','aguardando_peca':'Aguard. Peça','pronto_retirada':'Pronto','pago':'Pago','cancelado':'Cancelado'};
-        return `
-          <div class="os-item">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start">
-              <div>
-                <div class="os-num">OS ${os.numero}</div>
-                <div class="os-data">📅 ${brData(os.data_entrada)}</div>
-              </div>
-              <span class="badge ${badgeMap[os.status]||''}">${labelMap[os.status]||os.status}</span>
-            </div>
-            ${itensSvcs.length?`<div class="os-servicos">${itensSvcs.map(i=>`<div class="os-servico-row">🔧 ${i.descricao}</div>`).join('')}</div>`:''}
-            ${itensPecs.length?`<div class="os-servicos">${itensPecs.map(i=>`<div class="os-servico-row">🔩 ${i.descricao}</div>`).join('')}</div>`:''}
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:.5rem">
-              <div class="os-total">${brl(os.valor_total)}</div>
-              ${os.avaliacao?`<div style="font-size:.85rem">${'⭐'.repeat(os.avaliacao)}</div>`:''}
-            </div>
-          </div>`;
-      }).join('');
+    var histHtml = '';
+    if(!osList.length){
+      histHtml = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-msg">Nenhuma OS encontrada para este veículo.</div></div>';
+    } else {
+      osList.forEach(function(os){
+        var svcs = (os.os_itens||[]).filter(function(i){return i.tipo==='servico';});
+        var pecs = (os.os_itens||[]).filter(function(i){return i.tipo==='peca';});
+        histHtml += '<div class="os-item">'+
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem">'+
+          '<div><div class="os-num">OS '+os.numero+'</div>'+
+          '<div class="os-data">'+dataBR(os.data_entrada)+'</div></div>'+
+          '<span class="badge '+(badgeMap[os.status]||'')+'">'+((labelMap[os.status])||os.status)+'</span>'+
+          '</div>'+
+          (svcs.length?svcs.map(function(i){return '<div class="os-serv-row">🔧 '+i.descricao+'</div>';}).join(''):'')+
+          (pecs.length?pecs.map(function(i){return '<div class="os-serv-row">🔩 '+i.descricao+'</div>';}).join(''):'')+
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.5rem">'+
+          '<div class="os-total">'+brl(os.valor_total)+'</div>'+
+          (os.avaliacao?'<div style="font-size:.85rem">'+'★'.repeat(os.avaliacao)+'</div>':'')+
+          '</div></div>';
+      });
+    }
 
-  // TAB PREVENTIVO
-  const hoje = new Date(isoHoje());
-  const prevHtml = (prevList||[]).length === 0
-    ? '<div class="empty"><div class="empty-icon">🛡️</div><div class="empty-msg">Nenhum item no plano preventivo.</div></div>'
-    : (prevList||[]).map(p=>{
-        let cor='#10b981', txt='Em dia ✅', badgeCls='';
+    // TAB PREVENTIVO
+    var prevHtml = '';
+    if(!prevList.length){
+      prevHtml = '<div class="empty"><div class="empty-icon">🛡️</div><div class="empty-msg">Nenhum item no plano preventivo.</div></div>';
+    } else {
+      var hojeDate = new Date(hoje());
+      prevList.forEach(function(p){
+        var cor='var(--green)', txt='Em dia', badgeCls='b-pronto';
         if(p.proxima_revisao){
-          const d = new Date(p.proxima_revisao);
-          const diff = Math.round((d-hoje)/86400000);
-          if(diff < 0)      { cor='#ef4444'; txt=`${Math.abs(diff)}d atrasado 🔴`; badgeCls='badge-cancelado'; }
-          else if(diff<=30) { cor='#f59e0b'; txt=`Vence em ${diff}d ⚠️`;           badgeCls='badge-aguardando'; }
-          else              { cor='#10b981'; txt=`OK — ${brData(p.proxima_revisao)}`;badgeCls='badge-pronto'; }
+          var d = new Date(p.proxima_revisao);
+          var diff = Math.round((d-hojeDate)/86400000);
+          if(diff<0)    { cor='var(--red)';   txt=Math.abs(diff)+'d atrasado'; badgeCls='b-cancelado'; }
+          else if(diff<=30){ cor='var(--amber)'; txt='Vence em '+diff+'d';   badgeCls='b-aguard'; }
+          else          { cor='var(--green)'; txt='OK';                      badgeCls='b-pronto'; }
         }
-        return `
-          <div class="prev-item">
-            <div class="prev-dot" style="background:${cor}"></div>
-            <div style="flex:1">
-              <div class="prev-nome">${p.item}</div>
-              <div class="prev-data">Última: ${brData(p.ultima_revisao)} • Próxima: ${brData(p.proxima_revisao)}</div>
-            </div>
-            <span class="badge ${badgeCls} prev-badge" style="font-size:.68rem">${txt}</span>
-          </div>`;
-      }).join('');
+        prevHtml += '<div class="prev-item">'+
+          '<div class="prev-dot" style="background:'+cor+'"></div>'+
+          '<div style="flex:1">'+
+          '<div class="prev-nome">'+p.item+'</div>'+
+          '<div class="prev-data">Última: '+dataBR(p.ultima_revisao)+' · Próxima: '+dataBR(p.proxima_revisao)+'</div>'+
+          '</div>'+
+          '<span class="badge '+badgeCls+'" style="margin-left:.5rem">'+txt+'</span>'+
+          '</div>';
+      });
+    }
+    if(telOf){
+      prevHtml += '<div style="padding:.85rem 1.1rem;border-top:1px solid var(--border)">'+
+        '<a class="btn btn-whatsapp btn-full" href="https://wa.me/55'+telOf+'?text='+encodeURIComponent('Olá! Gostaria de agendar a revisão do veículo '+veic.placa+'.')+'" target="_blank">Agendar Revisão via WhatsApp</a>'+
+        '</div>';
+    }
 
-  // TAB AVALIAR — buscar OS pagas sem avaliação
-  const osSemAval = (osList||[]).filter(o=>o.status==='pago'&&!o.avaliacao);
-  const avalHtml = osSemAval.length === 0
-    ? '<div class="empty"><div class="empty-icon">⭐</div><div class="empty-msg">Nenhuma OS pendente de avaliação.<br>Obrigado pelo seu feedback! 🙏</div></div>'
-    : osSemAval.map(os=>`
-        <div style="padding:.85rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.75rem">
-          <div style="font-weight:700;margin-bottom:.2rem">OS ${os.numero}</div>
-          <div style="font-size:.78rem;color:var(--muted);margin-bottom:.75rem">📅 ${brData(os.data_conclusao||os.data_entrada)}</div>
-          <div style="font-size:.82rem;font-weight:600;text-align:center;margin-bottom:.35rem">Como foi o serviço?</div>
-          <div class="star-wrap" id="stars-${os.id}">
-            ${[1,2,3,4,5].map(i=>`<button class="star-btn" onclick="selecionarEstrela('${os.id}',${i})">⭐</button>`).join('')}
-          </div>
-          <textarea id="comentario-${os.id}" placeholder="Deixe um comentário (opcional)..." style="width:100%;padding:.6rem .85rem;border:1.5px solid var(--border);border-radius:.5rem;font-size:.88rem;font-family:'DM Sans',sans-serif;resize:none;min-height:70px;outline:none;margin-bottom:.5rem"></textarea>
-          <button class="btn btn-primary btn-full" onclick="enviarAvaliacao('${os.id}')">Enviar Avaliação</button>
-        </div>`).join('');
+    // TAB AVALIAR
+    var osSemAval = osList.filter(function(o){ return o.status==='pago'&&!o.avaliacao; });
+    var avalHtml = '';
+    if(!osSemAval.length){
+      avalHtml = '<div class="empty"><div class="empty-icon">⭐</div><div class="empty-msg">Nenhuma OS pendente de avaliação.<br>Obrigado pelo seu feedback!</div></div>';
+    } else {
+      osSemAval.forEach(function(os){
+        avalHtml += '<div style="padding:.9rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.65rem">'+
+          '<div style="font-weight:800;font-size:.9rem;margin-bottom:.1rem">OS '+os.numero+'</div>'+
+          '<div style="font-size:.73rem;color:var(--muted);margin-bottom:.65rem;font-weight:500">'+dataBR(os.data_conclusao||os.data_entrada)+'</div>'+
+          '<div style="font-size:.82rem;font-weight:700;text-align:center;margin-bottom:.35rem">Como foi o serviço?</div>'+
+          '<div class="star-wrap" id="stars-'+os.id+'">'+
+          [1,2,3,4,5].map(function(i){ return '<button class="star-btn" onclick="selecionarStar(\''+os.id+'\','+i+')">★</button>'; }).join('')+
+          '</div>'+
+          '<textarea id="coment-'+os.id+'" placeholder="Comentário opcional..." style="width:100%;padding:.6rem .85rem;border:1.5px solid var(--border);border-radius:.55rem;font-size:.85rem;font-family:inherit;resize:none;min-height:68px;outline:none;margin-bottom:.5rem;transition:.2s" onfocus="this.style.borderColor=\'var(--amber)\'" onblur="this.style.borderColor=\'var(--border)\'"></textarea>'+
+          '<button class="btn btn-primary btn-full" onclick="enviarAval(\''+os.id+'\')">Enviar Avaliação</button>'+
+          '</div>';
+      });
+    }
 
-  html += `
-    <div id="tab-historico" class="tab-content active">
-      <div class="card">${osHtml}</div>
-    </div>
-    <div id="tab-preventivo" class="tab-content">
-      <div class="card">${prevHtml}</div>
-      ${telOf?`<a class="btn btn-whatsapp btn-full" style="margin-top:.5rem" href="https://wa.me/55${telOf}?text=${encodeURIComponent(`Olá! Gostaria de agendar a revisão do meu veículo ${veic.placa}.`)}" target="_blank">💬 Agendar via WhatsApp</a>`:''}
-    </div>
-    <div id="tab-avaliar" class="tab-content">
-      ${avalHtml}
-    </div>
-  `;
+    html += '<div id="t-hist" class="tab-content active"><div class="card">'+histHtml+'</div></div>'+
+            '<div id="t-prev" class="tab-content"><div class="card">'+prevHtml+'</div></div>'+
+            '<div id="t-aval" class="tab-content">'+avalHtml+'</div>';
 
-  el.innerHTML = html;
-}
+    html += '<div class="footer">'+nomeOf+'</div>';
 
-function switchTabVeic(id, btn){
-  document.querySelectorAll('#veiculo-content .tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#veiculo-content .tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id)?.classList.add('active');
-  btn.classList.add('active');
-}
-
-// ── AVALIAÇÃO ──────────────────────────────────────────────
-let _estrelas = {};
-function selecionarEstrela(osId, nota){
-  _estrelas[osId] = nota;
-  const wrap = document.getElementById('stars-'+osId);
-  if(!wrap) return;
-  wrap.querySelectorAll('.star-btn').forEach((btn,i)=>{
-    btn.classList.toggle('ativo', i < nota);
+    el.innerHTML = html;
   });
 }
 
-async function enviarAvaliacao(osId){
-  const nota = _estrelas[osId];
-  if(!nota){ toast('Selecione uma nota de 1 a 5 estrelas','error'); return; }
-  const comentario = document.getElementById('comentario-'+osId)?.value.trim()||'';
-  const {error} = await getSB().from('ordens_servico').update({
-    avaliacao:nota, comentario_avaliacao:comentario
-  }).eq('id', osId);
-  if(error){ toast('Erro ao enviar avaliação','error'); return; }
-  toast('Avaliação enviada! Obrigado 🙏','success');
-  // Recarregar aba avaliar
-  if(_veiculoAtual){
-    await renderVeiculo(document.getElementById('veiculo-content'), _veiculoAtual, _clienteAtual);
-    // Manter na aba avaliar
-    switchTabVeic('tab-avaliar', document.querySelectorAll('#veiculo-content .tab')[2]);
-  }
+function swTab(id, btn){
+  document.querySelectorAll('#veiculo-content .tab-content').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('#veiculo-content .tab').forEach(function(t){t.classList.remove('active');});
+  var el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  btn.classList.add('active');
 }
 
-// ── NAVEGAÇÃO ──────────────────────────────────────────────
+// AVALIAÇÃO
+var _stars = {};
+function selecionarStar(osId, nota){
+  _stars[osId] = nota;
+  var wrap = document.getElementById('stars-'+osId);
+  if(!wrap) return;
+  wrap.querySelectorAll('.star-btn').forEach(function(btn,i){ btn.classList.toggle('ativo', i<nota); });
+}
+
+function enviarAval(osId){
+  var nota = _stars[osId];
+  if(!nota){ toast('Selecione uma nota de 1 a 5 estrelas','error'); return; }
+  var coment = document.getElementById('coment-'+osId)?document.getElementById('coment-'+osId).value.trim():'';
+  sb().from('ordens_servico').update({avaliacao:nota,comentario_avaliacao:coment}).eq('id',osId).then(function(res){
+    if(res.error){ toast('Erro ao enviar','error'); return; }
+    toast('Avaliação enviada! Obrigado');
+    if(_veicAtual) renderVeiculo(document.getElementById('veiculo-content'),_veicAtual,_clienteAtual);
+  });
+}
+
+// NAVEGAÇÃO
 function voltarBusca(){
   document.getElementById('tela-busca').classList.remove('hidden');
   document.getElementById('tela-cliente').classList.add('hidden');
   document.getElementById('tela-veiculo').classList.add('hidden');
-  document.getElementById('busca-resultado').innerHTML = '';
-  document.getElementById('busca-input').value = '';
+  document.getElementById('busca-resultado').innerHTML='';
+  document.getElementById('busca-input').value='';
   window.scrollTo(0,0);
 }
 
@@ -591,6 +780,8 @@ function voltarCliente(){
     document.getElementById('tela-busca').classList.add('hidden');
     document.getElementById('tela-cliente').classList.remove('hidden');
     document.getElementById('tela-veiculo').classList.add('hidden');
+    // Recarregar tela cliente
+    mostrarCliente(_clienteAtual);
   } else {
     voltarBusca();
   }
