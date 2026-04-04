@@ -192,13 +192,12 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 
     <div class="search-wrap">
       <div class="search-tabs">
-        <button class="search-tab active" id="tab-cpf"   onclick="setModo('cpf')">CPF</button>
-        <button class="search-tab"        id="tab-placa" onclick="setModo('placa')">Placa</button>
-        <button class="search-tab"        id="tab-nome"  onclick="setModo('nome')">Nome</button>
+        <button class="search-tab active" id="tab-nome" onclick="setModo('nome')">Nome</button>
+        <button class="search-tab"        id="tab-cpf"  onclick="setModo('cpf')">CPF</button>
       </div>
       <div class="search-row">
         <input class="search-input" type="text" id="busca-input"
-          placeholder="000.000.000-00" autocomplete="off"
+          placeholder="Nome do cliente" autocomplete="off"
           onkeydown="if(event.key==='Enter')doBusca()">
         <button class="btn-buscar" onclick="doBusca()">Buscar</button>
       </div>
@@ -367,15 +366,14 @@ function toast(msg, tipo){
     }
   });
 })();
-var _modo = 'cpf';
+var _modo = 'nome';
 function setModo(m){
   _modo = m;
-  document.getElementById('tab-cpf').classList.toggle('active', m==='cpf');
-  document.getElementById('tab-placa').classList.toggle('active', m==='placa');
   document.getElementById('tab-nome').classList.toggle('active', m==='nome');
+  document.getElementById('tab-cpf').classList.toggle('active', m==='cpf');
   var inp = document.getElementById('busca-input');
   inp.value = '';
-  var ph = {cpf:'000.000.000-00', placa:'ABC-1234', nome:'Nome do cliente'};
+  var ph = {nome:'Nome do cliente', cpf:'000.000.000-00'};
   inp.placeholder = ph[m]||'';
   document.getElementById('busca-erro').textContent = '';
   document.getElementById('busca-resultado').innerHTML = '';
@@ -383,7 +381,6 @@ function setModo(m){
 
 document.getElementById('busca-input').addEventListener('input', function(){
   if(_modo==='cpf') this.value = maskCPF(this.value);
-  else if(_modo==='placa') this.value = this.value.toUpperCase().replace(/[^A-Z0-9\-]/g,'');
 });
 
 // DETECTAR CPF NA URL (?cpf=...)
@@ -394,10 +391,6 @@ document.getElementById('busca-input').addEventListener('input', function(){
   if(cpf){
     setModo('cpf');
     document.getElementById('busca-input').value = maskCPF(cpf);
-    setTimeout(doBusca, 400);
-  } else if(placa){
-    setModo('placa');
-    document.getElementById('busca-input').value = placa.toUpperCase();
     setTimeout(doBusca, 400);
   }
 })();
@@ -410,8 +403,7 @@ function doBusca(){
   if(!q){ erroEl.textContent = 'Preencha o campo para buscar.'; return; }
   document.getElementById('busca-resultado').innerHTML =
     '<div class="loading" style="color:rgba(255,255,255,.5)"><div class="spinner"></div></div>';
-  if(_modo==='placa') buscarPorPlaca(q);
-  else if(_modo==='nome') buscarPorNome(q);
+  if(_modo==='nome') buscarPorNome(q);
   else buscarPorCPF(q);
 }
 
@@ -457,14 +449,33 @@ function buscarPorPlaca(placa){
   });
 }
 
+function semAcento(s){
+  return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+
 function buscarPorNome(nome){
   if(nome.length<2){ document.getElementById('busca-erro').textContent='Digite ao menos 2 letras.'; document.getElementById('busca-resultado').innerHTML=''; return; }
-  sb().from('clientes').select('*').ilike('nome','%'+nome+'%').limit(5).then(function(res){
+  // Busca no Supabase com o termo original (pega nomes com acento)
+  // Depois filtra client-side ignorando acento dos dois lados
+  var termoSemAcento = semAcento(nome);
+  // Faz duas buscas paralelas: com o termo original e sem acento
+  Promise.all([
+    sb().from('clientes').select('*').ilike('nome','%'+nome+'%').limit(10),
+    sb().from('clientes').select('*').ilike('nome','%'+termoSemAcento+'%').limit(10)
+  ]).then(function(results){
     document.getElementById('busca-resultado').innerHTML = '';
-    var lista = res.data||[];
-    if(!lista.length){ mostrarNaoEncontrado('nome'); return; }
-    if(lista.length===1){ mostrarCliente(lista[0]); return; }
-    mostrarListaClientes(lista);
+    // Une resultados sem duplicatas
+    var todos = results[0].data||[];
+    (results[1].data||[]).forEach(function(c){
+      if(!todos.find(function(x){ return x.id===c.id; })) todos.push(c);
+    });
+    // Filtra client-side ignorando acento dos dois lados
+    var filtrado = todos.filter(function(c){
+      return semAcento(c.nome||'').includes(termoSemAcento);
+    });
+    if(!filtrado.length){ mostrarNaoEncontrado('nome'); return; }
+    if(filtrado.length===1){ mostrarCliente(filtrado[0]); return; }
+    mostrarListaClientes(filtrado);
   });
 }
 
@@ -507,64 +518,45 @@ var _clienteAtual = null;
 
 function mostrarCliente(cli){
   _clienteAtual = cli;
-  var el = document.getElementById('page-content');
 
-  Promise.all([
-    sb().from('veiculos').select('*').eq('cliente_id',cli.id).order('created_at'),
-    sb().from('ordens_servico').select('id,numero,status,veiculos(placa,modelo,marca)').eq('cliente_id',cli.id).in('status',['na_fila','em_manutencao','aguardando_peca','pronto_retirada']).order('data_entrada',{ascending:false})
-  ]).then(function(results){
-    var veics = results[0].data||[];
-    var osAtivas = results[1].data||[];
+  sb().from('veiculos').select('*').eq('cliente_id',cli.id).order('created_at').then(function(res){
+    var veics = res.data||[];
 
-    var statusInfo = {
-      'na_fila':        {emoji:'🕐', txt:'Na Fila',              desc:'Seu veículo está na fila.', cls:'na_fila'},
-      'em_manutencao':  {emoji:'🔧', txt:'Em Manutenção',        desc:'Mecânicos trabalhando agora.', cls:'em_manutencao'},
-      'aguardando_peca':{emoji:'⏳', txt:'Aguardando Peça',      desc:'Aguardando chegada da peça.', cls:'aguardando_peca'},
-      'pronto_retirada':{emoji:'✅', txt:'Pronto para Retirada!',desc:'Pode vir buscar seu veículo.', cls:'pronto_retirada'}
-    };
-
-    var osAtivasHtml = '';
-    osAtivas.forEach(function(os){
-      var s = statusInfo[os.status]||{emoji:'🔧',txt:os.status,desc:'',cls:''};
-      osAtivasHtml += '<div class="status-box '+s.cls+'" onclick="abrirVeiculoPorOS(\''+os.id+'\')">' +
-        '<div class="status-emoji">'+s.emoji+'</div>'+
-        '<div class="s-titulo">'+s.txt+'</div>'+
-        '<div class="s-sub">'+(os.veiculos?os.veiculos.placa+' — '+(os.veiculos.marca||'')+' '+(os.veiculos.modelo||''):'')+'</div>'+
-        '<div style="font-size:.72rem;color:var(--muted);margin-top:.35rem">OS '+os.numero+' · Toque para detalhes →</div>'+
-        '</div>';
-    });
-
-    var veicsHtml = '';
-    if(!veics.length){
-      veicsHtml = '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-msg">Nenhum veículo cadastrado.</div></div>';
-    } else {
-      veics.forEach(function(v){
-        veicsHtml += '<div class="veic-card" onclick="abrirVeiculo('+JSON.stringify(v).replace(/"/g,'&quot;')+','+JSON.stringify(cli).replace(/"/g,'&quot;')+')">' +
-          '<div class="veic-placa">'+v.placa+'</div>'+
-          '<div class="veic-info">'+
-          '<div class="veic-nome">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+'</div>'+
-          '<div class="veic-sub">'+(v.cor||'')+(v.combustivel?' · '+v.combustivel:'')+'</div>'+
-          '</div><span style="color:var(--muted)">›</span></div>';
-      });
+    // 1 veículo: vai direto para a tela do veículo
+    if(veics.length === 1){
+      abrirVeiculo(veics[0], cli);
+      return;
     }
+
+    // 0 veículos: mensagem
+    if(veics.length === 0){
+      document.getElementById('cliente-header').innerHTML = '';
+      document.getElementById('cliente-veiculos').innerHTML =
+        '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-msg">Nenhum veículo cadastrado para este cliente.</div></div>';
+      document.getElementById('tela-busca').classList.add('hidden');
+      document.getElementById('tela-cliente').classList.remove('hidden');
+      document.getElementById('tela-veiculo').classList.add('hidden');
+      window.scrollTo(0,0);
+      return;
+    }
+
+    // 2+ veículos: mostra lista para escolher
+    var veicsHtml = veics.map(function(v){
+      return '<div class="veic-card" onclick="abrirVeiculo('+JSON.stringify(v).replace(/"/g,'&quot;')+','+JSON.stringify(cli).replace(/"/g,'&quot;')+')">'+
+        '<div class="veic-placa">'+v.placa+'</div>'+
+        '<div class="veic-info">'+
+        '<div class="veic-nome">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+'</div>'+
+        '<div class="veic-sub">'+(v.cor||'')+( v.combustivel?' · '+v.combustivel:'')+'</div>'+
+        '</div><span style="color:var(--muted)">›</span></div>';
+    }).join('');
 
     var primeiroNome = cli.nome ? cli.nome.split(' ')[0] : cli.nome;
     document.getElementById('cliente-header').innerHTML =
-      '<div class="card" style="margin-bottom:.8rem">'+
-      '<div class="saudacao">'+
-      '<div>'+
-      '<div class="saud-nome">Olá, '+primeiroNome+'!</div>'+
-      '<div class="saud-sub">'+(cli.cpf||'')+(cli.telefone?' · '+cli.telefone:'')+'</div>'+
-      '</div>'+
-      '<span class="badge b-'+(cli.status||'novo')+'">'+(cli.status||'NOVO').toUpperCase()+'</span>'+
-      '</div></div>'+
-      osAtivasHtml;
+      '<div style="font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:.6rem">'+
+      'Olá, '+primeiroNome+'! Qual veículo deseja consultar?</div>';
 
     document.getElementById('cliente-veiculos').innerHTML =
-      '<div class="card">'+
-      '<div class="card-header"><div class="card-title">Seus Veículos</div></div>'+
-      veicsHtml+
-      '</div>';
+      '<div class="card">'+veicsHtml+'</div>';
 
     document.getElementById('tela-busca').classList.add('hidden');
     document.getElementById('tela-cliente').classList.remove('hidden');
@@ -572,7 +564,6 @@ function mostrarCliente(cli){
     window.scrollTo(0,0);
   });
 }
-
 function abrirVeiculoPorOS(osId){
   sb().from('ordens_servico').select('veiculo_id,veiculos(*),clientes(*)').eq('id',osId).single().then(function(res){
     if(res.data && res.data.veiculos) abrirVeiculo(res.data.veiculos, res.data.clientes);
