@@ -191,13 +191,10 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
     <div class="hero-sub">Status em tempo real, histórico e revisões</div>
 
     <div class="search-wrap">
-      <div class="search-tabs">
-        <button class="search-tab active" id="tab-nome" onclick="setModo('nome')">Nome</button>
-        <button class="search-tab"        id="tab-cpf"  onclick="setModo('cpf')">CPF</button>
-      </div>
+
       <div class="search-row">
         <input class="search-input" type="text" id="busca-input"
-          placeholder="Nome do cliente" autocomplete="off"
+          placeholder="000.000.000-00" autocomplete="off"
           onkeydown="if(event.key==='Enter')doBusca()">
         <button class="btn-buscar" onclick="doBusca()">Buscar</button>
       </div>
@@ -272,6 +269,9 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
           <div class="dif-txt">Orçamento aprovado</div>
         </div>
       </div>
+      <a class="btn-wa-cta" id="btn-wa-dif" href="https://wa.me/5541995853589?text=Ol%C3%A1%2C+tenho+d%C3%BAvidas+sobre+meu+ve%C3%ADculo!" target="_blank" style="display:flex;margin-top:.85rem">
+        Fale conosco pelo WhatsApp
+      </a>
 
       <div class="servicos-cta">
         <p id="svc-cta-txt">Agende sua revisão agora mesmo — sem sair de casa</p>
@@ -352,35 +352,30 @@ function toast(msg, tipo){
       if(footer) footer.textContent = nome + (end ? ' · ' + end : '');
     }
 
-    // Botão WhatsApp
+    // Botão WhatsApp CTA serviços
     if(tel){
       var msg = 'Olá'+(nome?' '+nome:'')+', gostaria de agendar um serviço!';
       var btn = document.getElementById('btn-wa-agendar');
       if(btn) btn.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msg);
       var cta = document.getElementById('svc-cta-txt');
       if(cta) cta.textContent = 'Agende pelo WhatsApp — respondemos na hora';
+      // Atualizar link do botão WA nos diferenciais com telefone real
+      var btnDif = document.getElementById('btn-wa-dif');
+      if(btnDif && tel){
+        var msgDif = 'Olá'+(nome?' '+nome:'')+', tenho dúvidas sobre meu veículo!';
+        btnDif.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgDif);
+      }
     } else {
-      // Sem telefone: esconder botão WA
       var btnEl = document.getElementById('btn-wa-agendar');
       if(btnEl) btnEl.closest('.servicos-cta').style.display='none';
     }
   });
 })();
-var _modo = 'nome';
-function setModo(m){
-  _modo = m;
-  document.getElementById('tab-nome').classList.toggle('active', m==='nome');
-  document.getElementById('tab-cpf').classList.toggle('active', m==='cpf');
-  var inp = document.getElementById('busca-input');
-  inp.value = '';
-  var ph = {nome:'Nome do cliente', cpf:'000.000.000-00'};
-  inp.placeholder = ph[m]||'';
-  document.getElementById('busca-erro').textContent = '';
-  document.getElementById('busca-resultado').innerHTML = '';
-}
+var _modo = 'cpf';
+function setModo(m){ _modo='cpf'; }
 
 document.getElementById('busca-input').addEventListener('input', function(){
-  if(_modo==='cpf') this.value = maskCPF(this.value);
+  this.value = maskCPF(this.value);
 });
 
 // DETECTAR CPF NA URL (?cpf=...)
@@ -403,8 +398,7 @@ function doBusca(){
   if(!q){ erroEl.textContent = 'Preencha o campo para buscar.'; return; }
   document.getElementById('busca-resultado').innerHTML =
     '<div class="loading" style="color:rgba(255,255,255,.5)"><div class="spinner"></div></div>';
-  if(_modo==='nome') buscarPorNome(q);
-  else buscarPorCPF(q);
+  buscarPorCPF(q);
 }
 
 function buscarPorCPF(cpf){
