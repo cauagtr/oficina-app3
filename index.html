@@ -165,6 +165,32 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .dif-item{text-align:center;padding:.75rem .4rem;background:var(--bg);border-radius:.65rem;border:1px solid var(--border)}
 .dif-icon{font-size:1.2rem;margin-bottom:.25rem}
 .dif-txt{font-size:.68rem;font-weight:700;color:var(--navy);line-height:1.3}
+/* PERFIL OFICINA */
+.perfil-capa{width:100%;height:160px;object-fit:cover;display:block}
+.perfil-capa-placeholder{width:100%;height:160px;background:linear-gradient(135deg,var(--navy),#1e3a5f);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.perfil-info{padding:1rem 1.1rem;border-bottom:1px solid var(--border)}
+.perfil-nome{font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.2rem}
+.perfil-meta{font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:.2rem}
+.perfil-meta a{color:var(--muted);text-decoration:none}
+.perfil-meta a:hover{color:var(--amber)}
+/* GALERIA */
+.galeria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;padding:.85rem}
+.galeria-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:.45rem;cursor:pointer;transition:.2s}
+.galeria-img:hover{transform:scale(1.03)}
+/* DEPOIMENTOS */
+.dep-card{padding:1rem 1.1rem;border-bottom:1px solid var(--border)}
+.dep-card:last-child{border-bottom:none}
+.dep-stars{color:var(--amber);font-size:.9rem;margin-bottom:.3rem}
+.dep-texto{font-size:.82rem;color:var(--text);line-height:1.55;margin-bottom:.3rem;font-style:italic}
+.dep-autor{font-size:.72rem;color:var(--muted);font-weight:600}
+/* SERVIÇOS DINÂMICOS */
+.svc-dyn-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.75rem;padding:1rem;transition:.2s}
+.svc-dyn-card:hover{border-color:var(--amber);background:#fffbeb}
+.svc-dyn-nome{font-size:.88rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}
+.svc-dyn-desc{font-size:.75rem;color:var(--muted);margin-bottom:.5rem;line-height:1.45}
+.svc-dyn-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
+.svc-dyn-preco{font-size:.78rem;font-weight:700;color:var(--green)}
+.svc-dyn-tempo{font-size:.72rem;color:var(--muted);background:var(--card);padding:.18rem .5rem;border-radius:999px;border:1px solid var(--border)}
 /* FOOTER */
 .footer{text-align:center;padding:2rem 1rem 2.5rem;color:var(--muted);font-size:.75rem;font-weight:500}
 
@@ -204,83 +230,57 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 
   <div id="busca-resultado"></div>
 
-  <!-- SERVIÇOS -->
-  <div class="servicos-section" id="secao-servicos">
-    <div class="servicos-inner">
+  <!-- ZONA PÚBLICA DINÂMICA -->
+  <div id="zona-publica">
 
-      <div class="servicos-label">Nossos Serviços</div>
-      <div class="servicos-title" id="svc-titulo">O que fazemos por você</div>
-      <div class="servicos-sub">Atendimento especializado com qualidade e transparência em cada serviço.</div>
-
-      <div class="servicos-grid">
-        <div class="serv-card">
-          <div class="serv-icon">🔧</div>
-          <div class="serv-nome">Revisão Geral</div>
-          <div class="serv-desc">Inspeção completa de motor, freios, suspensão e fluidos</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">🛢️</div>
-          <div class="serv-nome">Troca de Óleo</div>
-          <div class="serv-desc">Troca de óleo e filtros com os melhores lubrificantes do mercado</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">🛑</div>
-          <div class="serv-nome">Freios</div>
-          <div class="serv-desc">Pastilhas, discos, tambores e fluido de freio</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">⚙️</div>
-          <div class="serv-nome">Suspensão</div>
-          <div class="serv-desc">Amortecedores, bieletas, buchas e balanceamento</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">❄️</div>
-          <div class="serv-nome">Ar-Condicionado</div>
-          <div class="serv-desc">Recarga, limpeza e manutenção do sistema de climatização</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">⚡</div>
-          <div class="serv-nome">Elétrica</div>
-          <div class="serv-desc">Diagnóstico eletrônico, bateria, alternador e motor de arranque</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">🔄</div>
-          <div class="serv-nome">Câmbio</div>
-          <div class="serv-desc">Manutenção e troca de óleo de câmbio automático e manual</div>
-        </div>
-        <div class="serv-card">
-          <div class="serv-icon">🚗</div>
-          <div class="serv-nome">Alinhamento</div>
-          <div class="serv-desc">Alinhamento e balanceamento para maior vida útil dos pneus</div>
-        </div>
+    <!-- Perfil da oficina -->
+    <div class="card" style="margin:1rem;border-radius:.8rem;overflow:hidden" id="perfil-card">
+      <div id="perfil-capa-wrap">
+        <div class="perfil-capa-placeholder">🔧</div>
       </div>
-
-      <div class="diferenciais">
-        <div class="dif-item">
-          <div class="dif-icon">📱</div>
-          <div class="dif-txt">Acompanhe online</div>
-        </div>
-        <div class="dif-item">
-          <div class="dif-icon">🔎</div>
-          <div class="dif-txt">Diagnóstico digital</div>
-        </div>
-        <div class="dif-item">
-          <div class="dif-icon">✅</div>
-          <div class="dif-txt">Orçamento aprovado</div>
-        </div>
+      <div class="perfil-info" id="perfil-info">
+        <div class="perfil-nome" id="perfil-nome">Oficina Digital</div>
+        <div class="perfil-meta" id="perfil-meta"></div>
       </div>
-      <a class="btn-wa-cta" id="btn-wa-dif" href="https://wa.me/5541995853589?text=Ol%C3%A1%2C+tenho+d%C3%BAvidas+sobre+meu+ve%C3%ADculo!" target="_blank" style="display:flex;margin-top:.85rem">
+    </div>
+
+    <!-- Galeria -->
+    <div id="galeria-wrap" class="hidden">
+      <div style="padding:.65rem 1rem .25rem">
+        <div style="font-size:.72rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em">Fotos</div>
+      </div>
+      <div class="galeria-grid" id="galeria-grid"></div>
+    </div>
+
+    <!-- Serviços dinâmicos -->
+    <div style="padding:.65rem 1rem .35rem">
+      <div style="font-size:.72rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em">Nossos Serviços</div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Toque em um serviço para solicitar via WhatsApp</div>
+    </div>
+    <div id="servicos-dyn" style="padding:0 1rem 1rem;display:grid;grid-template-columns:1fr 1fr;gap:.65rem">
+      <!-- preenchido dinamicamente -->
+      <div class="svc-dyn-card"><div class="svc-dyn-nome">Revisão Geral</div><div class="svc-dyn-desc">Inspeção completa de motor, freios e fluidos</div><a class="btn-wa-cta" href="#" target="_blank" style="font-size:.78rem;padding:.5rem .8rem">Solicitar</a></div>
+      <div class="svc-dyn-card"><div class="svc-dyn-nome">Troca de Óleo</div><div class="svc-dyn-desc">Óleo e filtros com os melhores lubrificantes</div><a class="btn-wa-cta" href="#" target="_blank" style="font-size:.78rem;padding:.5rem .8rem">Solicitar</a></div>
+    </div>
+
+    <!-- Diferenciais -->
+    <div class="diferenciais" style="margin:0 1rem 1rem">
+      <div class="dif-item"><div class="dif-icon">📱</div><div class="dif-txt">Acompanhe online</div></div>
+      <div class="dif-item"><div class="dif-icon">🔎</div><div class="dif-txt">Diagnóstico digital</div></div>
+      <div class="dif-item"><div class="dif-icon">✅</div><div class="dif-txt">Orçamento aprovado</div></div>
+    </div>
+    <div style="padding:0 1rem 1rem">
+      <a class="btn-wa-cta" id="btn-wa-dif" href="https://wa.me/5541995853589?text=Ol%C3%A1%2C+tenho+d%C3%BAvidas+sobre+meu+ve%C3%ADculo!" target="_blank" style="display:flex">
         Fale conosco pelo WhatsApp
       </a>
-
-      <div class="servicos-cta">
-        <p id="svc-cta-txt">Agende sua revisão agora mesmo — sem sair de casa</p>
-        <a class="btn-wa-cta" id="btn-wa-agendar" href="#" target="_blank">
-          Agendar via WhatsApp
-        </a>
-      </div>
-
     </div>
+
+    <!-- Depoimentos -->
+    <div id="depoimentos-wrap" class="hidden" style="margin:0 1rem 1rem">
+      <div style="font-size:.72rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.65rem">O que dizem nossos clientes</div>
+      <div class="card" id="depoimentos-lista"></div>
+    </div>
+
   </div>
 
   <div class="footer" id="footer-txt">Dúvidas? Fale com a oficina pelo WhatsApp</div>
@@ -333,42 +333,102 @@ function toast(msg, tipo){
   _tTimer = setTimeout(function(){ el.classList.add('hidden'); }, 3500);
 }
 
-// CARREGAR CONFIGURAÇÕES E PREENCHER SEÇÃO DE SERVIÇOS
-(function carregarConfigs(){
-  sb().from('configuracoes').select('chave,valor').then(function(res){
+// CARREGAR ZONA PÚBLICA DINÂMICA
+(function carregarZonaPublica(){
+  Promise.all([
+    sb().from('configuracoes').select('chave,valor'),
+    sb().from('servicos_publicos').select('*').eq('ativo',true).order('ordem'),
+    sb().from('ordens_servico').select('avaliacao,comentario_avaliacao,clientes(nome),created_at').eq('status','pago').not('avaliacao','is',null).gte('avaliacao',4).order('created_at',{ascending:false}).limit(5)
+  ]).then(function(results){
     var cfg = {};
-    (res.data||[]).forEach(function(c){ cfg[c.chave]=c.valor; });
-    var nome  = cfg['nome_mecanica']  || '';
-    var tel   = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
-    var end   = cfg['endereco_mecanica'] || '';
+    (results[0].data||[]).forEach(function(r){ cfg[r.chave]=r.valor; });
+    var servicos   = results[1].data||[];
+    var avaliacoes = results[2].data||[];
 
-    // Título da seção
+    var nome    = cfg['nome_mecanica']  || '';
+    var tel     = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
+    var end     = cfg['endereco_mecanica']  || '';
+    var horario = cfg['horario_funcionamento'] || '';
+    var maps    = cfg['maps_link']    || '';
+    var ig      = cfg['instagram']    || '';
+    var capa    = cfg['foto_capa']    || '';
+    var logo    = cfg['logo_url']     || '';
+
+    // ── Atualizar hero
     if(nome){
-      var tit = document.getElementById('svc-titulo');
-      if(tit) tit.textContent = 'Serviços da ' + nome;
       var heroLogo = document.querySelector('.hero-logo');
       if(heroLogo) heroLogo.textContent = nome;
       var footer = document.getElementById('footer-txt');
       if(footer) footer.textContent = nome + (end ? ' · ' + end : '');
     }
 
-    // Botão WhatsApp CTA serviços
-    if(tel){
-      var msg = 'Olá'+(nome?' '+nome:'')+', gostaria de agendar um serviço!';
-      var btn = document.getElementById('btn-wa-agendar');
-      if(btn) btn.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msg);
-      var cta = document.getElementById('svc-cta-txt');
-      if(cta) cta.textContent = 'Agende pelo WhatsApp — respondemos na hora';
-      // Atualizar link do botão WA nos diferenciais com telefone real
-      var btnDif = document.getElementById('btn-wa-dif');
-      if(btnDif && tel){
-        var msgDif = 'Olá'+(nome?' '+nome:'')+', tenho dúvidas sobre meu veículo!';
-        btnDif.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgDif);
-      }
-    } else {
-      var btnEl = document.getElementById('btn-wa-agendar');
-      if(btnEl) btnEl.closest('.servicos-cta').style.display='none';
+    // ── Perfil da oficina
+    var capaWrap = document.getElementById('perfil-capa-wrap');
+    if(capaWrap){
+      if(capa) capaWrap.innerHTML = '<img src="'+capa+'" class="perfil-capa" alt="'+nome+'">';
+      else capaWrap.innerHTML = '<div class="perfil-capa-placeholder">🔧</div>';
     }
+    var nomeEl = document.getElementById('perfil-nome');
+    if(nomeEl && nome) nomeEl.textContent = nome;
+
+    var metaEl = document.getElementById('perfil-meta');
+    if(metaEl){
+      var metaHtml = '';
+      if(end)     metaHtml += '<span>📍 '+(maps?'<a href="'+maps+'" target="_blank">'+end+'</a>':end)+'</span>';
+      if(horario) metaHtml += '<span>🕐 '+horario+'</span>';
+      if(tel)     metaHtml += '<span>📞 <a href="https://wa.me/55'+tel+'">'+tel+'</a></span>';
+      if(ig)      metaHtml += '<span>📷 <a href="https://instagram.com/'+ig.replace('@','')+'" target="_blank">'+ig+'</a></span>';
+      metaEl.innerHTML = metaHtml;
+    }
+
+    // ── Botão WA diferenciais
+    var btnDif = document.getElementById('btn-wa-dif');
+    if(btnDif && tel){
+      var msgDif = 'Olá'+(nome?' '+nome:'')+', tenho dúvidas sobre meu veículo!';
+      btnDif.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgDif);
+    }
+
+    // ── Serviços dinâmicos
+    var svcEl = document.getElementById('servicos-dyn');
+    if(svcEl && servicos.length > 0){
+      var icons = ['🔧','🛢️','🛑','⚙️','❄️','⚡','🔄','🚗','🔩','🔦','🪝','🔋'];
+      svcEl.innerHTML = servicos.map(function(s, i){
+        var precoTxt = s.preco_de ? ('A partir de R$ '+Number(s.preco_de).toLocaleString('pt-BR',{minimumFractionDigits:2})) : '';
+        if(s.preco_de && s.preco_ate) precoTxt = 'R$ '+Number(s.preco_de).toLocaleString('pt-BR',{minimumFractionDigits:2})+' – R$ '+Number(s.preco_ate).toLocaleString('pt-BR',{minimumFractionDigits:2});
+        var tempoTxt = s.tempo_medio_min ? (s.tempo_medio_min >= 60 ? Math.floor(s.tempo_medio_min/60)+'h'+(s.tempo_medio_min%60?(s.tempo_medio_min%60)+'min':'') : s.tempo_medio_min+'min') : '';
+        var msgWA = 'Olá'+(nome?' '+nome:'')+', gostaria de solicitar o serviço: *'+s.nome+'*'+(tempoTxt?' (tempo estimado: '+tempoTxt+')':'')+(tel?'':'')+'. Podem me passar disponibilidade?';
+        var waHref = tel ? 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgWA) : '#';
+        return '<div class="svc-dyn-card">'+
+          '<div style="font-size:1.3rem;margin-bottom:.35rem">'+(icons[i%icons.length])+'</div>'+
+          '<div class="svc-dyn-nome">'+s.nome+'</div>'+
+          (s.descricao?'<div class="svc-dyn-desc">'+s.descricao+'</div>':'')+
+          '<div class="svc-dyn-meta">'+
+          (precoTxt?'<span class="svc-dyn-preco">'+precoTxt+'</span>':'')+
+          (tempoTxt?'<span class="svc-dyn-tempo">⏱ '+tempoTxt+'</span>':'')+
+          '</div>'+
+          '<a class="btn-wa-cta" href="'+waHref+'" target="_blank" style="font-size:.78rem;padding:.5rem .8rem;justify-content:center">Solicitar via WhatsApp</a>'+
+          '</div>';
+      }).join('');
+    } else if(svcEl && servicos.length===0){
+      // manter cards padrão se não houver serviços cadastrados
+    }
+
+    // ── Depoimentos (avaliações ≥4 estrelas)
+    var depWrap = document.getElementById('depoimentos-wrap');
+    var depLista = document.getElementById('depoimentos-lista');
+    if(depWrap && depLista && avaliacoes.length > 0){
+      depWrap.classList.remove('hidden');
+      depLista.innerHTML = avaliacoes.map(function(a){
+        var estrelas = '★'.repeat(a.avaliacao||5);
+        var primeiroNome = a.clientes ? (a.clientes.nome||'Cliente').split(' ')[0] : 'Cliente';
+        return '<div class="dep-card">'+
+          '<div class="dep-stars">'+estrelas+'</div>'+
+          (a.comentario_avaliacao?'<div class="dep-texto">"'+a.comentario_avaliacao+'"</div>':'')+
+          '<div class="dep-autor">'+primeiroNome+' · '+dataBR((a.created_at||'').substring(0,10))+'</div>'+
+          '</div>';
+      }).join('');
+    }
+
   });
 })();
 var _modo = 'cpf';
