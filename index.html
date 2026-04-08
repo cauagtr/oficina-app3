@@ -191,6 +191,22 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .svc-dyn-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
 .svc-dyn-preco{font-size:.78rem;font-weight:700;color:var(--green)}
 .svc-dyn-tempo{font-size:.72rem;color:var(--muted);background:var(--card);padding:.18rem .5rem;border-radius:999px;border:1px solid var(--border)}
+/* FASE 4 — ABAS CLIENTE */
+.cli-tabs{display:flex;gap:.25rem;background:#f1f5f9;padding:.28rem;border-radius:.65rem;margin-bottom:.85rem}
+.cli-tab{flex:1;padding:.48rem .3rem;border-radius:.45rem;border:none;background:none;cursor:pointer;font-size:.72rem;font-weight:700;color:var(--muted);transition:.2s;text-align:center;font-family:inherit;white-space:nowrap}
+.cli-tab.active{background:var(--card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.cli-tab-content{display:none}
+.cli-tab-content.active{display:block}
+/* GARANTIA */
+.garantia-card{background:#f0fdf4;border:1.5px solid #86efac;border-radius:.65rem;padding:.75rem 1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;gap:.65rem}
+.garantia-card.vencida{background:#fff1f2;border-color:#fca5a5}
+.garantia-icon{font-size:1.1rem;flex-shrink:0}
+.garantia-os{font-size:.82rem;font-weight:800;color:var(--navy);margin-bottom:.15rem}
+.garantia-validade{font-size:.73rem;color:var(--muted);font-weight:500}
+/* VEÍCULO CARD CLIENTE */
+.veic-cli-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.7rem;padding:1rem;margin-bottom:.65rem}
+.veic-cli-placa{font-family:monospace;font-size:.9rem;font-weight:800;background:var(--navy);color:#fff;padding:.22rem .6rem;border-radius:.35rem;letter-spacing:.06em;display:inline-block;margin-bottom:.45rem}
+.veic-cli-info{font-size:.82rem;color:var(--muted);font-weight:500;margin-bottom:.65rem}
 /* FOOTER */
 .footer{text-align:center;padding:2rem 1rem 2.5rem;color:var(--muted);font-size:.75rem;font-weight:500}
 
@@ -347,6 +363,7 @@ function toast(msg, tipo){
 
     var nome    = cfg['nome_mecanica']  || '';
     var tel     = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
+    window._telOf = tel; // disponível globalmente para botões WA
     var end     = cfg['endereco_mecanica']  || '';
     var horario = cfg['horario_funcionamento'] || '';
     var maps    = cfg['maps_link']    || '';
@@ -573,50 +590,116 @@ var _clienteAtual = null;
 function mostrarCliente(cli){
   _clienteAtual = cli;
 
-  sb().from('veiculos').select('*').eq('cliente_id',cli.id).order('created_at').then(function(res){
-    var veics = res.data||[];
+  Promise.all([
+    sb().from('veiculos').select('*').eq('cliente_id',cli.id).order('created_at'),
+    sb().from('ordens_servico')
+      .select('id,numero,status,valor_total,data_entrada,data_pagamento,garantia_dias,veiculos(placa,modelo,marca)')
+      .eq('cliente_id',cli.id)
+      .in('status',['na_fila','em_manutencao','aguardando_peca','pronto_retirada'])
+      .order('data_entrada',{ascending:false})
+  ]).then(function(results){
+    var veics    = results[0].data||[];
+    var osAtivas = results[1].data||[];
 
-    // 1 veículo: vai direto para a tela do veículo
-    if(veics.length === 1){
+    // Se 1 veículo e nenhuma OS ativa: ir direto para o veículo
+    if(veics.length === 1 && osAtivas.length === 0){
       abrirVeiculo(veics[0], cli);
       return;
     }
 
-    // 0 veículos: mensagem
-    if(veics.length === 0){
-      document.getElementById('cliente-header').innerHTML = '';
-      document.getElementById('cliente-veiculos').innerHTML =
-        '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-msg">Nenhum veículo cadastrado para este cliente.</div></div>';
-      document.getElementById('tela-busca').classList.add('hidden');
-      document.getElementById('tela-cliente').classList.remove('hidden');
-      document.getElementById('tela-veiculo').classList.add('hidden');
-      window.scrollTo(0,0);
-      return;
+    var primeiroNome = cli.nome ? cli.nome.split(' ')[0] : 'Cliente';
+
+    // ── Aba STATUS — OS ativas
+    var statusInfo = {
+      'na_fila':        {emoji:'🕐',txt:'Na Fila',              cls:'na_fila'},
+      'em_manutencao':  {emoji:'🔧',txt:'Em Manutenção',        cls:'em_manutencao'},
+      'aguardando_peca':{emoji:'⏳',txt:'Aguardando Peça',      cls:'aguardando_peca'},
+      'pronto_retirada':{emoji:'✅',txt:'Pronto para Retirada!',cls:'pronto_retirada'}
+    };
+
+    var statusHtml = '';
+    if(osAtivas.length === 0){
+      statusHtml = '<div class="empty"><div class="empty-icon">✅</div><div class="empty-msg">Nenhum veículo na oficina agora.</div></div>';
+    } else {
+      osAtivas.forEach(function(os){
+        var s = statusInfo[os.status]||{emoji:'🔧',txt:os.status,cls:''};
+        statusHtml += '<div class="status-box '+s.cls+'" onclick="abrirVeiculoPorOS(\''+os.id+'\')" style="margin-bottom:.65rem">'+
+          '<div class="status-emoji">'+s.emoji+'</div>'+
+          '<div class="s-titulo">'+s.txt+'</div>'+
+          '<div class="s-sub">'+(os.veiculos?os.veiculos.placa+' — '+(os.veiculos.marca||'')+' '+(os.veiculos.modelo||''):'')+'</div>'+
+          '<div style="font-size:.72rem;color:var(--muted);margin-top:.3rem">OS '+os.numero+' · Toque para detalhes →</div>'+
+          '</div>';
+      });
     }
 
-    // 2+ veículos: mostra lista para escolher
-    var veicsHtml = veics.map(function(v){
-      return '<div class="veic-card" onclick="abrirVeiculo('+JSON.stringify(v).replace(/"/g,'&quot;')+','+JSON.stringify(cli).replace(/"/g,'&quot;')+')">'+
-        '<div class="veic-placa">'+v.placa+'</div>'+
-        '<div class="veic-info">'+
-        '<div class="veic-nome">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+'</div>'+
-        '<div class="veic-sub">'+(v.cor||'')+( v.combustivel?' · '+v.combustivel:'')+'</div>'+
-        '</div><span style="color:var(--muted)">›</span></div>';
-    }).join('');
+    // ── Aba MEUS VEÍCULOS
+    var veicsHtml = '';
+    if(veics.length === 0){
+      veicsHtml = '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-msg">Nenhum veículo cadastrado.</div></div>';
+    } else {
+      veics.forEach(function(v){
+        // Buscar última OS do veículo para mostrar
+        var msgRevisao = 'Olá! Gostaria de solicitar uma revisão para o veículo *'+v.placa+'*'+(v.marca?' ('+v.marca+' '+v.modelo+')':'')+'. Podem me passar disponibilidade?';
+        veicsHtml += '<div class="veic-cli-card">'+
+          '<div class="veic-cli-placa">'+v.placa+'</div>'+
+          '<div class="veic-cli-info">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+(v.cor?' · '+v.cor:'')+
+          (v.combustivel?' · '+v.combustivel:'')+'</div>'+
+          '<div style="display:flex;gap:.45rem;flex-wrap:wrap">'+
+          '<button class="btn btn-primary btn-sm" onclick="abrirVeiculo('+JSON.stringify(v).replace(/"/g,'&quot;')+','+JSON.stringify(cli).replace(/"/g,'&quot;')+')">Ver histórico</button>'+
+          (window._telOf?'<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent(msgRevisao)+'" target="_blank">Solicitar revisão</a>':'')+'</div>'+
+          '</div>';
+      });
+      // Botão adicionar veículo via WA
+      if(window._telOf){
+        var msgAddVeic = 'Olá! Sou '+cli.nome+' (CPF: '+cli.cpf+') e gostaria de cadastrar um novo veículo. Placa: [INFORME A PLACA]. Marca/Modelo: [INFORME].';
+        veicsHtml += '<a class="btn btn-secondary btn-full" style="margin-top:.25rem" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent(msgAddVeic)+'" target="_blank">+ Adicionar veículo via WhatsApp</a>';
+      }
+    }
 
-    var primeiroNome = cli.nome ? cli.nome.split(' ')[0] : cli.nome;
+    // ── Aba PERFIL
+    var perfilHtml =
+      '<div class="card" style="margin-bottom:.65rem">'+
+      '<div class="card-body">'+
+      '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">'+
+      '<div style="width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;flex-shrink:0">'+
+      cli.nome.charAt(0).toUpperCase()+'</div>'+
+      '<div><div style="font-weight:800;font-size:1rem">'+(cli.nome||'—')+'</div>'+
+      '<div style="font-size:.75rem;color:var(--muted)">'+(cli.cpf||'')+'</div></div></div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;font-size:.82rem">'+
+      (cli.telefone?'<div><span style="color:var(--muted)">Telefone </span><strong>'+cli.telefone+'</strong></div>':'')+
+      (cli.email?'<div><span style="color:var(--muted)">E-mail </span><strong style="word-break:break-all">'+cli.email+'</strong></div>':'')+
+      (cli.total_gasto?'<div><span style="color:var(--muted)">Total gasto </span><strong style="color:var(--green)">'+brl(cli.total_gasto)+'</strong></div>':'')+
+      (cli.ultima_visita?'<div><span style="color:var(--muted)">Última visita </span><strong>'+dataBR(cli.ultima_visita)+'</strong></div>':'')+
+      '</div></div></div>'+
+      '<div class="alert alert-info" style="font-size:.78rem">Para atualizar seus dados, entre em contato com a oficina via WhatsApp.</div>';
+
+    // Montar tela
     document.getElementById('cliente-header').innerHTML =
-      '<div style="font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:.6rem">'+
-      'Olá, '+primeiroNome+'! Qual veículo deseja consultar?</div>';
+      '<div style="font-size:.88rem;font-weight:600;margin-bottom:.75rem">Olá, <strong>'+primeiroNome+'</strong>! 👋</div>'+
+      '<div class="cli-tabs">'+
+      '<button class="cli-tab active" onclick="swCliTab(\'c-status\',this)">Status</button>'+
+      '<button class="cli-tab" onclick="swCliTab(\'c-veics\',this)">Meus Veículos</button>'+
+      '<button class="cli-tab" onclick="swCliTab(\'c-perfil\',this)">Perfil</button>'+
+      '</div>'+
+      '<div id="c-status" class="cli-tab-content active">'+statusHtml+'</div>'+
+      '<div id="c-veics" class="cli-tab-content">'+veicsHtml+'</div>'+
+      '<div id="c-perfil" class="cli-tab-content">'+perfilHtml+'</div>';
 
-    document.getElementById('cliente-veiculos').innerHTML =
-      '<div class="card">'+veicsHtml+'</div>';
+    document.getElementById('cliente-veiculos').innerHTML = '';
 
     document.getElementById('tela-busca').classList.add('hidden');
     document.getElementById('tela-cliente').classList.remove('hidden');
     document.getElementById('tela-veiculo').classList.add('hidden');
     window.scrollTo(0,0);
   });
+}
+
+function swCliTab(id, btn){
+  document.querySelectorAll('.cli-tab-content').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.cli-tab').forEach(function(t){t.classList.remove('active');});
+  var el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  btn.classList.add('active');
 }
 function abrirVeiculoPorOS(osId){
   sb().from('ordens_servico').select('veiculo_id,veiculos(*),clientes(*)').eq('id',osId).single().then(function(res){
@@ -700,8 +783,31 @@ function renderVeiculo(el, veic, cli){
     html += '<div class="tabs">'+
       '<button class="tab active" onclick="swTab(\'t-hist\',this)">Histórico</button>'+
       '<button class="tab" onclick="swTab(\'t-prev\',this)">Preventivo</button>'+
+      '<button class="tab" onclick="swTab(\'t-gar\',this)">Garantias</button>'+
       '<button class="tab" onclick="swTab(\'t-aval\',this)">Avaliar</button>'+
       '</div>';
+
+    // TAB GARANTIAS
+    var hoje2 = new Date();
+    var osComGarantia = osList.filter(function(o){ return o.status==='pago' && o.garantia_dias; });
+    var garHtml = '';
+    if(!osComGarantia.length){
+      garHtml = '<div class="empty"><div class="empty-icon">🛡️</div><div class="empty-msg">Nenhuma garantia ativa encontrada.</div></div>';
+    } else {
+      osComGarantia.forEach(function(os){
+        var dtPag = new Date(os.data_pagamento||os.data_entrada||os.created_at||Date.now());
+        var dtFim = new Date(dtPag); dtFim.setDate(dtFim.getDate()+(os.garantia_dias||90));
+        var diffDias = Math.round((dtFim - hoje2)/86400000);
+        var ativa = diffDias >= 0;
+        garHtml += '<div class="garantia-card'+(ativa?'':' vencida')+'">'+
+          '<div class="garantia-icon">'+(ativa?'🛡️':'❌')+'</div>'+
+          '<div style="flex:1">'+
+          '<div class="garantia-os">OS '+os.numero+(ativa?' — Em vigor':' — Encerrada')+'</div>'+
+          '<div class="garantia-validade">'+(ativa?'Válida até ':' Expirou em ')+dtFim.toLocaleDateString('pt-BR')+' ('+( os.garantia_dias||90)+' dias)</div>'+
+          (ativa && window._telOf?'<a class="btn btn-secondary btn-sm" style="margin-top:.45rem;display:inline-flex" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent('Olá! Meu veículo '+veic.placa+' está na garantia (OS '+os.numero+') e gostaria de acionar.')+'" target="_blank">Acionar garantia</a>':'')+
+          '</div></div>';
+      });
+    }
 
     // TAB HISTÓRICO
     var badgeMap = {'na_fila':'b-fila','em_manutencao':'b-manut','aguardando_peca':'b-aguard','pronto_retirada':'b-pronto','pago':'b-pago','cancelado':'b-cancelado'};
@@ -714,6 +820,10 @@ function renderVeiculo(el, veic, cli){
       osList.forEach(function(os){
         var svcs = (os.os_itens||[]).filter(function(i){return i.tipo==='servico';});
         var pecs = (os.os_itens||[]).filter(function(i){return i.tipo==='peca';});
+        var svcsDesc = svcs.map(function(i){return i.descricao;}).join(', ');
+        var waHistMsg = svcsDesc
+          ? 'Olá! Fiz um serviço anteriormente ('+svcsDesc+') e gostaria de agendar novamente para o veículo *'+veic.placa+'*. Podem me passar disponibilidade?'
+          : 'Olá! Gostaria de agendar um serviço para o veículo *'+veic.placa+'*. Podem me passar disponibilidade?';
         histHtml += '<div class="os-item">'+
           '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem">'+
           '<div><div class="os-num">OS '+os.numero+'</div>'+
@@ -721,11 +831,16 @@ function renderVeiculo(el, veic, cli){
           '<span class="badge '+(badgeMap[os.status]||'')+'">'+((labelMap[os.status])||os.status)+'</span>'+
           '</div>'+
           (svcs.length?svcs.map(function(i){return '<div class="os-serv-row">🔧 '+i.descricao+'</div>';}).join(''):'')+
-          (pecs.length?pecs.map(function(i){return '<div class="os-serv-row">🔩 '+i.descricao+'</div>';}).join(''):'')+
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.5rem">'+
+          (pecs.length?pecs.map(function(i){
+            var tipoBadge = i.tipo_peca ? ' <span style="font-size:.65rem;background:#dbeafe;color:#1d4ed8;padding:.12rem .4rem;border-radius:999px;font-weight:700">'+i.tipo_peca+'</span>' : '';
+            return '<div class="os-serv-row">🔩 '+i.descricao+tipoBadge+'</div>';
+          }).join(''):'')+
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.65rem">'+
           '<div class="os-total">'+brl(os.valor_total)+'</div>'+
+          '<div style="display:flex;align-items:center;gap:.5rem">'+
           (os.avaliacao?'<div style="font-size:.85rem">'+'★'.repeat(os.avaliacao)+'</div>':'')+
-          '</div></div>';
+          (os.status==='pago' && window._telOf?'<a class="btn btn-whatsapp btn-sm" style="font-size:.7rem;padding:.28rem .6rem" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent(waHistMsg)+'" target="_blank">Repetir</a>':'')+
+          '</div></div></div>';
       });
     }
 
@@ -782,6 +897,7 @@ function renderVeiculo(el, veic, cli){
 
     html += '<div id="t-hist" class="tab-content active"><div class="card">'+histHtml+'</div></div>'+
             '<div id="t-prev" class="tab-content"><div class="card">'+prevHtml+'</div></div>'+
+            '<div id="t-gar"  class="tab-content">'+garHtml+'</div>'+
             '<div id="t-aval" class="tab-content">'+avalHtml+'</div>';
 
     html += '<div class="footer">'+nomeOf+'</div>';
