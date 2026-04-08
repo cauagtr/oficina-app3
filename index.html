@@ -191,6 +191,26 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 .svc-dyn-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
 .svc-dyn-preco{font-size:.78rem;font-weight:700;color:var(--green)}
 .svc-dyn-tempo{font-size:.72rem;color:var(--muted);background:var(--card);padding:.18rem .5rem;border-radius:999px;border:1px solid var(--border)}
+/* FASE 5 — RECOMPENSAS APP3 */
+.pts-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:.85rem;padding:1.5rem;text-align:center;margin-bottom:1rem;position:relative;overflow:hidden}
+.pts-card::before{content:'★';position:absolute;font-size:8rem;opacity:.04;top:-1rem;right:-1rem;line-height:1}
+.pts-valor{font-size:3rem;font-weight:800;color:#f59e0b;line-height:1}
+.pts-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem}
+.pts-nivel{display:inline-block;margin-top:.65rem;padding:.3rem .9rem;border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.04em}
+.pts-nivel.bronze{background:rgba(205,127,50,.2);color:#cd7f32;border:1px solid rgba(205,127,50,.35)}
+.pts-nivel.prata{background:rgba(173,181,189,.2);color:#adb5bd;border:1px solid rgba(173,181,189,.35)}
+.pts-nivel.ouro{background:rgba(245,158,11,.2);color:#f59e0b;border:1px solid rgba(245,158,11,.35)}
+.pts-barra-wrap{background:rgba(255,255,255,.08);border-radius:999px;height:8px;margin:.75rem 0 .35rem;overflow:hidden}
+.pts-barra{background:linear-gradient(90deg,#f59e0b,#fbbf24);height:100%;border-radius:999px;transition:width .6s ease}
+.pts-barra-info{display:flex;justify-content:space-between;font-size:.68rem;color:rgba(255,255,255,.35)}
+.beneficio-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.7rem;padding:.9rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.75rem;transition:.2s}
+.beneficio-card.disponivel{border-color:#10b981;background:#f0fdf4}
+.beneficio-card.bloqueado{opacity:.6}
+.beneficio-icon{font-size:1.4rem;flex-shrink:0}
+.beneficio-nome{font-size:.88rem;font-weight:700;margin-bottom:.15rem}
+.beneficio-pts{font-size:.75rem;font-weight:600}
+.beneficio-pts.ok{color:#10b981}
+.beneficio-pts.no{color:var(--muted)}
 /* FASE 4 — ABAS CLIENTE */
 .cli-tabs{display:flex;gap:.25rem;background:#f1f5f9;padding:.28rem;border-radius:.65rem;margin-bottom:.85rem}
 .cli-tab{flex:1;padding:.48rem .3rem;border-radius:.45rem;border:none;background:none;cursor:pointer;font-size:.72rem;font-weight:700;color:var(--muted);transition:.2s;text-align:center;font-family:inherit;white-space:nowrap}
@@ -678,11 +698,13 @@ function mostrarCliente(cli){
       '<div style="font-size:.88rem;font-weight:600;margin-bottom:.75rem">Olá, <strong>'+primeiroNome+'</strong>! 👋</div>'+
       '<div class="cli-tabs">'+
       '<button class="cli-tab active" onclick="swCliTab(\'c-status\',this)">Status</button>'+
-      '<button class="cli-tab" onclick="swCliTab(\'c-veics\',this)">Meus Veículos</button>'+
+      '<button class="cli-tab" onclick="swCliTab(\'c-veics\',this)">Veículos</button>'+
+      '<button class="cli-tab" onclick="swCliTab(\'c-recomp\',this)">Pontos</button>'+
       '<button class="cli-tab" onclick="swCliTab(\'c-perfil\',this)">Perfil</button>'+
       '</div>'+
       '<div id="c-status" class="cli-tab-content active">'+statusHtml+'</div>'+
       '<div id="c-veics" class="cli-tab-content">'+veicsHtml+'</div>'+
+      '<div id="c-recomp" class="cli-tab-content"><div id="recomp-loading" style="text-align:center;padding:2rem;color:var(--muted)"><div class="spinner" style="margin:0 auto .5rem"></div>Carregando pontos...</div></div>'+
       '<div id="c-perfil" class="cli-tab-content">'+perfilHtml+'</div>';
 
     document.getElementById('cliente-veiculos').innerHTML = '';
@@ -700,6 +722,94 @@ function swCliTab(id, btn){
   var el = document.getElementById(id);
   if(el) el.classList.add('active');
   btn.classList.add('active');
+  // Lazy load da aba de recompensas
+  if(id === 'c-recomp' && _clienteAtual && document.getElementById('recomp-loading')){
+    carregarRecompensasCliente(_clienteAtual);
+  }
+}
+
+function carregarRecompensasCliente(cli){
+  Promise.all([
+    sb().from('recompensas_config').select('*').limit(1),
+    sb().from('recompensas_catalogo').select('*').eq('ativo',true).order('pontos_necessarios'),
+    sb().from('recompensas_resgates').select('pontos_usados,created_at,recompensas_catalogo(nome)').eq('cliente_id',cli.id).order('created_at',{ascending:false})
+  ]).then(function(results){
+    var cfg      = results[0].data?.[0] || {pontos_por_real:1, nivel_prata:500, nivel_ouro:1500};
+    var catalogo = results[1].data||[];
+    var resgates = results[2].data||[];
+
+    var ganhos  = Math.floor(Number(cli.total_gasto||0) * Number(cfg.pontos_por_real||1));
+    var usados  = resgates.reduce(function(s,r){return s+Number(r.pontos_usados||0);},0);
+    var saldo   = Math.max(0, ganhos - usados);
+    var nivelPrata = Number(cfg.nivel_prata||500);
+    var nivelOuro  = Number(cfg.nivel_ouro||1500);
+    var nivel   = saldo >= nivelOuro ? 'Ouro' : saldo >= nivelPrata ? 'Prata' : 'Bronze';
+    var nivelCls= nivel.toLowerCase();
+
+    // Barra de progresso
+    var proximo = nivel==='Ouro' ? nivelOuro : nivel==='Prata' ? nivelOuro : nivelPrata;
+    var base    = nivel==='Ouro' ? nivelPrata : 0;
+    var pct     = Math.min(100, Math.round((saldo - base) / (proximo - base) * 100));
+    var faltam  = Math.max(0, proximo - saldo);
+
+    var barraHtml = nivel==='Ouro'
+      ? '<div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-top:.75rem">Nível máximo atingido! 🏆</div>'
+      : '<div class="pts-barra-wrap"><div class="pts-barra" style="width:'+pct+'%"></div></div>'+
+        '<div class="pts-barra-info">'+
+        '<span>'+saldo+' pts</span>'+
+        '<span>Faltam '+faltam+' para '+( nivel==='Bronze'?'Prata':'Ouro')+'</span>'+
+        '</div>';
+
+    // Catálogo
+    var catHtml = catalogo.map(function(b){
+      var disp = saldo >= b.pontos_necessarios;
+      return '<div class="beneficio-card '+(disp?'disponivel':'bloqueado')+'">'+
+        '<div class="beneficio-icon">'+(disp?'🎁':'🔒')+'</div>'+
+        '<div style="flex:1">'+
+        '<div class="beneficio-nome">'+b.nome+'</div>'+
+        (b.descricao?'<div style="font-size:.73rem;color:var(--muted)">'+b.descricao+'</div>':'')+
+        '</div>'+
+        '<div class="beneficio-pts '+(disp?'ok':'no')+'">'+
+        b.pontos_necessarios+' pts'+
+        (disp?'<br><span style="font-size:.68rem">Disponível!</span>':'<br><span style="font-size:.68rem">Faltam '+(b.pontos_necessarios-saldo)+'</span>')+
+        '</div>'+
+        '</div>';
+    }).join('');
+
+    // Histórico de resgates
+    var histHtml = resgates.length===0
+      ? '<div style="font-size:.8rem;color:var(--muted);text-align:center;padding:.75rem">Nenhum resgate ainda.</div>'
+      : resgates.map(function(r){
+          return '<div style="display:flex;justify-content:space-between;font-size:.8rem;padding:.45rem 0;border-bottom:1px solid var(--border)">'+
+            '<span>'+( r.recompensas_catalogo?.nome||'—')+'</span>'+
+            '<span style="color:var(--red);font-weight:700">-'+r.pontos_usados+' pts</span>'+
+            '</div>';
+        }).join('');
+
+    var html =
+      '<div class="pts-card">'+
+      '<div class="pts-valor">'+saldo+'</div>'+
+      '<div class="pts-label">Pontos disponíveis</div>'+
+      '<span class="pts-nivel '+nivelCls+'">'+(nivel==='Bronze'?'🥉':nivel==='Prata'?'🥈':'🥇')+' '+nivel+'</span>'+
+      barraHtml+
+      '</div>';
+
+    if(catalogo.length){
+      html += '<div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin-bottom:.5rem">Benefícios disponíveis</div>'+catHtml;
+    }
+
+    if(resgates.length){
+      html += '<div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin:.85rem 0 .5rem">Histórico de resgates</div>'+
+        '<div class="card" style="padding:.5rem 1rem">'+histHtml+'</div>';
+    }
+
+    html += '<div style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:1rem">'+
+      'Você ganhou '+ganhos+' pontos no total. '+(ganhos>0?'Continue usando nossos serviços!':'Traga seu veículo e comece a acumular!')+
+      '</div>';
+
+    var el = document.getElementById('c-recomp');
+    if(el) el.innerHTML = html;
+  });
 }
 function abrirVeiculoPorOS(osId){
   sb().from('ordens_servico').select('veiculo_id,veiculos(*),clientes(*)').eq('id',osId).single().then(function(res){
