@@ -1194,46 +1194,203 @@ function pgPerfil(){
   var primeiroNome = nome.split(' ')[0];
 
   el.innerHTML =
+    // Avatar + dados básicos
     '<div class="card" style="margin-bottom:.75rem">'+
-      '<div class="card-body" style="text-align:center;padding:1.5rem 1rem">'+
+      '<div class="card-body" style="text-align:center;padding:1.5rem 1rem 1rem">'+
         '<div class="perfil-avatar">'+primeiroNome.charAt(0).toUpperCase()+'</div>'+
         '<div style="font-size:1.05rem;font-weight:800;letter-spacing:-.02em">'+nome+'</div>'+
         '<div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;font-family:var(--mono)">'+(_cli.cpf||'')+'</div>'+
       '</div>'+
-      '<div style="padding:.25rem 1rem .75rem">'+
+      '<div style="padding:.25rem 1rem .5rem">'+
         '<div class="info-row"><span class="info-lbl">Telefone</span><span class="info-val">'+(_cli.telefone||'—')+'</span></div>'+
         '<div class="info-row"><span class="info-lbl">E-mail</span><span class="info-val">'+(_cli.email||'—')+'</span></div>'+
         '<div class="info-row"><span class="info-lbl">Total gasto</span><span class="info-val" style="color:var(--green)">'+brl(_cli.total_gasto||0)+'</span></div>'+
         '<div class="info-row"><span class="info-lbl">Última visita</span><span class="info-val">'+dataBR(_cli.ultima_visita)+'</span></div>'+
         '<div class="info-row"><span class="info-lbl">Status</span><span class="info-val"><span class="badge b-'+(_cli.status||'novo')+'">'+(_cli.status||'Novo').toUpperCase()+'</span></span></div>'+
-        '<div class="info-row"><span class="info-lbl">Veículos</span><span class="info-val">'+_veics.length+'</span></div>'+
+      '</div>'+
+      '<div style="padding:.5rem 1rem .85rem">'+
+        '<button class="btn btn-secondary btn-full" onclick="abrirEditarDados()">✏️ Editar meus dados</button>'+
       '</div>'+
     '</div>'+
 
+    // Veículos
+    '<div class="sec-title">Meus veículos</div>'+
     (_veics.length ?
-      '<div class="sec-title">Meus veículos</div>'+
       _veics.map(function(v){
         return '<div class="card" style="margin-bottom:.5rem">'+
           '<div class="card-body">'+
-            '<div style="display:flex;align-items:center;gap:.65rem">'+
-              '<span class="placa">'+v.placa+'</span>'+
-              '<div>'+
-                '<div style="font-weight:700">'+(v.marca||'')+' '+(v.modelo||'')+'</div>'+
-                '<div style="font-size:.72rem;color:var(--muted)">'+(v.ano||'')+' · '+(v.cor||'')+' · '+(v.combustivel||'')+'</div>'+
+            '<div style="display:flex;align-items:center;justify-content:space-between;gap:.5rem">'+
+              '<div style="display:flex;align-items:center;gap:.65rem;min-width:0">'+
+                '<span class="placa">'+v.placa+'</span>'+
+                '<div>'+
+                  '<div style="font-weight:700;font-size:.88rem">'+(v.marca||'')+' '+(v.modelo||'')+'</div>'+
+                  '<div style="font-size:.72rem;color:var(--muted)">'+(v.ano?v.ano+' · ':'')+''+(v.cor?v.cor+' · ':'')+''+(v.combustivel||'')+'</div>'+
+                '</div>'+
               '</div>'+
+              '<button class="btn btn-secondary btn-sm" style="flex-shrink:0" onclick="abrirEditarVeiculo(\''+v.id+'\')">Editar</button>'+
             '</div>'+
           '</div>'+
         '</div>';
-      }).join('') : '')+
+      }).join('')
+    : '<div class="empty" style="padding:1.2rem"><div class="empty-msg">Nenhum veículo cadastrado ainda.</div></div>')+
 
-    '<div class="alert alert-info">Para atualizar seus dados ou cadastrar um novo veículo, entre em contato com a oficina.</div>'+
+    '<button class="btn btn-primary btn-full" style="margin-bottom:1rem" onclick="abrirCadastroVeiculo()">+ Adicionar veículo</button>'+
 
-    (window._telOf ?
-      '<a class="btn btn-wa btn-full btn-lg" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent('Olá! Sou '+(_cli.nome||'')+' (CPF: '+(_cli.cpf||'')+') e gostaria de atualizar meus dados cadastrais.')+'" target="_blank">'+
-        'Falar com a oficina'+
-      '</a>' : '')+
+    '<button class="btn btn-danger btn-full" onclick="sair()">Sair da conta</button>';
+}
 
-    '<button class="btn btn-danger btn-full" style="margin-top:.65rem" onclick="sair()">Sair da conta</button>';
+// ── EDITAR DADOS DO CLIENTE ──────────────────────────────
+function abrirEditarDados(){
+  var corpo =
+    '<div class="agend-form">'+
+      '<div class="form-group"><label>Nome completo</label>'+
+        '<input type="text" id="ed-nome" value="'+(_cli.nome||'')+'"></div>'+
+      '<div class="form-group"><label>Telefone / WhatsApp</label>'+
+        '<input type="text" id="ed-tel" value="'+(_cli.telefone||'')+'" oninput="maskTel(this)" maxlength="15"></div>'+
+      '<div class="form-group"><label>E-mail</label>'+
+        '<input type="email" id="ed-email" value="'+(_cli.email||'')+'"></div>'+
+      '<div id="ed-erro" style="color:var(--red);font-size:.78rem;min-height:1rem;text-align:center"></div>'+
+    '</div>';
+
+  var rodape =
+    '<button class="btn btn-primary btn-full" onclick="salvarDadosCliente()">Salvar</button>'+
+    '<button class="btn btn-secondary btn-full" onclick="fecharModal()">Cancelar</button>';
+
+  abrirModal('Editar meus dados', corpo, rodape);
+}
+
+function salvarDadosCliente(){
+  var nome  = (document.getElementById('ed-nome')?.value||'').trim();
+  var tel   = (document.getElementById('ed-tel')?.value||'').trim();
+  var email = (document.getElementById('ed-email')?.value||'').trim();
+  var erroEl = document.getElementById('ed-erro');
+
+  if(!nome){ erroEl.textContent='Nome é obrigatório.'; return; }
+  if(!tel){  erroEl.textContent='Telefone é obrigatório.'; return; }
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ erroEl.textContent='E-mail inválido.'; return; }
+
+  sb().from('clientes').update({nome:nome, telefone:tel, email:email||null})
+    .eq('id',_cli.id).then(function(res){
+      if(res.error){ erroEl.textContent='Erro: '+res.error.message; return; }
+      // Atualizar sessão local
+      _cli.nome     = nome;
+      _cli.telefone = tel;
+      _cli.email    = email||null;
+      sessionStorage.setItem('portal_cli', JSON.stringify(_cli));
+      toast('Dados atualizados!');
+      fecharModal();
+      recarregarPagina('perfil');
+      // Atualizar topbar
+      var primeiroNome = nome.split(' ')[0];
+      document.getElementById('tp-nome').textContent = primeiroNome;
+      document.getElementById('tp-avatar').textContent = primeiroNome.charAt(0).toUpperCase();
+    });
+}
+
+// ── CADASTRAR NOVO VEÍCULO ───────────────────────────────
+function abrirCadastroVeiculo(){
+  var corpo = formVeiculo({});
+  var rodape =
+    '<button class="btn btn-primary btn-full" onclick="salvarNovoVeiculo()">Salvar veículo</button>'+
+    '<button class="btn btn-secondary btn-full" onclick="fecharModal()">Cancelar</button>';
+  abrirModal('Novo veículo', corpo, rodape);
+}
+
+function abrirEditarVeiculo(veicId){
+  var v = _veics.find(function(x){ return x.id===veicId; })||{};
+  var corpo = formVeiculo(v);
+  var rodape =
+    '<button class="btn btn-primary btn-full" onclick="salvarEdicaoVeiculo(\''+veicId+'\')">Salvar</button>'+
+    '<button class="btn btn-secondary btn-full" onclick="fecharModal()">Cancelar</button>';
+  abrirModal('Editar veículo', corpo, rodape);
+}
+
+function formVeiculo(v){
+  var combOpts = ['flex','gasolina','etanol','diesel','gnv','eletrico','hibrido'].map(function(c){
+    return '<option value="'+c+'"'+(v.combustivel===c?' selected':'')+'>'+c.charAt(0).toUpperCase()+c.slice(1)+'</option>';
+  }).join('');
+
+  return '<div class="agend-form">'+
+    '<div class="form-group"><label>Placa *</label>'+
+      '<input type="text" id="fv-placa" value="'+(v.placa||'')+'" maxlength="8" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()" placeholder="ABC-1234"></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem">'+
+      '<div class="form-group"><label>Marca *</label>'+
+        '<input type="text" id="fv-marca" value="'+(v.marca||'')+'" placeholder="Toyota"></div>'+
+      '<div class="form-group"><label>Modelo *</label>'+
+        '<input type="text" id="fv-modelo" value="'+(v.modelo||'')+'" placeholder="Corolla"></div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem">'+
+      '<div class="form-group"><label>Ano *</label>'+
+        '<input type="number" id="fv-ano" value="'+(v.ano||'')+'" placeholder="2020" min="1980" max="2026" inputmode="numeric"></div>'+
+      '<div class="form-group"><label>Cor</label>'+
+        '<input type="text" id="fv-cor" value="'+(v.cor||'')+'" placeholder="Prata"></div>'+
+    '</div>'+
+    '<div class="form-group"><label>Combustível</label>'+
+      '<select id="fv-comb">'+combOpts+'</select></div>'+
+    '<div id="fv-erro" style="color:var(--red);font-size:.78rem;min-height:1rem;text-align:center"></div>'+
+  '</div>';
+}
+
+function validarFormVeiculo(){
+  var placa  = (document.getElementById('fv-placa')?.value||'').trim().toUpperCase();
+  var marca  = (document.getElementById('fv-marca')?.value||'').trim();
+  var modelo = (document.getElementById('fv-modelo')?.value||'').trim();
+  var ano    = parseInt(document.getElementById('fv-ano')?.value)||0;
+  var cor    = (document.getElementById('fv-cor')?.value||'').trim();
+  var comb   = document.getElementById('fv-comb')?.value||'flex';
+  var erroEl = document.getElementById('fv-erro');
+
+  if(!placa)  { erroEl.textContent='Placa é obrigatória.'; return null; }
+  if(!marca)  { erroEl.textContent='Marca é obrigatória.'; return null; }
+  if(!modelo) { erroEl.textContent='Modelo é obrigatório.'; return null; }
+  if(!ano)    { erroEl.textContent='Ano é obrigatório.'; return null; }
+
+  return {placa, marca, modelo, ano, cor:cor||null, combustivel:comb};
+}
+
+function salvarNovoVeiculo(){
+  var dados = validarFormVeiculo();
+  if(!dados) return;
+
+  sb().from('veiculos').insert({
+    cliente_id: _cli.id,
+    placa:  dados.placa,
+    marca:  dados.marca,
+    modelo: dados.modelo,
+    ano:    dados.ano,
+    cor:    dados.cor,
+    combustivel: dados.combustivel
+  }).select().single().then(function(res){
+    if(res.error){ document.getElementById('fv-erro').textContent='Erro: '+res.error.message; return; }
+    _veics.push(res.data);
+    toast('Veículo cadastrado!');
+    fecharModal();
+    recarregarPagina('perfil');
+    recarregarPagina('agendamento');
+  });
+}
+
+function salvarEdicaoVeiculo(veicId){
+  var dados = validarFormVeiculo();
+  if(!dados) return;
+
+  sb().from('veiculos').update({
+    placa:  dados.placa,
+    marca:  dados.marca,
+    modelo: dados.modelo,
+    ano:    dados.ano,
+    cor:    dados.cor,
+    combustivel: dados.combustivel
+  }).eq('id',veicId).then(function(res){
+    if(res.error){ document.getElementById('fv-erro').textContent='Erro: '+res.error.message; return; }
+    // Atualizar local
+    var idx = _veics.findIndex(function(v){ return v.id===veicId; });
+    if(idx>=0) _veics[idx] = Object.assign(_veics[idx], dados);
+    toast('Veículo atualizado!');
+    fecharModal();
+    recarregarPagina('perfil');
+    recarregarPagina('agendamento');
+  });
 }
 </script>
 </body>
