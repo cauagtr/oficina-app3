@@ -3,343 +3,434 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Acompanhe seu Veículo</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Minha Conta — Oficina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#111827;--amber:#f59e0b;--amber2:#fbbf24;--green:#10b981;
-  --red:#ef4444;--blue:#3b82f6;--orange:#f97316;
-  --bg:#f8f9fa;--card:#ffffff;--border:#e5e7eb;--text:#111827;--muted:#6b7280;
-  --radius:0.8rem;
+  --ink:#0c0c0c; --ink2:#1a1a1a; --ink3:#333;
+  --muted:#6b6b6b; --muted2:#999; --muted3:#c4c4c4;
+  --bg:#f5f4f2; --bg2:#efefed; --card:#fff;
+  --amber:#e8a020; --amber2:#f5b832; --amberbg:#fef8ec;
+  --green:#14a05a; --greenbg:#e8f8ef;
+  --red:#d93025; --redbg:#fdecea;
+  --blue:#1a73e8; --bluebg:#e8f0fe;
+  --orange:#e06b00;
+  --border:#e4e2de; --border2:#d0ceca;
+  --r:.75rem; --r2:1.1rem;
+  --font:'Sora',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
-body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;min-height:100dvh;overflow-x:hidden}
 .hidden{display:none!important}
 
-/* HERO */
-.hero{background:var(--navy);padding:2.75rem 1.25rem 2.25rem;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(245,158,11,.15) 0%,transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(59,130,246,.08) 0%,transparent 50%)}
-.hero-logo{font-size:.7rem;font-weight:800;letter-spacing:.18em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:1.25rem;position:relative;z-index:1}
-.hero-title{font-size:1.85rem;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.15;position:relative;z-index:1}
-.hero-title span{color:var(--amber)}
-.hero-sub{color:rgba(255,255,255,.45);font-size:.85rem;margin-top:.4rem;margin-bottom:2rem;position:relative;z-index:1;font-weight:500}
+/* ── ENTRADA ── */
+#tela-entrada{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 1.25rem;background:var(--ink2);position:relative;overflow:hidden}
+#tela-entrada::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(232,160,32,.14),transparent 70%)}
+#tela-entrada::after{content:'';position:absolute;bottom:-40%;right:-20%;width:500px;height:500px;border-radius:50%;border:1px solid rgba(255,255,255,.04);pointer-events:none}
 
-/* BUSCA */
-.search-wrap{position:relative;z-index:1;max-width:440px;margin:0 auto}
-.search-tabs{display:flex;gap:.4rem;justify-content:center;margin-bottom:.85rem}
-.search-tab{padding:.38rem .9rem;border-radius:999px;border:1.5px solid rgba(255,255,255,.18);background:none;color:rgba(255,255,255,.55);font-size:.78rem;font-weight:700;cursor:pointer;transition:.2s;font-family:inherit;letter-spacing:.02em}
-.search-tab.active{background:var(--amber);border-color:var(--amber);color:var(--navy)}
-.search-row{display:flex;gap:.45rem;align-items:stretch}
-.search-input{flex:1;padding:.82rem 1rem;border-radius:.65rem;border:1.5px solid rgba(255,255,255,.14);background:rgba(255,255,255,.09);color:#fff;font-size:.95rem;font-family:inherit;outline:none;transition:.2s}
-.search-input::placeholder{color:rgba(255,255,255,.35)}
-.search-input:focus{border-color:var(--amber);background:rgba(245,158,11,.07)}
-.btn-buscar{padding:.82rem 1.15rem;background:var(--amber);border:none;border-radius:.65rem;color:var(--navy);font-weight:800;font-size:.9rem;cursor:pointer;white-space:nowrap;font-family:inherit;transition:.2s;flex-shrink:0}
-.btn-buscar:active{background:var(--amber2);transform:scale(.97)}
-.busca-erro{color:#fca5a5;font-size:.8rem;margin-top:.65rem;min-height:1.1rem;text-align:center;font-weight:500}
+.entrada-logo{font-size:.65rem;font-weight:700;letter-spacing:.22em;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:3rem;font-family:var(--mono)}
+.entrada-card{width:100%;max-width:380px;position:relative;z-index:2}
+.entrada-titulo{font-size:2.1rem;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.1;margin-bottom:.4rem}
+.entrada-titulo em{color:var(--amber);font-style:normal}
+.entrada-sub{font-size:.85rem;color:rgba(255,255,255,.38);font-weight:400;margin-bottom:2.5rem;line-height:1.6}
 
-/* CONTAINER */
-.container{max-width:540px;margin:0 auto;padding:1.1rem 1rem}
+.cpf-wrap{position:relative;margin-bottom:.75rem}
+.cpf-inp{width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:var(--r);color:#fff;font-size:1.05rem;font-family:var(--mono);font-weight:500;letter-spacing:.08em;outline:none;transition:.2s}
+.cpf-inp::placeholder{color:rgba(255,255,255,.22);letter-spacing:.04em;font-size:.9rem}
+.cpf-inp:focus{border-color:var(--amber);background:rgba(232,160,32,.07)}
+.cpf-label{display:block;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.6rem}
+
+.btn-entrar{width:100%;padding:1rem;background:var(--amber);border:none;border-radius:var(--r);color:var(--ink2);font-weight:800;font-size:.95rem;cursor:pointer;font-family:var(--font);letter-spacing:.01em;transition:.15s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-entrar:active{transform:scale(.98)}
+.btn-entrar:disabled{opacity:.5;pointer-events:none}
+.btn-entrar .spinner-sm{width:16px;height:16px;border:2px solid rgba(0,0,0,.2);border-top-color:var(--ink2);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.entrada-divider{display:flex;align-items:center;gap:.65rem;margin:1.1rem 0;color:rgba(255,255,255,.2);font-size:.72rem;font-weight:500}
+.entrada-divider::before,.entrada-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.btn-wa-entrada{width:100%;padding:.85rem;background:rgba(37,211,102,.12);border:1.5px solid rgba(37,211,102,.25);border-radius:var(--r);color:#25d366;font-weight:700;font-size:.88rem;cursor:pointer;font-family:var(--font);transition:.15s;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.btn-wa-entrada:active{transform:scale(.98)}
+
+.entrada-erro{color:#ff9999;font-size:.78rem;margin-top:.6rem;min-height:1.1rem;font-weight:500;text-align:center}
+
+/* ── APP PRINCIPAL ── */
+#app{display:none;flex-direction:column;min-height:100dvh}
+#app.show{display:flex}
+
+/* TOPBAR */
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:.7rem 1.1rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:.5rem}
+.topbar-left{display:flex;align-items:center;gap:.6rem;min-width:0}
+.topbar-avatar{width:32px;height:32px;border-radius:50%;background:var(--ink2);color:#fff;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.topbar-nome{font-weight:700;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-sub{font-size:.65rem;color:var(--muted);margin-top:.05rem;font-family:var(--mono)}
+.btn-sair{background:var(--bg);border:1.5px solid var(--border);border-radius:.5rem;padding:.32rem .75rem;font-size:.72rem;font-weight:700;cursor:pointer;color:var(--muted);font-family:var(--font);transition:.15s;white-space:nowrap}
+.btn-sair:hover{color:var(--red);border-color:var(--red)}
+
+/* NAV BOTTOM */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);z-index:100;padding-bottom:env(safe-area-inset-bottom,0)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.5rem .25rem;border:none;background:none;cursor:pointer;min-height:52px;position:relative;font-family:var(--font)}
+.nav-ico{font-size:1.15rem;line-height:1;margin-bottom:.18rem;transition:.15s}
+.nav-lbl{font-size:.57rem;font-weight:700;color:var(--muted2);letter-spacing:.02em;text-transform:uppercase;transition:.15s}
+.nav-btn.ativo .nav-lbl{color:var(--amber)}
+.nav-btn.ativo .nav-ico{transform:scale(1.1)}
+.nav-badge{position:absolute;top:6px;right:calc(50% - 16px);background:var(--red);color:#fff;border-radius:999px;font-size:.52rem;font-weight:800;padding:.1rem .28rem;min-width:.82rem;text-align:center}
+
+/* SCROLL CONTENT */
+.page-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:80px}
+.page{display:none;padding:1.1rem}
+.page.ativo{display:block}
 
 /* CARDS */
-.card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:.8rem;overflow:hidden}
-.card-header{padding:.82rem 1.1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.card-title{font-size:.82rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em}
-.card-body{padding:1rem 1.1rem}
+.card{background:var(--card);border-radius:var(--r2);border:1px solid var(--border);margin-bottom:.75rem;overflow:hidden}
+.card-hd{padding:.8rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-titulo{font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.card-body{padding:1rem}
 
-/* STATUS DESTAQUE */
-.status-box{border-radius:var(--radius);padding:1.4rem 1.1rem;margin-bottom:.8rem;text-align:center;cursor:pointer;transition:.15s}
+/* STATUS BOX */
+.status-box{border-radius:var(--r2);padding:1.4rem 1.1rem;margin-bottom:.75rem;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
 .status-box:active{transform:scale(.99)}
-.status-box.na_fila{background:#f8fafc;border:2px solid #cbd5e1}
-.status-box.em_manutencao{background:#eff6ff;border:2px solid #93c5fd}
-.status-box.aguardando_peca{background:#fffbeb;border:2px solid #fcd34d}
-.status-box.pronto_retirada{background:#f0fdf4;border:2px solid #4ade80}
-.status-box.pronto_retirada .s-titulo{color:#065f46}
-.status-emoji{font-size:2.25rem;margin-bottom:.35rem;line-height:1}
+.status-box.na_fila{background:#f8f9fb;border:2px solid #c8d0e0}
+.status-box.em_manutencao{background:#e8f0fe;border:2px solid #93b8f5}
+.status-box.aguardando_peca{background:#fef8e6;border:2px solid #f5c842}
+.status-box.pronto_retirada{background:#e8f8ef;border:2px solid #5ec98a}
+.s-badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.65rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:.25rem .65rem;border-radius:999px;margin-bottom:.6rem}
+.s-badge.na_fila{background:#e8ecf5;color:#5a6a8a}
+.s-badge.em_manutencao{background:#dbeafe;color:#1a56b0}
+.s-badge.aguardando_peca{background:#fef3c7;color:#92611a}
+.s-badge.pronto_retirada{background:#d1fae5;color:#15803d}
+.s-emoji{font-size:2rem;display:block;margin-bottom:.4rem}
 .s-titulo{font-size:1rem;font-weight:800;margin-bottom:.2rem;letter-spacing:-.02em}
-.s-sub{font-size:.82rem;color:var(--muted);font-weight:500}
-
-/* TABS */
-.tabs{display:flex;gap:.25rem;background:#f1f5f9;padding:.28rem;border-radius:.65rem;margin-bottom:.85rem}
-.tab{flex:1;padding:.48rem .3rem;border-radius:.45rem;border:none;background:none;cursor:pointer;font-size:.75rem;font-weight:700;color:var(--muted);transition:.2s;text-align:center;font-family:inherit;white-space:nowrap}
-.tab.active{background:var(--card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.tab-content{display:none}
-.tab-content.active{display:block}
+.s-info{font-size:.78rem;color:var(--muted);font-weight:500;margin-top:.25rem}
+.s-tap{font-size:.68rem;color:var(--muted2);margin-top:.5rem;display:flex;align-items:center;gap:.25rem}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;padding:.22rem .6rem;border-radius:999px;font-size:.67rem;font-weight:800;line-height:1;letter-spacing:.02em;white-space:nowrap}
-.b-fila{background:#f1f5f9;color:#475569}
+.badge{display:inline-flex;align-items:center;padding:.2rem .55rem;border-radius:999px;font-size:.65rem;font-weight:800;letter-spacing:.03em;white-space:nowrap}
+.b-fila{background:#f1f4fa;color:#475569}
 .b-manut{background:#dbeafe;color:#1d4ed8}
 .b-aguard{background:#fef3c7;color:#92400e}
 .b-pronto{background:#d1fae5;color:#065f46}
-.b-pago{background:#064e3b;color:#a7f3d0}
+.b-pago{background:#e8f8ef;color:#14a05a}
 .b-cancelado{background:#fee2e2;color:#b91c1c}
-.b-novo{background:#f1f5f9;color:#475569}
-.b-vip{background:#fef3c7;color:#92400e}
 
-/* OS ITEMS */
-.os-item{padding:.9rem 1.1rem;border-bottom:1px solid var(--border)}
+/* OS ITEM */
+.os-item{padding:.9rem 1rem;border-bottom:1px solid var(--border)}
 .os-item:last-child{border-bottom:none}
-.os-num{font-size:.9rem;font-weight:800;letter-spacing:-.02em}
-.os-data{font-size:.73rem;color:var(--muted);margin-top:.08rem;font-weight:500}
-.os-serv-row{font-size:.8rem;color:var(--muted);display:flex;align-items:center;gap:.3rem;margin-top:.2rem}
-.os-total{font-size:.95rem;font-weight:800;color:var(--green)}
+.os-num{font-size:.88rem;font-weight:800;letter-spacing:-.01em}
+.os-data{font-size:.7rem;color:var(--muted);margin-top:.05rem;font-family:var(--mono)}
+.os-svc{font-size:.78rem;color:var(--muted);margin-top:.2rem;display:flex;align-items:center;gap:.3rem}
+
+/* PLACA */
+.placa{font-family:var(--mono);font-weight:700;font-size:.82rem;background:var(--ink2);color:#fff;padding:.18rem .5rem;border-radius:.3rem;letter-spacing:.07em;display:inline-block}
 
 /* PREVENTIVO */
-.prev-item{display:flex;align-items:flex-start;gap:.75rem;padding:.82rem 1.1rem;border-bottom:1px solid var(--border)}
-.prev-item:last-child{border-bottom:none}
-.prev-dot{width:.5rem;height:.5rem;border-radius:50%;flex-shrink:0;margin-top:.35rem}
-.prev-nome{font-weight:700;font-size:.88rem}
-.prev-data{font-size:.73rem;color:var(--muted);margin-top:.1rem;font-weight:500}
+.prev-linha{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;border-bottom:1px solid var(--border)}
+.prev-linha:last-child{border-bottom:none}
+.prev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.prev-nome{font-weight:600;font-size:.85rem}
+.prev-datas{font-size:.7rem;color:var(--muted);margin-top:.1rem;font-family:var(--mono)}
 
-/* VEÍCULO CARD */
-.veic-card{display:flex;align-items:center;gap:.85rem;padding:.9rem 1.1rem;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border)}
-.veic-card:last-child{border-bottom:none}
-.veic-card:active{background:#f8fafc}
-.veic-placa{background:var(--navy);color:#fff;font-size:.88rem;font-weight:800;padding:.28rem .65rem;border-radius:.4rem;letter-spacing:.06em;flex-shrink:0}
-.veic-nome{font-weight:700;font-size:.9rem}
-.veic-sub{font-size:.73rem;color:var(--muted);margin-top:.1rem;font-weight:500}
+/* GARANTIA */
+.gar-card{display:flex;align-items:flex-start;gap:.65rem;padding:.8rem 1rem;border-bottom:1px solid var(--border)}
+.gar-card:last-child{border-bottom:none}
+.gar-card.ok{background:var(--greenbg)}
+.gar-card.vencida{background:var(--redbg)}
+
+/* PONTOS */
+.pts-hero{background:var(--ink2);border-radius:var(--r2);padding:1.5rem 1.25rem;margin-bottom:.75rem;position:relative;overflow:hidden;text-align:center}
+.pts-hero::before{content:'';position:absolute;top:-30%;right:-10%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(232,160,32,.15),transparent 70%)}
+.pts-num{font-size:3.5rem;font-weight:800;color:var(--amber);line-height:1;font-family:var(--mono)}
+.pts-label{font-size:.62rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.14em;margin-top:.2rem}
+.nivel-badge{display:inline-flex;align-items:center;gap:.35rem;margin-top:.75rem;padding:.28rem .9rem;border-radius:999px;font-size:.75rem;font-weight:800;letter-spacing:.04em}
+.nivel-bronze{background:rgba(205,127,50,.18);color:#cd7f32;border:1px solid rgba(205,127,50,.3)}
+.nivel-prata{background:rgba(180,188,196,.18);color:#90a0b0;border:1px solid rgba(180,188,196,.3)}
+.nivel-ouro{background:rgba(232,160,32,.18);color:var(--amber);border:1px solid rgba(232,160,32,.3)}
+.pts-barra-wrap{background:rgba(255,255,255,.08);border-radius:999px;height:6px;margin:.85rem 0 .35rem;overflow:hidden}
+.pts-barra{background:linear-gradient(90deg,var(--amber),var(--amber2));height:100%;border-radius:999px;transition:width .8s cubic-bezier(.34,1.56,.64,1)}
+.pts-barra-info{display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,.3);font-family:var(--mono)}
+
+.beneficio-card{display:flex;align-items:center;gap:.75rem;padding:.85rem 1rem;border-bottom:1px solid var(--border)}
+.beneficio-card:last-child{border-bottom:none}
+.beneficio-card.disp{background:var(--greenbg)}
+.beneficio-ico{font-size:1.3rem;flex-shrink:0}
+.beneficio-nome{font-size:.88rem;font-weight:700}
+.beneficio-desc{font-size:.72rem;color:var(--muted);margin-top:.08rem}
+.beneficio-pts{font-size:.78rem;font-weight:700;white-space:nowrap}
+.beneficio-pts.ok{color:var(--green)}
+.beneficio-pts.no{color:var(--muted2)}
+
+/* AGENDAMENTO */
+.agend-form .form-group{margin-bottom:.85rem}
+.agend-form label{display:block;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.agend-form input,.agend-form select,.agend-form textarea{width:100%;padding:.78rem .9rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.92rem;font-family:var(--font);color:var(--ink);background:var(--card);outline:none;transition:.2s}
+.agend-form input:focus,.agend-form select:focus,.agend-form textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(232,160,32,.1)}
+.agend-form textarea{resize:vertical;min-height:80px}
+.agend-status{border-radius:var(--r);padding:.8rem 1rem;margin-bottom:.75rem;font-size:.82rem;font-weight:600;border-left:3px solid}
+.agend-status.ok{background:var(--greenbg);color:var(--green);border-color:var(--green)}
+.agend-status.erro{background:var(--redbg);color:var(--red);border-color:var(--red)}
+.agend-status.info{background:var(--bluebg);color:var(--blue);border-color:var(--blue)}
+
+/* PERFIL */
+.perfil-avatar{width:64px;height:64px;border-radius:50%;background:var(--ink2);color:#fff;font-size:1.6rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto .85rem}
+.info-row{display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.85rem}
+.info-row:last-child{border-bottom:none}
+.info-lbl{color:var(--muted);font-size:.78rem}
+.info-val{font-weight:600;text-align:right}
+
+/* AVALIAÇÃO */
+.star-row{display:flex;gap:.4rem;justify-content:center;margin:.6rem 0}
+.star{font-size:1.9rem;background:none;border:none;cursor:pointer;opacity:.25;transition:.15s;line-height:1}
+.star.on{opacity:1}
 
 /* BOTÕES */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.7rem 1.2rem;border-radius:.65rem;border:none;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;text-decoration:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.35rem;padding:.7rem 1.2rem;border-radius:var(--r);border:none;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font);text-decoration:none;transition:.15s;white-space:nowrap}
 .btn:active{transform:scale(.97)}
-.btn-primary{background:var(--amber);color:var(--navy)}
-.btn-whatsapp{background:#25d366;color:#fff}
-.btn-secondary{background:var(--bg);color:var(--text);border:1.5px solid var(--border)}
+.btn-primary{background:var(--amber);color:var(--ink2)}
+.btn-primary:hover{background:var(--amber2)}
+.btn-secondary{background:var(--bg);color:var(--ink);border:1.5px solid var(--border)}
+.btn-secondary:hover{border-color:var(--amber);color:var(--amber)}
+.btn-wa{background:#25d366;color:#fff}
+.btn-danger{background:var(--redbg);color:var(--red);border:1.5px solid var(--red)}
 .btn-full{width:100%;display:flex}
-.btn-lg{padding:.82rem 1.4rem;font-size:.92rem;border-radius:.7rem}
+.btn-lg{padding:.88rem 1.4rem;font-size:.92rem}
+.btn-sm{padding:.32rem .7rem;font-size:.72rem}
+.btn:disabled{opacity:.45;pointer-events:none}
 
-/* SAUDAÇÃO */
-.saudacao{padding:1rem 1.1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.saud-nome{font-size:1.05rem;font-weight:800;letter-spacing:-.02em}
-.saud-sub{font-size:.75rem;color:var(--muted);margin-top:.1rem;font-weight:500}
-
-/* STARS */
-.star-wrap{display:flex;gap:.4rem;justify-content:center;margin:.65rem 0}
-.star-btn{font-size:1.8rem;background:none;border:none;cursor:pointer;opacity:.3;transition:.2s;line-height:1}
-.star-btn.ativo{opacity:1}
-
-/* BACK BAR */
-.back-bar{display:flex;align-items:center;gap:.6rem;padding:.8rem 1rem;background:var(--card);border-bottom:1px solid var(--border);cursor:pointer;position:sticky;top:0;z-index:50}
-.back-bar span{font-size:.88rem;font-weight:600;color:var(--muted)}
-.back-bar strong{font-size:.88rem;font-weight:700;color:var(--text)}
-
-/* ALERTS */
-.alert{padding:.8rem 1rem;border-radius:.65rem;font-size:.82rem;margin-bottom:.75rem;border-left:3px solid;font-weight:500}
-.alert-success{background:#f0fdf4;color:#065f46;border-color:var(--green)}
-.alert-info{background:#eff6ff;color:#1d4ed8;border-color:var(--blue)}
-.alert-warning{background:#fffbeb;color:#92400e;border-color:var(--amber)}
-
-/* TOAST */
-#toast{position:fixed;bottom:1.25rem;left:1rem;right:1rem;max-width:480px;margin:0 auto;padding:.82rem 1.1rem;border-radius:.7rem;font-size:.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.18);text-align:center}
-#toast.success{background:#0f172a;color:#a7f3d0;border-left:3px solid var(--green)}
-#toast.error{background:#0f172a;color:#fca5a5;border-left:3px solid var(--red)}
-
-/* LOADING */
-.loading{text-align:center;padding:2.5rem;color:var(--muted)}
-.spinner{width:20px;height:20px;border:2.5px solid var(--border);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* VAZIO */
-.empty{text-align:center;padding:2rem;color:var(--muted)}
-.empty-icon{font-size:2.25rem;margin-bottom:.5rem}
+/* EMPTY */
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--muted)}
+.empty-ico{font-size:2.4rem;margin-bottom:.5rem}
 .empty-msg{font-size:.85rem;line-height:1.6;font-weight:500}
 
-/* SEÇÃO SERVIÇOS */
-.servicos-section{background:var(--card);border-top:1px solid var(--border)}
-.servicos-inner{max-width:540px;margin:0 auto;padding:2rem 1rem 1.5rem}
-.servicos-label{font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:.4rem}
-.servicos-title{font-size:1.35rem;font-weight:800;letter-spacing:-.03em;color:var(--navy);margin-bottom:.35rem}
-.servicos-sub{font-size:.82rem;color:var(--muted);font-weight:500;margin-bottom:1.5rem;line-height:1.6}
-.servicos-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.5rem}
-.serv-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.75rem;padding:.9rem;transition:.2s;cursor:default}
-.serv-card:hover{border-color:var(--amber);background:#fffbeb}
-.serv-icon{font-size:1.5rem;margin-bottom:.45rem;line-height:1}
-.serv-nome{font-size:.85rem;font-weight:800;color:var(--navy);margin-bottom:.15rem;letter-spacing:-.01em}
-.serv-desc{font-size:.72rem;color:var(--muted);font-weight:500;line-height:1.45}
-.servicos-cta{background:var(--navy);border-radius:.75rem;padding:1.25rem;text-align:center;margin-bottom:1rem}
-.servicos-cta p{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:.75rem;font-weight:500}
-.btn-wa-cta{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;background:#25d366;color:#fff;padding:.75rem 1.5rem;border-radius:.65rem;font-weight:800;font-size:.9rem;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:.2s;width:100%}
-.btn-wa-cta:active{transform:scale(.97)}
-.diferenciais{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:1.25rem}
-.dif-item{text-align:center;padding:.75rem .4rem;background:var(--bg);border-radius:.65rem;border:1px solid var(--border)}
-.dif-icon{font-size:1.2rem;margin-bottom:.25rem}
-.dif-txt{font-size:.68rem;font-weight:700;color:var(--navy);line-height:1.3}
-/* PERFIL OFICINA */
-.perfil-capa{width:100%;height:160px;object-fit:cover;display:block}
-.perfil-capa-placeholder{width:100%;height:160px;background:linear-gradient(135deg,var(--navy),#1e3a5f);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
-.perfil-info{padding:1rem 1.1rem;border-bottom:1px solid var(--border)}
-.perfil-nome{font-size:1.1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.2rem}
-.perfil-meta{font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;gap:.2rem}
-.perfil-meta a{color:var(--muted);text-decoration:none}
-.perfil-meta a:hover{color:var(--amber)}
-/* GALERIA */
-.galeria-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;padding:.85rem}
-.galeria-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:.45rem;cursor:pointer;transition:.2s}
-.galeria-img:hover{transform:scale(1.03)}
-/* DEPOIMENTOS */
-.dep-card{padding:1rem 1.1rem;border-bottom:1px solid var(--border)}
-.dep-card:last-child{border-bottom:none}
-.dep-stars{color:var(--amber);font-size:.9rem;margin-bottom:.3rem}
-.dep-texto{font-size:.82rem;color:var(--text);line-height:1.55;margin-bottom:.3rem;font-style:italic}
-.dep-autor{font-size:.72rem;color:var(--muted);font-weight:600}
-/* SERVIÇOS DINÂMICOS */
-.svc-dyn-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.75rem;padding:1rem;transition:.2s}
-.svc-dyn-card:hover{border-color:var(--amber);background:#fffbeb}
-.svc-dyn-nome{font-size:.88rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}
-.svc-dyn-desc{font-size:.75rem;color:var(--muted);margin-bottom:.5rem;line-height:1.45}
-.svc-dyn-meta{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem}
-.svc-dyn-preco{font-size:.78rem;font-weight:700;color:var(--green)}
-.svc-dyn-tempo{font-size:.72rem;color:var(--muted);background:var(--card);padding:.18rem .5rem;border-radius:999px;border:1px solid var(--border)}
-/* FASE 5 — RECOMPENSAS APP3 */
-.pts-card{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:.85rem;padding:1.5rem;text-align:center;margin-bottom:1rem;position:relative;overflow:hidden}
-.pts-card::before{content:'★';position:absolute;font-size:8rem;opacity:.04;top:-1rem;right:-1rem;line-height:1}
-.pts-valor{font-size:3rem;font-weight:800;color:#f59e0b;line-height:1}
-.pts-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-top:.25rem}
-.pts-nivel{display:inline-block;margin-top:.65rem;padding:.3rem .9rem;border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.04em}
-.pts-nivel.bronze{background:rgba(205,127,50,.2);color:#cd7f32;border:1px solid rgba(205,127,50,.35)}
-.pts-nivel.prata{background:rgba(173,181,189,.2);color:#adb5bd;border:1px solid rgba(173,181,189,.35)}
-.pts-nivel.ouro{background:rgba(245,158,11,.2);color:#f59e0b;border:1px solid rgba(245,158,11,.35)}
-.pts-barra-wrap{background:rgba(255,255,255,.08);border-radius:999px;height:8px;margin:.75rem 0 .35rem;overflow:hidden}
-.pts-barra{background:linear-gradient(90deg,#f59e0b,#fbbf24);height:100%;border-radius:999px;transition:width .6s ease}
-.pts-barra-info{display:flex;justify-content:space-between;font-size:.68rem;color:rgba(255,255,255,.35)}
-.beneficio-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.7rem;padding:.9rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.75rem;transition:.2s}
-.beneficio-card.disponivel{border-color:#10b981;background:#f0fdf4}
-.beneficio-card.bloqueado{opacity:.6}
-.beneficio-icon{font-size:1.4rem;flex-shrink:0}
-.beneficio-nome{font-size:.88rem;font-weight:700;margin-bottom:.15rem}
-.beneficio-pts{font-size:.75rem;font-weight:600}
-.beneficio-pts.ok{color:#10b981}
-.beneficio-pts.no{color:var(--muted)}
-/* FASE 4 — ABAS CLIENTE */
-.cli-tabs{display:flex;gap:.25rem;background:#f1f5f9;padding:.28rem;border-radius:.65rem;margin-bottom:.85rem}
-.cli-tab{flex:1;padding:.48rem .3rem;border-radius:.45rem;border:none;background:none;cursor:pointer;font-size:.72rem;font-weight:700;color:var(--muted);transition:.2s;text-align:center;font-family:inherit;white-space:nowrap}
-.cli-tab.active{background:var(--card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.cli-tab-content{display:none}
-.cli-tab-content.active{display:block}
-/* GARANTIA */
-.garantia-card{background:#f0fdf4;border:1.5px solid #86efac;border-radius:.65rem;padding:.75rem 1rem;margin-bottom:.5rem;display:flex;align-items:flex-start;gap:.65rem}
-.garantia-card.vencida{background:#fff1f2;border-color:#fca5a5}
-.garantia-icon{font-size:1.1rem;flex-shrink:0}
-.garantia-os{font-size:.82rem;font-weight:800;color:var(--navy);margin-bottom:.15rem}
-.garantia-validade{font-size:.73rem;color:var(--muted);font-weight:500}
-/* VEÍCULO CARD CLIENTE */
-.veic-cli-card{background:var(--bg);border:1.5px solid var(--border);border-radius:.7rem;padding:1rem;margin-bottom:.65rem}
-.veic-cli-placa{font-family:monospace;font-size:.9rem;font-weight:800;background:var(--navy);color:#fff;padding:.22rem .6rem;border-radius:.35rem;letter-spacing:.06em;display:inline-block;margin-bottom:.45rem}
-.veic-cli-info{font-size:.82rem;color:var(--muted);font-weight:500;margin-bottom:.65rem}
-/* FOOTER */
-.footer{text-align:center;padding:2rem 1rem 2.5rem;color:var(--muted);font-size:.75rem;font-weight:500}
+/* TOAST */
+#toast{position:fixed;bottom:1.25rem;left:1rem;right:1rem;max-width:480px;margin:0 auto;padding:.82rem 1.1rem;border-radius:var(--r);font-size:.85rem;font-weight:700;z-index:9999;box-shadow:0 4px 24px rgba(0,0,0,.16);text-align:center;transition:opacity .3s}
+#toast.s{background:var(--ink2);color:#a7f3d0;border-left:3px solid var(--green)}
+#toast.e{background:var(--ink2);color:#fca5a5;border-left:3px solid var(--red)}
+#toast.i{background:var(--ink2);color:#bfdbfe;border-left:3px solid var(--blue)}
 
-/* PLACA DISPLAY */
-.placa-display{background:var(--navy);color:#fff;font-size:1.15rem;font-weight:800;padding:.4rem .9rem;border-radius:.5rem;letter-spacing:.08em;display:inline-block}
+/* LOADING */
+.spinner{width:20px;height:20px;border:2.5px solid var(--border2);border-top-color:var(--amber);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+.loading{text-align:center;padding:2rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:.6rem}
 
-/* URL CPF AUTO */
-.url-hint{color:rgba(255,255,255,.35);font-size:.72rem;margin-top:.5rem;text-align:center}
+/* VEÍCULO SELECT */
+.veic-opcao{display:flex;align-items:center;gap:.75rem;padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:var(--r);margin-bottom:.45rem;cursor:pointer;transition:.15s;background:var(--card)}
+.veic-opcao:hover,.veic-opcao.sel{border-color:var(--amber);background:var(--amberbg)}
+.veic-opcao.sel .placa{background:var(--amber);color:var(--ink2)}
 
-@media(max-width:360px){
-  .hero-title{font-size:1.6rem}
-  .search-tab{padding:.35rem .7rem;font-size:.75rem}
-}
-@media print{.hero,.back-bar,.btn-whatsapp,.star-wrap,#toast{display:none!important}.container{padding:0}}
+/* SECTION TITLE */
+.sec-title{font-size:.65rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:.25rem 0 .65rem;display:flex;align-items:center;gap:.5rem}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* MODAL OVERLAY */
+.modal-wrap{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:flex;align-items:flex-end;justify-content:center}
+.modal-wrap.hidden{display:none}
+.modal-sheet{background:var(--card);border-radius:1.25rem 1.25rem 0 0;width:100%;max-width:520px;max-height:92dvh;overflow-y:auto;padding-bottom:1.5rem}
+.modal-handle{width:36px;height:4px;background:var(--border2);border-radius:2px;margin:.75rem auto .3rem}
+.modal-hd{padding:.6rem 1.25rem 0;display:flex;align-items:center;justify-content:space-between}
+.modal-tit{font-size:.92rem;font-weight:800}
+.modal-close{background:none;border:none;font-size:1.2rem;color:var(--muted);cursor:pointer;padding:.2rem .4rem}
+.modal-body{padding:.85rem 1.25rem}
+.modal-foot{padding:.65rem 1.25rem 0;display:flex;flex-direction:column;gap:.45rem}
+
+/* ALERTAS INLINE */
+.alert{padding:.75rem 1rem;border-radius:var(--r);font-size:.8rem;border-left:3px solid;font-weight:500;margin-bottom:.65rem}
+.alert-info{background:var(--bluebg);color:var(--blue);border-color:var(--blue)}
+.alert-warning{background:var(--amberbg);color:var(--orange);border-color:var(--amber)}
+.alert-success{background:var(--greenbg);color:var(--green);border-color:var(--green)}
 </style>
 </head>
 <body>
 
-<!-- TELA BUSCA -->
-<div id="tela-busca">
-  <div class="hero">
-    <div class="hero-logo">Oficina Digital</div>
-    <div class="hero-title">Acompanhe seu <span>veículo</span></div>
-    <div class="hero-sub">Status em tempo real, histórico e revisões</div>
+<!-- ══ TELA ENTRADA ══ -->
+<div id="tela-entrada">
+  <div class="entrada-logo" id="el-nome-of">Portal do Cliente</div>
+  <div class="entrada-card">
+    <div class="entrada-titulo">Olá, <em>bem-vindo</em>.</div>
+    <div class="entrada-sub">Acompanhe seu veículo, histórico de serviços e agende revisões.</div>
 
-    <div class="search-wrap">
-
-      <div class="search-row">
-        <input class="search-input" type="text" id="busca-input"
-          placeholder="000.000.000-00" autocomplete="off"
-          onkeydown="if(event.key==='Enter')doBusca()">
-        <button class="btn-buscar" onclick="doBusca()">Buscar</button>
-      </div>
-      <div class="busca-erro" id="busca-erro"></div>
+    <label class="cpf-label">Seu CPF</label>
+    <div class="cpf-wrap">
+      <input class="cpf-inp" type="text" id="cpf-inp" placeholder="000.000.000-00"
+        inputmode="numeric" autocomplete="off" maxlength="14"
+        oninput="maskCPF(this)"
+        onkeydown="if(event.key==='Enter')entrar()">
     </div>
-  </div>
+    <button class="btn-entrar" id="btn-entrar" onclick="entrar()">
+      Acessar minha conta
+    </button>
+    <div class="entrada-erro" id="entrada-erro"></div>
 
-  <div id="busca-resultado"></div>
-
-  <!-- ZONA PÚBLICA DINÂMICA -->
-  <div id="zona-publica">
-
-    <!-- Perfil da oficina -->
-    <div class="card" style="margin:1rem;border-radius:.8rem;overflow:hidden" id="perfil-card">
-      <div id="perfil-capa-wrap">
-        <div class="perfil-capa-placeholder">🔧</div>
-      </div>
-      <div class="perfil-info" id="perfil-info">
-        <div class="perfil-nome" id="perfil-nome">Oficina Digital</div>
-        <div class="perfil-meta" id="perfil-meta"></div>
-      </div>
-    </div>
-
-    <!-- Galeria -->
-    <div id="galeria-wrap" class="hidden">
-      <div style="padding:.65rem 1rem .25rem">
-        <div style="font-size:.72rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em">Fotos</div>
-      </div>
-      <div class="galeria-grid" id="galeria-grid"></div>
-    </div>
-
-    <!-- Serviços dinâmicos -->
-    <div style="padding:.65rem 1rem .35rem">
-      <div style="font-size:.72rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em">Nossos Serviços</div>
-      <div style="font-size:.8rem;color:var(--muted);margin-top:.2rem">Toque em um serviço para solicitar via WhatsApp</div>
-    </div>
-    <div id="servicos-dyn" style="padding:0 1rem 1rem;display:grid;grid-template-columns:1fr 1fr;gap:.65rem">
-      <!-- preenchido dinamicamente -->
-      <div class="svc-dyn-card"><div class="svc-dyn-nome">Revisão Geral</div><div class="svc-dyn-desc">Inspeção completa de motor, freios e fluidos</div><a class="btn-wa-cta" href="#" target="_blank" style="font-size:.78rem;padding:.5rem .8rem">Solicitar</a></div>
-      <div class="svc-dyn-card"><div class="svc-dyn-nome">Troca de Óleo</div><div class="svc-dyn-desc">Óleo e filtros com os melhores lubrificantes</div><a class="btn-wa-cta" href="#" target="_blank" style="font-size:.78rem;padding:.5rem .8rem">Solicitar</a></div>
-    </div>
-
-    <!-- Diferenciais -->
-    <div class="diferenciais" style="margin:0 1rem 1rem">
-      <div class="dif-item"><div class="dif-icon">📱</div><div class="dif-txt">Acompanhe online</div></div>
-      <div class="dif-item"><div class="dif-icon">🔎</div><div class="dif-txt">Diagnóstico digital</div></div>
-      <div class="dif-item"><div class="dif-icon">✅</div><div class="dif-txt">Orçamento aprovado</div></div>
-    </div>
-    <div style="padding:0 1rem 1rem">
-      <a class="btn-wa-cta" id="btn-wa-dif" href="https://wa.me/5541995853589?text=Ol%C3%A1%2C+tenho+d%C3%BAvidas+sobre+meu+ve%C3%ADculo!" target="_blank" style="display:flex">
-        Fale conosco pelo WhatsApp
-      </a>
-    </div>
-
-    <!-- Depoimentos -->
-    <div id="depoimentos-wrap" class="hidden" style="margin:0 1rem 1rem">
-      <div style="font-size:.72rem;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.65rem">O que dizem nossos clientes</div>
-      <div class="card" id="depoimentos-lista"></div>
-    </div>
-
-  </div>
-
-  <div class="footer" id="footer-txt">Dúvidas? Fale com a oficina pelo WhatsApp</div>
-</div>
-
-<!-- TELA CLIENTE (lista veículos) -->
-<div id="tela-cliente" class="hidden">
-  <div class="back-bar" onclick="voltarBusca()">
-    <span>←</span><strong>Nova busca</strong>
-  </div>
-  <div class="container">
-    <div id="cliente-header"></div>
-    <div id="cliente-veiculos"></div>
+    <div class="entrada-divider">ou</div>
+    <button class="btn-wa-entrada" onclick="mostrarCadastro()" style="background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.25);color:var(--amber)">
+      ✦ Criar minha conta
+    </button>
   </div>
 </div>
 
-<!-- TELA VEÍCULO (detalhe) -->
-<div id="tela-veiculo" class="hidden">
-  <div class="back-bar" id="back-bar-veic" onclick="voltarCliente()">
-    <span>←</span><strong id="back-label">Voltar</strong>
+<!-- ══ TELA CADASTRO ══ -->
+<div id="tela-cadastro" class="hidden" style="min-height:100dvh;background:var(--ink2);padding:0;overflow-y:auto">
+  <div style="background:rgba(8,8,8,.5);padding:16px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(255,255,255,.06)">
+    <button onclick="mostrarEntrada()" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:1.3rem;cursor:pointer;padding:0 4px">←</button>
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:rgba(255,255,255,.3);text-transform:uppercase" id="cad-nome-of">Criar Conta</div>
   </div>
-  <div class="container">
-    <div id="veiculo-content"></div>
+
+  <div style="padding:28px 24px 80px;max-width:480px;margin:0 auto">
+    <div style="font-size:1.6rem;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:6px">Criar minha conta</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.35);margin-bottom:28px;line-height:1.6">Preencha seus dados e de um veículo para começar. Você poderá adicionar mais veículos depois.</div>
+
+    <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:8px">
+      <span style="width:16px;height:1px;background:var(--amber);display:inline-block"></span>
+      Seus dados
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div>
+        <label class="cpf-label">Nome completo *</label>
+        <input class="cpf-inp" type="text" id="cad-nome" placeholder="Seu nome completo" autocomplete="name">
+      </div>
+      <div>
+        <label class="cpf-label">CPF *</label>
+        <input class="cpf-inp" type="text" id="cad-cpf" placeholder="000.000.000-00" inputmode="numeric" maxlength="14" oninput="maskCPF(this)">
+      </div>
+      <div>
+        <label class="cpf-label">Telefone / WhatsApp *</label>
+        <input class="cpf-inp" type="text" id="cad-tel" placeholder="(41) 99999-9999" inputmode="tel" maxlength="15" oninput="maskTel(this)">
+      </div>
+      <div>
+        <label class="cpf-label">E-mail</label>
+        <input class="cpf-inp" type="email" id="cad-email" placeholder="seu@email.com" autocomplete="email">
+      </div>
+    </div>
+
+    <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;display:flex;align-items:center;gap:8px">
+      <span style="width:16px;height:1px;background:var(--amber);display:inline-block"></span>
+      Seu veículo
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="cpf-label">Placa *</label>
+          <input class="cpf-inp" type="text" id="cad-placa" placeholder="ABC-1234" maxlength="8" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+        </div>
+        <div>
+          <label class="cpf-label">Ano *</label>
+          <input class="cpf-inp" type="number" id="cad-ano" placeholder="2020" inputmode="numeric" min="1980" max="2026">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="cpf-label">Marca *</label>
+          <input class="cpf-inp" type="text" id="cad-marca" placeholder="Ex: Toyota">
+        </div>
+        <div>
+          <label class="cpf-label">Modelo *</label>
+          <input class="cpf-inp" type="text" id="cad-modelo" placeholder="Ex: Corolla">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div>
+          <label class="cpf-label">Cor</label>
+          <input class="cpf-inp" type="text" id="cad-cor" placeholder="Ex: Prata">
+        </div>
+        <div>
+          <label class="cpf-label">Combustível</label>
+          <select id="cad-comb" style="width:100%;padding:1rem 1.1rem;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:var(--r);color:#fff;font-size:.95rem;font-family:var(--font);outline:none">
+            <option value="flex">Flex</option>
+            <option value="gasolina">Gasolina</option>
+            <option value="etanol">Etanol</option>
+            <option value="diesel">Diesel</option>
+            <option value="eletrico">Elétrico</option>
+            <option value="hibrido">Híbrido</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div id="cad-erro" style="color:#ff9999;font-size:.78rem;margin-bottom:10px;min-height:1rem;font-weight:500;text-align:center"></div>
+
+    <button class="btn-entrar" id="btn-cadastrar" onclick="cadastrarCliente()">
+      Criar minha conta
+    </button>
+    <div style="text-align:center;margin-top:12px">
+      <button onclick="mostrarEntrada()" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:12px;cursor:pointer;font-family:var(--font)">Já tenho conta — Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP PRINCIPAL ══ -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-avatar" id="tp-avatar">?</div>
+      <div>
+        <div class="topbar-nome" id="tp-nome">—</div>
+        <div class="topbar-sub" id="tp-cpf">—</div>
+      </div>
+    </div>
+    <button class="btn-sair" onclick="sair()">Sair</button>
+  </div>
+
+  <div class="page-scroll">
+
+    <!-- STATUS -->
+    <div class="page ativo" id="pg-status">
+      <div class="loading"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+
+    <!-- VEÍCULOS / HISTÓRICO -->
+    <div class="page" id="pg-historico">
+      <div class="loading"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+
+    <!-- AGENDAMENTO -->
+    <div class="page" id="pg-agendamento">
+      <div class="loading"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+
+    <!-- PONTOS -->
+    <div class="page" id="pg-pontos">
+      <div class="loading"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+
+    <!-- PERFIL -->
+    <div class="page" id="pg-perfil">
+      <div class="loading"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn ativo" data-pg="status" onclick="irPara('status',this)">
+      <span class="nav-ico">🔄</span><span class="nav-lbl">Status</span>
+      <span class="nav-badge hidden" id="badge-os">0</span>
+    </button>
+    <button class="nav-btn" data-pg="historico" onclick="irPara('historico',this)">
+      <span class="nav-ico">📋</span><span class="nav-lbl">Histórico</span>
+    </button>
+    <button class="nav-btn" data-pg="agendamento" onclick="irPara('agendamento',this)">
+      <span class="nav-ico">📅</span><span class="nav-lbl">Agendar</span>
+    </button>
+    <button class="nav-btn" data-pg="pontos" onclick="irPara('pontos',this)">
+      <span class="nav-ico">⭐</span><span class="nav-lbl">Pontos</span>
+    </button>
+    <button class="nav-btn" data-pg="perfil" onclick="irPara('perfil',this)">
+      <span class="nav-ico">👤</span><span class="nav-lbl">Perfil</span>
+    </button>
+  </nav>
+</div>
+
+<!-- MODAL -->
+<div class="modal-wrap hidden" id="modal-wrap" onclick="fecharModalFora(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-hd">
+      <div class="modal-tit" id="modal-tit">—</div>
+      <button class="modal-close" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-foot" id="modal-foot"></div>
   </div>
 </div>
 
@@ -347,724 +438,794 @@ body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);c
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-var SUPA_URL = 'https://phmtiulbrlnwjllcrjcf.supabase.co';
-var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBobXRpdWxicmxud2psbGNyamNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5NjgwODksImV4cCI6MjA5MDU0NDA4OX0.vsM7EZckDErY4rGLM-BTfmthW4ern9sT1TnIN6FT4ss';
+// ── CONFIG ──────────────────────────────────────────────
+var SUPA_URL = 'https://vignaatgbwlhkwqeupan.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpZ25hYXRnYndsaGt3cWV1cGFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3OTQ2MDYsImV4cCI6MjA5NTM3MDYwNn0.3J15sgQ6svDO1x1YAjUjr6M57by3nRV9hnEHNTS6HTI';
+var LANDING_URL = './landing_oficina.html'; // URL da vitrine pública
 
 var _sb = null;
 function sb(){ if(!_sb) _sb = supabase.createClient(SUPA_URL, SUPA_KEY); return _sb; }
 
-// HELPERS
+// Estado global
+var _cli = null;
+var _veics = [];
+var _cfg = {};
+var _pgAtual = 'status';
+var _pgsCarregadas = {};
+
+// ── HELPERS ─────────────────────────────────────────────
 function brl(v){ return 'R$\u00a0'+Math.abs(Number(v)||0).toLocaleString('pt-BR',{minimumFractionDigits:2}); }
 function dataBR(iso){ if(!iso) return '—'; var p=iso.substring(0,10).split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
-function maskCPF(v){ return v.replace(/\D/g,'').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2'); }
 function hoje(){ return new Date().toISOString().substring(0,10); }
 
 var _tTimer;
 function toast(msg, tipo){
-  tipo = tipo||'success';
   var el = document.getElementById('toast');
-  el.textContent = msg; el.className = 'toast '+tipo;
+  el.textContent = msg;
+  el.className = tipo==='e'?'e':tipo==='i'?'i':'s';
   el.classList.remove('hidden');
   clearTimeout(_tTimer);
   _tTimer = setTimeout(function(){ el.classList.add('hidden'); }, 3500);
 }
 
-// CARREGAR ZONA PÚBLICA DINÂMICA
-(function carregarZonaPublica(){
-  Promise.all([
-    sb().from('configuracoes').select('chave,valor'),
-    sb().from('servicos_publicos').select('*').eq('ativo',true).order('ordem'),
-    sb().from('ordens_servico').select('avaliacao,comentario_avaliacao,clientes(nome),created_at').eq('status','pago').not('avaliacao','is',null).gte('avaliacao',4).order('created_at',{ascending:false}).limit(5)
-  ]).then(function(results){
-    var cfg = {};
-    (results[0].data||[]).forEach(function(r){ cfg[r.chave]=r.valor; });
-    var servicos   = results[1].data||[];
-    var avaliacoes = results[2].data||[];
+function maskTel(inp){
+  var v = inp.value.replace(/\D/g,'');
+  v = v.replace(/^(\d{2})(\d)/,'($1) $2');
+  v = v.replace(/(\d{5})(\d)/,'$1-$2');
+  inp.value = v.substring(0,15);
+}
 
-    var nome    = cfg['nome_mecanica']  || '';
-    var tel     = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
-    window._telOf = tel; // disponível globalmente para botões WA
-    var end     = cfg['endereco_mecanica']  || '';
-    var horario = cfg['horario_funcionamento'] || '';
-    var maps    = cfg['maps_link']    || '';
-    var ig      = cfg['instagram']    || '';
-    var capa    = cfg['foto_capa']    || '';
-    var logo    = cfg['logo_url']     || '';
+function mostrarCadastro(){
+  document.getElementById('tela-entrada').classList.add('hidden');
+  document.getElementById('tela-cadastro').classList.remove('hidden');
+  var nomeOf = document.getElementById('el-nome-of');
+  var cadNomeOf = document.getElementById('cad-nome-of');
+  if(nomeOf && cadNomeOf) cadNomeOf.textContent = nomeOf.textContent;
+}
 
-    // ── Atualizar hero
-    if(nome){
-      var heroLogo = document.querySelector('.hero-logo');
-      if(heroLogo) heroLogo.textContent = nome;
-      var footer = document.getElementById('footer-txt');
-      if(footer) footer.textContent = nome + (end ? ' · ' + end : '');
-    }
+function mostrarEntrada(){
+  document.getElementById('tela-cadastro').classList.add('hidden');
+  document.getElementById('tela-entrada').classList.remove('hidden');
+}
 
-    // ── Perfil da oficina
-    var capaWrap = document.getElementById('perfil-capa-wrap');
-    if(capaWrap){
-      if(capa) capaWrap.innerHTML = '<img src="'+capa+'" class="perfil-capa" alt="'+nome+'">';
-      else capaWrap.innerHTML = '<div class="perfil-capa-placeholder">🔧</div>';
-    }
-    var nomeEl = document.getElementById('perfil-nome');
-    if(nomeEl && nome) nomeEl.textContent = nome;
+async function cadastrarCliente(){
+  var nome   = (document.getElementById('cad-nome')?.value||'').trim();
+  var cpfRaw = (document.getElementById('cad-cpf')?.value||'').replace(/\D/g,'');
+  var tel    = (document.getElementById('cad-tel')?.value||'').trim();
+  var email  = (document.getElementById('cad-email')?.value||'').trim();
+  var placa  = (document.getElementById('cad-placa')?.value||'').trim().toUpperCase();
+  var ano    = document.getElementById('cad-ano')?.value;
+  var marca  = (document.getElementById('cad-marca')?.value||'').trim();
+  var modelo = (document.getElementById('cad-modelo')?.value||'').trim();
+  var cor    = (document.getElementById('cad-cor')?.value||'').trim();
+  var comb   = document.getElementById('cad-comb')?.value||'flex';
+  var erroEl = document.getElementById('cad-erro');
+  var btn    = document.getElementById('btn-cadastrar');
 
-    var metaEl = document.getElementById('perfil-meta');
-    if(metaEl){
-      var metaHtml = '';
-      if(end)     metaHtml += '<span>📍 '+(maps?'<a href="'+maps+'" target="_blank">'+end+'</a>':end)+'</span>';
-      if(horario) metaHtml += '<span>🕐 '+horario+'</span>';
-      if(tel)     metaHtml += '<span>📞 <a href="https://wa.me/55'+tel+'">'+tel+'</a></span>';
-      if(ig)      metaHtml += '<span>📷 <a href="https://instagram.com/'+ig.replace('@','')+'" target="_blank">'+ig+'</a></span>';
-      metaEl.innerHTML = metaHtml;
-    }
+  function setErro(msg){ erroEl.textContent = msg; btn.disabled=false; btn.textContent='Criar minha conta'; }
 
-    // ── Botão WA diferenciais
-    var btnDif = document.getElementById('btn-wa-dif');
-    if(btnDif && tel){
-      var msgDif = 'Olá'+(nome?' '+nome:'')+', tenho dúvidas sobre meu veículo!';
-      btnDif.href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgDif);
-    }
+  btn.disabled=true; btn.textContent='Cadastrando...'; erroEl.textContent='';
 
-    // ── Serviços dinâmicos
-    var svcEl = document.getElementById('servicos-dyn');
-    if(svcEl && servicos.length > 0){
-      var icons = ['🔧','🛢️','🛑','⚙️','❄️','⚡','🔄','🚗','🔩','🔦','🪝','🔋'];
-      svcEl.innerHTML = servicos.map(function(s, i){
-        var precoTxt = s.preco_de ? ('A partir de R$ '+Number(s.preco_de).toLocaleString('pt-BR',{minimumFractionDigits:2})) : '';
-        if(s.preco_de && s.preco_ate) precoTxt = 'R$ '+Number(s.preco_de).toLocaleString('pt-BR',{minimumFractionDigits:2})+' – R$ '+Number(s.preco_ate).toLocaleString('pt-BR',{minimumFractionDigits:2});
-        var tempoTxt = s.tempo_medio_min ? (s.tempo_medio_min >= 60 ? Math.floor(s.tempo_medio_min/60)+'h'+(s.tempo_medio_min%60?(s.tempo_medio_min%60)+'min':'') : s.tempo_medio_min+'min') : '';
-        var msgWA = 'Olá'+(nome?' '+nome:'')+', gostaria de solicitar o serviço: *'+s.nome+'*'+(tempoTxt?' (tempo estimado: '+tempoTxt+')':'')+(tel?'':'')+'. Podem me passar disponibilidade?';
-        var waHref = tel ? 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgWA) : '#';
-        return '<div class="svc-dyn-card">'+
-          '<div style="font-size:1.3rem;margin-bottom:.35rem">'+(icons[i%icons.length])+'</div>'+
-          '<div class="svc-dyn-nome">'+s.nome+'</div>'+
-          (s.descricao?'<div class="svc-dyn-desc">'+s.descricao+'</div>':'')+
-          '<div class="svc-dyn-meta">'+
-          (precoTxt?'<span class="svc-dyn-preco">'+precoTxt+'</span>':'')+
-          (tempoTxt?'<span class="svc-dyn-tempo">⏱ '+tempoTxt+'</span>':'')+
-          '</div>'+
-          '<a class="btn-wa-cta" href="'+waHref+'" target="_blank" style="font-size:.78rem;padding:.5rem .8rem;justify-content:center">Solicitar via WhatsApp</a>'+
-          '</div>';
-      }).join('');
-    } else if(svcEl && servicos.length===0){
-      // manter cards padrão se não houver serviços cadastrados
-    }
+  // Validações
+  if(!nome)          return setErro('Nome é obrigatório.');
+  if(cpfRaw.length!==11) return setErro('CPF inválido — informe 11 dígitos.');
+  var inv=['00000000000','11111111111','22222222222','33333333333','44444444444','55555555555','66666666666','77777777777','88888888888','99999999999'];
+  if(inv.includes(cpfRaw)) return setErro('CPF inválido.');
+  var s=0; for(var i=0;i<9;i++) s+=parseInt(cpfRaw[i])*(10-i); var r=11-(s%11); if(r>=10)r=0; if(r!==parseInt(cpfRaw[9])) return setErro('CPF inválido.');
+  s=0; for(var i=0;i<10;i++) s+=parseInt(cpfRaw[i])*(11-i); r=11-(s%11); if(r>=10)r=0; if(r!==parseInt(cpfRaw[10])) return setErro('CPF inválido.');
+  if(!tel)           return setErro('Telefone é obrigatório.');
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setErro('E-mail inválido.');
+  if(!placa)         return setErro('Placa é obrigatória.');
+  if(!marca)         return setErro('Marca é obrigatória.');
+  if(!modelo)        return setErro('Modelo é obrigatório.');
+  if(!ano)           return setErro('Ano é obrigatório.');
 
-    // ── Depoimentos (avaliações ≥4 estrelas)
-    var depWrap = document.getElementById('depoimentos-wrap');
-    var depLista = document.getElementById('depoimentos-lista');
-    if(depWrap && depLista && avaliacoes.length > 0){
-      depWrap.classList.remove('hidden');
-      depLista.innerHTML = avaliacoes.map(function(a){
-        var estrelas = '★'.repeat(a.avaliacao||5);
-        var primeiroNome = a.clientes ? (a.clientes.nome||'Cliente').split(' ')[0] : 'Cliente';
-        return '<div class="dep-card">'+
-          '<div class="dep-stars">'+estrelas+'</div>'+
-          (a.comentario_avaliacao?'<div class="dep-texto">"'+a.comentario_avaliacao+'"</div>':'')+
-          '<div class="dep-autor">'+primeiroNome+' · '+dataBR((a.created_at||'').substring(0,10))+'</div>'+
-          '</div>';
-      }).join('');
-    }
+  // Formatar CPF
+  var cpfFmt = cpfRaw.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
 
+  // Checar se CPF já existe
+  var {data:exist} = await sb().from('clientes').select('id').ilike('cpf','%'+cpfFmt+'%').limit(1);
+  if(exist&&exist.length>0) return setErro('CPF já cadastrado. Tente acessar sua conta.');
+
+  // Criar cliente
+  var {data:cli, error:e1} = await sb().from('clientes').insert({
+    nome, cpf:cpfFmt, telefone:tel, email:email||null, status:'ativo'
+  }).select().single();
+
+  if(e1) return setErro('Erro ao cadastrar: '+e1.message);
+
+  // Criar veículo
+  var {error:e2} = await sb().from('veiculos').insert({
+    cliente_id:cli.id, placa, marca, modelo, ano:parseInt(ano)||null, cor:cor||null, combustivel:comb
   });
-})();
-var _modo = 'cpf';
-function setModo(m){ _modo='cpf'; }
 
-document.getElementById('busca-input').addEventListener('input', function(){
-  this.value = maskCPF(this.value);
-});
+  if(e2) return setErro('Cliente criado mas erro no veículo: '+e2.message);
 
-// DETECTAR CPF NA URL (?cpf=...)
-(function(){
-  var params = new URLSearchParams(window.location.search);
-  var cpf = params.get('cpf');
-  var placa = params.get('placa');
-  if(cpf){
-    setModo('cpf');
-    document.getElementById('busca-input').value = maskCPF(cpf);
-    setTimeout(doBusca, 400);
+  // Entrar automaticamente
+  _cli = cli;
+  sessionStorage.setItem('portal_cli', JSON.stringify(cli));
+  toast('Conta criada com sucesso! Bem-vindo(a), '+nome.split(' ')[0]+'!');
+  document.getElementById('tela-cadastro').classList.add('hidden');
+  _veics = [{placa, marca, modelo, ano:parseInt(ano)||null, cor, combustivel:comb, cliente_id:cli.id}];
+  iniciarApp();
+}
+
+
+  var v = inp.value.replace(/\D/g,'');
+  v = v.replace(/(\d{3})(\d)/, '$1.$2');
+  v = v.replace(/(\d{3})(\d)/, '$1.$2');
+  v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  inp.value = v;
+}
+
+// Modal
+function abrirModal(tit, corpo, rodape){
+  document.getElementById('modal-tit').textContent = tit||'';
+  document.getElementById('modal-body').innerHTML = corpo||'';
+  document.getElementById('modal-foot').innerHTML = rodape||'';
+  document.getElementById('modal-wrap').classList.remove('hidden');
+}
+function fecharModal(){ document.getElementById('modal-wrap').classList.add('hidden'); }
+function fecharModalFora(e){ if(e.target.id==='modal-wrap') fecharModal(); }
+
+// ── INICIALIZAÇÃO ────────────────────────────────────────
+(function init(){
+  // Carregar configurações da oficina
+  sb().from('configuracoes').select('chave,valor').then(function(res){
+    (res.data||[]).forEach(function(r){ _cfg[r.chave]=r.valor; });
+    var nome = _cfg['nome_mecanica'] || 'Oficina';
+    var tel  = (_cfg['telefone_mecanica']||'').replace(/\D/g,'');
+    document.getElementById('el-nome-of').textContent = nome;
+    document.title = 'Minha Conta — ' + nome;
+    if(tel){
+      var msgCad = 'Olá! Gostaria de me cadastrar no portal de clientes da '+nome+'. Meu nome é: [SEU NOME]. CPF: [SEU CPF].';
+      document.getElementById('btn-wa-cad').href = 'https://wa.me/55'+tel+'?text='+encodeURIComponent(msgCad);
+    }
+    window._telOf = tel;
+  });
+
+  // Verificar sessão salva
+  var sessao = sessionStorage.getItem('portal_cli');
+  if(sessao){
+    try{
+      var c = JSON.parse(sessao);
+      if(c && c.id){ _cli = c; iniciarApp(); }
+    } catch(e){}
   }
 })();
 
-// BUSCA
-function doBusca(){
-  var q = document.getElementById('busca-input').value.trim();
-  var erroEl = document.getElementById('busca-erro');
+// ── ENTRAR ──────────────────────────────────────────────
+function entrar(){
+  var cpfRaw = document.getElementById('cpf-inp').value.replace(/\D/g,'');
+  var erroEl = document.getElementById('entrada-erro');
+  var btn    = document.getElementById('btn-entrar');
   erroEl.textContent = '';
-  if(!q){ erroEl.textContent = 'Preencha o campo para buscar.'; return; }
-  document.getElementById('busca-resultado').innerHTML =
-    '<div class="loading" style="color:rgba(255,255,255,.5)"><div class="spinner"></div></div>';
-  buscarPorCPF(q);
-}
 
-function buscarPorCPF(cpf){
-  var clean = cpf.replace(/\D/g,'');
-  if(clean.length < 8){ document.getElementById('busca-erro').textContent='CPF inválido.'; document.getElementById('busca-resultado').innerHTML=''; return; }
-  // Busca com máscara (000.000.000-00) E sem máscara (só números) — cobre qualquer formato salvo no banco
-  var comMascara = clean.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  if(cpfRaw.length < 11){ erroEl.textContent = 'CPF incompleto.'; return; }
+
+  // Validar CPF
+  var invalidos = ['00000000000','11111111111','22222222222','33333333333','44444444444','55555555555','66666666666','77777777777','88888888888','99999999999'];
+  if(invalidos.indexOf(cpfRaw) >= 0){ erroEl.textContent = 'CPF inválido.'; return; }
+  var s=0; for(var i=0;i<9;i++) s+=parseInt(cpfRaw[i])*(10-i); var r=11-(s%11); if(r>=10)r=0; if(r!==parseInt(cpfRaw[9])){ erroEl.textContent='CPF inválido.'; return; }
+  s=0; for(var i=0;i<10;i++) s+=parseInt(cpfRaw[i])*(11-i); r=11-(s%11); if(r>=10)r=0; if(r!==parseInt(cpfRaw[10])){ erroEl.textContent='CPF inválido.'; return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner-sm"></div> Buscando...';
+
+  var comMascara = cpfRaw.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+
   Promise.all([
     sb().from('clientes').select('*').ilike('cpf','%'+comMascara+'%').limit(3),
-    sb().from('clientes').select('*').ilike('cpf','%'+clean+'%').limit(3)
+    sb().from('clientes').select('*').ilike('cpf','%'+cpfRaw+'%').limit(3)
   ]).then(function(results){
-    document.getElementById('busca-resultado').innerHTML = '';
+    btn.disabled = false;
+    btn.innerHTML = 'Acessar minha conta';
+
     var todos = results[0].data||[];
     (results[1].data||[]).forEach(function(c){
       if(!todos.find(function(x){ return x.id===c.id; })) todos.push(c);
     });
-    if(!todos.length){ mostrarNaoEncontrado('CPF'); return; }
-    if(todos.length===1){ mostrarCliente(todos[0]); return; }
-    mostrarListaClientes(todos);
-  });
-}
 
-function buscarPorPlaca(placa){
-  var p = placa.replace(/[^A-Z0-9]/g,'');
-  sb().from('veiculos').select('*,clientes(*)').ilike('placa','%'+p+'%').limit(3).then(function(res){
-    document.getElementById('busca-resultado').innerHTML = '';
-    var lista = res.data||[];
-    if(!lista.length){ mostrarNaoEncontrado('placa'); return; }
-    if(lista.length===1 && lista[0].clientes){ abrirVeiculo(lista[0], lista[0].clientes); return; }
-    // Múltiplos resultados
-    var html = '<div style="padding:.75rem 1rem;background:var(--card);margin-top:0;border-top:1px solid rgba(255,255,255,.1)">' +
-      '<div style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem">'+lista.length+' resultado(s)</div>';
-    lista.forEach(function(v){
-      html += '<div style="display:flex;align-items:center;gap:.75rem;padding:.82rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.4rem;cursor:pointer;background:#fff" onclick="abrirVeiculoById(\''+v.id+'\')">'+
-        '<div class="veic-placa">'+v.placa+'</div>'+
-        '<div><div class="veic-nome">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+'</div>'+
-        '<div class="veic-sub">'+(v.clientes?v.clientes.nome:'')+'</div></div>'+
-        '<span style="color:var(--muted);margin-left:auto">›</span></div>';
-    });
-    html += '</div>';
-    document.getElementById('busca-resultado').innerHTML = html;
-  });
-}
-
-function semAcento(s){
-  return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-}
-
-function buscarPorNome(nome){
-  if(nome.length<2){ document.getElementById('busca-erro').textContent='Digite ao menos 2 letras.'; document.getElementById('busca-resultado').innerHTML=''; return; }
-  // Busca no Supabase com o termo original (pega nomes com acento)
-  // Depois filtra client-side ignorando acento dos dois lados
-  var termoSemAcento = semAcento(nome);
-  // Faz duas buscas paralelas: com o termo original e sem acento
-  Promise.all([
-    sb().from('clientes').select('*').ilike('nome','%'+nome+'%').limit(10),
-    sb().from('clientes').select('*').ilike('nome','%'+termoSemAcento+'%').limit(10)
-  ]).then(function(results){
-    document.getElementById('busca-resultado').innerHTML = '';
-    // Une resultados sem duplicatas
-    var todos = results[0].data||[];
-    (results[1].data||[]).forEach(function(c){
-      if(!todos.find(function(x){ return x.id===c.id; })) todos.push(c);
-    });
-    // Filtra client-side ignorando acento dos dois lados
-    var filtrado = todos.filter(function(c){
-      return semAcento(c.nome||'').includes(termoSemAcento);
-    });
-    if(!filtrado.length){ mostrarNaoEncontrado('nome'); return; }
-    if(filtrado.length===1){ mostrarCliente(filtrado[0]); return; }
-    mostrarListaClientes(filtrado);
-  });
-}
-
-function mostrarNaoEncontrado(tipo){
-  var msg = tipo==='CPF' ? 'CPF não encontrado. Entre em contato com a oficina.' : tipo==='placa' ? 'Placa não encontrada no sistema.' : 'Nenhum cliente encontrado.';
-  document.getElementById('busca-resultado').innerHTML =
-    '<div style="padding:1.5rem 1rem;text-align:center;color:rgba(255,255,255,.5)">'+
-    '<div style="font-size:2rem;margin-bottom:.5rem">?</div>'+
-    '<div style="font-size:.85rem;font-weight:500">'+msg+'</div></div>';
-}
-
-function mostrarListaClientes(lista){
-  var html = '<div style="padding:.75rem;background:var(--card);border-top:1px solid rgba(255,255,255,.1)">'+
-    '<div style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:.5rem;padding:.25rem">'+lista.length+' cliente(s) encontrado(s)</div>';
-  lista.forEach(function(c){
-    html += '<div style="display:flex;align-items:center;gap:.75rem;padding:.82rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.4rem;cursor:pointer;background:#fff" onclick="mostrarClienteById(\''+c.id+'\')">'+
-      '<div style="width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.88rem;flex-shrink:0">'+c.nome.charAt(0).toUpperCase()+'</div>'+
-      '<div><div style="font-weight:700;font-size:.9rem">'+c.nome+'</div>'+
-      '<div style="font-size:.75rem;color:var(--muted);margin-top:.05rem">'+(c.cpf||'')+(c.telefone?' · '+c.telefone:'')+'</div></div>'+
-      '<span style="color:var(--muted);margin-left:auto">›</span></div>';
-  });
-  html += '</div>';
-  document.getElementById('busca-resultado').innerHTML = html;
-}
-
-function mostrarClienteById(id){
-  sb().from('clientes').select('*').eq('id',id).single().then(function(res){
-    if(res.data) mostrarCliente(res.data);
-  });
-}
-
-function abrirVeiculoById(id){
-  sb().from('veiculos').select('*,clientes(*)').eq('id',id).single().then(function(res){
-    if(res.data) abrirVeiculo(res.data, res.data.clientes);
-  });
-}
-
-// TELA CLIENTE
-var _clienteAtual = null;
-
-function mostrarCliente(cli){
-  _clienteAtual = cli;
-
-  Promise.all([
-    sb().from('veiculos').select('*').eq('cliente_id',cli.id).order('created_at'),
-    sb().from('ordens_servico')
-      .select('id,numero,status,valor_total,data_entrada,data_pagamento,garantia_dias,veiculos(placa,modelo,marca)')
-      .eq('cliente_id',cli.id)
-      .in('status',['na_fila','em_manutencao','aguardando_peca','pronto_retirada'])
-      .order('data_entrada',{ascending:false})
-  ]).then(function(results){
-    var veics    = results[0].data||[];
-    var osAtivas = results[1].data||[];
-
-    // Se 1 veículo e nenhuma OS ativa: ir direto para o veículo
-    if(veics.length === 1 && osAtivas.length === 0){
-      abrirVeiculo(veics[0], cli);
+    if(!todos.length){
+      erroEl.textContent = 'CPF não encontrado. Fale com a oficina para se cadastrar.';
       return;
     }
-
-    var primeiroNome = cli.nome ? cli.nome.split(' ')[0] : 'Cliente';
-
-    // ── Aba STATUS — OS ativas
-    var statusInfo = {
-      'na_fila':        {emoji:'🕐',txt:'Na Fila',              cls:'na_fila'},
-      'em_manutencao':  {emoji:'🔧',txt:'Em Manutenção',        cls:'em_manutencao'},
-      'aguardando_peca':{emoji:'⏳',txt:'Aguardando Peça',      cls:'aguardando_peca'},
-      'pronto_retirada':{emoji:'✅',txt:'Pronto para Retirada!',cls:'pronto_retirada'}
-    };
-
-    var statusHtml = '';
-    if(osAtivas.length === 0){
-      statusHtml = '<div class="empty"><div class="empty-icon">✅</div><div class="empty-msg">Nenhum veículo na oficina agora.</div></div>';
-    } else {
-      osAtivas.forEach(function(os){
-        var s = statusInfo[os.status]||{emoji:'🔧',txt:os.status,cls:''};
-        statusHtml += '<div class="status-box '+s.cls+'" onclick="abrirVeiculoPorOS(\''+os.id+'\')" style="margin-bottom:.65rem">'+
-          '<div class="status-emoji">'+s.emoji+'</div>'+
-          '<div class="s-titulo">'+s.txt+'</div>'+
-          '<div class="s-sub">'+(os.veiculos?os.veiculos.placa+' — '+(os.veiculos.marca||'')+' '+(os.veiculos.modelo||''):'')+'</div>'+
-          '<div style="font-size:.72rem;color:var(--muted);margin-top:.3rem">OS '+os.numero+' · Toque para detalhes →</div>'+
-          '</div>';
-      });
-    }
-
-    // ── Aba MEUS VEÍCULOS
-    var veicsHtml = '';
-    if(veics.length === 0){
-      veicsHtml = '<div class="empty"><div class="empty-icon">🚗</div><div class="empty-msg">Nenhum veículo cadastrado.</div></div>';
-    } else {
-      veics.forEach(function(v){
-        // Buscar última OS do veículo para mostrar
-        var msgRevisao = 'Olá! Gostaria de solicitar uma revisão para o veículo *'+v.placa+'*'+(v.marca?' ('+v.marca+' '+v.modelo+')':'')+'. Podem me passar disponibilidade?';
-        veicsHtml += '<div class="veic-cli-card">'+
-          '<div class="veic-cli-placa">'+v.placa+'</div>'+
-          '<div class="veic-cli-info">'+(v.marca||'')+' '+(v.modelo||'')+' '+(v.ano||'')+(v.cor?' · '+v.cor:'')+
-          (v.combustivel?' · '+v.combustivel:'')+'</div>'+
-          '<div style="display:flex;gap:.45rem;flex-wrap:wrap">'+
-          '<button class="btn btn-primary btn-sm" onclick="abrirVeiculo('+JSON.stringify(v).replace(/"/g,'&quot;')+','+JSON.stringify(cli).replace(/"/g,'&quot;')+')">Ver histórico</button>'+
-          (window._telOf?'<a class="btn btn-whatsapp btn-sm" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent(msgRevisao)+'" target="_blank">Solicitar revisão</a>':'')+'</div>'+
-          '</div>';
-      });
-      // Botão adicionar veículo via WA
-      if(window._telOf){
-        var msgAddVeic = 'Olá! Sou '+cli.nome+' (CPF: '+cli.cpf+') e gostaria de cadastrar um novo veículo. Placa: [INFORME A PLACA]. Marca/Modelo: [INFORME].';
-        veicsHtml += '<a class="btn btn-secondary btn-full" style="margin-top:.25rem" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent(msgAddVeic)+'" target="_blank">+ Adicionar veículo via WhatsApp</a>';
-      }
-    }
-
-    // ── Aba PERFIL
-    var perfilHtml =
-      '<div class="card" style="margin-bottom:.65rem">'+
-      '<div class="card-body">'+
-      '<div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">'+
-      '<div style="width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;flex-shrink:0">'+
-      cli.nome.charAt(0).toUpperCase()+'</div>'+
-      '<div><div style="font-weight:800;font-size:1rem">'+(cli.nome||'—')+'</div>'+
-      '<div style="font-size:.75rem;color:var(--muted)">'+(cli.cpf||'')+'</div></div></div>'+
-      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;font-size:.82rem">'+
-      (cli.telefone?'<div><span style="color:var(--muted)">Telefone </span><strong>'+cli.telefone+'</strong></div>':'')+
-      (cli.email?'<div><span style="color:var(--muted)">E-mail </span><strong style="word-break:break-all">'+cli.email+'</strong></div>':'')+
-      (cli.total_gasto?'<div><span style="color:var(--muted)">Total gasto </span><strong style="color:var(--green)">'+brl(cli.total_gasto)+'</strong></div>':'')+
-      (cli.ultima_visita?'<div><span style="color:var(--muted)">Última visita </span><strong>'+dataBR(cli.ultima_visita)+'</strong></div>':'')+
-      '</div></div></div>'+
-      '<div class="alert alert-info" style="font-size:.78rem">Para atualizar seus dados, entre em contato com a oficina via WhatsApp.</div>';
-
-    // Montar tela
-    document.getElementById('cliente-header').innerHTML =
-      '<div style="font-size:.88rem;font-weight:600;margin-bottom:.75rem">Olá, <strong>'+primeiroNome+'</strong>! 👋</div>'+
-      '<div class="cli-tabs">'+
-      '<button class="cli-tab active" onclick="swCliTab(\'c-status\',this)">Status</button>'+
-      '<button class="cli-tab" onclick="swCliTab(\'c-veics\',this)">Veículos</button>'+
-      '<button class="cli-tab" onclick="swCliTab(\'c-recomp\',this)">Pontos</button>'+
-      '<button class="cli-tab" onclick="swCliTab(\'c-perfil\',this)">Perfil</button>'+
-      '</div>'+
-      '<div id="c-status" class="cli-tab-content active">'+statusHtml+'</div>'+
-      '<div id="c-veics" class="cli-tab-content">'+veicsHtml+'</div>'+
-      '<div id="c-recomp" class="cli-tab-content"><div id="recomp-loading" style="text-align:center;padding:2rem;color:var(--muted)"><div class="spinner" style="margin:0 auto .5rem"></div>Carregando pontos...</div></div>'+
-      '<div id="c-perfil" class="cli-tab-content">'+perfilHtml+'</div>';
-
-    document.getElementById('cliente-veiculos').innerHTML = '';
-
-    document.getElementById('tela-busca').classList.add('hidden');
-    document.getElementById('tela-cliente').classList.remove('hidden');
-    document.getElementById('tela-veiculo').classList.add('hidden');
-    window.scrollTo(0,0);
+    _cli = todos[0];
+    sessionStorage.setItem('portal_cli', JSON.stringify(_cli));
+    iniciarApp();
+  }).catch(function(){
+    btn.disabled = false;
+    btn.innerHTML = 'Acessar minha conta';
+    erroEl.textContent = 'Erro de conexão. Tente novamente.';
   });
 }
 
-function swCliTab(id, btn){
-  document.querySelectorAll('.cli-tab-content').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.cli-tab').forEach(function(t){t.classList.remove('active');});
-  var el = document.getElementById(id);
-  if(el) el.classList.add('active');
-  btn.classList.add('active');
-  // Lazy load da aba de recompensas
-  if(id === 'c-recomp' && _clienteAtual && document.getElementById('recomp-loading')){
-    carregarRecompensasCliente(_clienteAtual);
-  }
+function sair(){
+  _cli = null; _veics = []; _pgsCarregadas = {};
+  sessionStorage.removeItem('portal_cli');
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('tela-entrada').classList.remove('hidden');
+  document.getElementById('cpf-inp').value = '';
+  document.getElementById('entrada-erro').textContent = '';
+  irPara('status', document.querySelector('.nav-btn[data-pg="status"]'));
 }
 
-function carregarRecompensasCliente(cli){
+function iniciarApp(){
+  document.getElementById('tela-entrada').classList.add('hidden');
+  var app = document.getElementById('app');
+  app.classList.add('show');
+
+  // Topbar
+  var primeiroNome = (_cli.nome||'Cliente').split(' ')[0];
+  document.getElementById('tp-avatar').textContent = primeiroNome.charAt(0).toUpperCase();
+  document.getElementById('tp-nome').textContent = primeiroNome;
+  document.getElementById('tp-cpf').textContent = _cli.cpf||'';
+
+  // Carregar veículos
+  sb().from('veiculos').select('*').eq('cliente_id',_cli.id).order('created_at').then(function(res){
+    _veics = res.data||[];
+    carregarPagina('status');
+  });
+}
+
+// ── NAVEGAÇÃO ────────────────────────────────────────────
+function irPara(pg, btn){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('ativo'); });
+  document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('ativo'); });
+
+  var el = document.getElementById('pg-'+pg);
+  if(el) el.classList.add('ativo');
+  if(btn) btn.classList.add('ativo');
+  _pgAtual = pg;
+
+  if(!_pgsCarregadas[pg]) carregarPagina(pg);
+  var scroll = document.querySelector('.page-scroll');
+  if(scroll) scroll.scrollTop = 0;
+}
+
+function carregarPagina(pg){
+  _pgsCarregadas[pg] = true;
+  if(pg==='status')      pgStatus();
+  else if(pg==='historico')   pgHistorico();
+  else if(pg==='agendamento') pgAgendamento();
+  else if(pg==='pontos')      pgPontos();
+  else if(pg==='perfil')      pgPerfil();
+}
+
+function recarregarPagina(pg){
+  _pgsCarregadas[pg] = false;
+  carregarPagina(pg);
+}
+
+// ── PÁGINA STATUS ────────────────────────────────────────
+function pgStatus(){
+  var el = document.getElementById('pg-status');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div><span>Carregando...</span></div>';
+
+  sb().from('ordens_servico')
+    .select('id,numero,status,prioridade,valor_total,data_entrada,data_previsao,quilometragem_entrada,veiculos(placa,modelo,marca)')
+    .eq('cliente_id', _cli.id)
+    .in('status',['na_fila','em_manutencao','aguardando_peca','pronto_retirada'])
+    .order('data_entrada',{ascending:false})
+    .then(function(res){
+      var lista = res.data||[];
+
+      // Atualizar badge
+      var badge = document.getElementById('badge-os');
+      if(badge){ badge.textContent = lista.length; badge.classList.toggle('hidden', lista.length===0); }
+
+      if(!lista.length){
+        el.innerHTML =
+          '<div class="empty" style="padding-top:3rem">'+
+            '<div class="empty-ico">✅</div>'+
+            '<div class="empty-msg">Nenhum veículo na oficina agora.<br>Tudo tranquilo por aqui!</div>'+
+          '</div>'+
+          '<div style="padding:0 1.1rem">'+
+            '<button class="btn btn-primary btn-full btn-lg" onclick="irPara(\'agendamento\',document.querySelector(\'[data-pg=agendamento]\'))">Agendar um serviço</button>'+
+          '</div>';
+        return;
+      }
+
+      var sInfo = {
+        'na_fila':         {emoji:'🕐',txt:'Na fila',             cls:'na_fila',         badge:'b-fila'},
+        'em_manutencao':   {emoji:'🔧',txt:'Em manutenção',       cls:'em_manutencao',   badge:'b-manut'},
+        'aguardando_peca': {emoji:'⏳',txt:'Aguardando peça',     cls:'aguardando_peca', badge:'b-aguard'},
+        'pronto_retirada': {emoji:'✅',txt:'Pronto para retirar!',cls:'pronto_retirada', badge:'b-pronto'},
+      };
+
+      var html = '';
+      lista.forEach(function(os){
+        var s = sInfo[os.status]||{emoji:'🔧',txt:os.status,cls:'',badge:''};
+        var veicInfo = os.veiculos ? os.veiculos.placa+' — '+(os.veiculos.marca||'')+' '+(os.veiculos.modelo||'') : '';
+        var priorTag = os.prioridade && os.prioridade!=='normal'
+          ? '<span class="badge" style="background:'+(os.prioridade==='vip'?'#fef3c7':'#ffe4d4')+';color:'+(os.prioridade==='vip'?'#92400e':'#c2410c')+'">'+os.prioridade.toUpperCase()+'</span> '
+          : '';
+        html +=
+          '<div class="status-box '+s.cls+'" onclick="verDetalhOS(\''+os.id+'\')" style="margin:0 0 .75rem">'+
+            '<span class="s-badge '+s.cls+'">'+s.emoji+' '+s.txt+'</span>'+
+            (priorTag ? '<span style="font-size:.65rem;font-weight:800;color:var(--orange);margin-left:.35rem">'+os.prioridade.toUpperCase()+'</span>' : '')+
+            '<div class="s-titulo">'+veicInfo+'</div>'+
+            '<div class="s-info">OS #'+os.numero+' · Entrada: '+dataBR(os.data_entrada)+'</div>'+
+            (os.data_previsao ? '<div class="s-info">Previsão: '+dataBR(os.data_previsao)+'</div>' : '')+
+            '<div class="s-tap">Toque para ver detalhes →</div>'+
+          '</div>';
+      });
+
+      el.innerHTML = html;
+    });
+}
+
+function verDetalhOS(osId){
+  sb().from('ordens_servico')
+    .select('*, veiculos(placa,modelo,marca,ano), os_itens(*), os_fotos(foto_base64,descricao)')
+    .eq('id',osId).single()
+    .then(function(res){
+      var os = res.data; if(!os) return;
+      var itens = os.os_itens||[];
+      var svcs  = itens.filter(function(i){return i.tipo==='servico';});
+      var pecs  = itens.filter(function(i){return i.tipo==='peca';});
+      var fotos = os.os_fotos||[];
+
+      var sInfo = {
+        'na_fila':         {emoji:'🕐',txt:'Na fila'},
+        'em_manutencao':   {emoji:'🔧',txt:'Em manutenção'},
+        'aguardando_peca': {emoji:'⏳',txt:'Aguardando peça'},
+        'pronto_retirada': {emoji:'✅',txt:'Pronto para retirar'},
+        'pago':            {emoji:'💰',txt:'Pago / Concluído'},
+        'cancelado':       {emoji:'❌',txt:'Cancelado'},
+      };
+      var s = sInfo[os.status]||{emoji:'🔧',txt:os.status};
+
+      var corpo =
+        '<div class="alert alert-info">'+s.emoji+' '+s.txt+'</div>'+
+        '<div class="card" style="margin-bottom:.75rem"><div class="card-body">'+
+          '<div class="sec-title">Veículo</div>'+
+          '<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem">'+
+            '<span class="placa">'+(os.veiculos?os.veiculos.placa:'')+'</span>'+
+            '<span style="font-weight:600">'+(os.veiculos?(os.veiculos.marca||'')+' '+(os.veiculos.modelo||''):'')+' '+(os.veiculos?os.veiculos.ano||'':'')+'</span>'+
+          '</div>'+
+          (os.quilometragem_entrada ? '<div style="font-size:.78rem;color:var(--muted)">KM de entrada: '+Number(os.quilometragem_entrada).toLocaleString('pt-BR')+'</div>' : '')+
+        '</div></div>'+
+        (svcs.length ?
+          '<div class="card" style="margin-bottom:.75rem"><div class="card-hd"><div class="card-titulo">Serviços</div></div>'+
+          svcs.map(function(i){ return '<div class="os-item">'+
+            '<div style="display:flex;justify-content:space-between"><span style="font-weight:600">'+i.descricao+'</span><span style="font-weight:700;color:var(--green)">'+brl(i.valor_total)+'</span></div>'+
+          '</div>'; }).join('')+'</div>' : '')+
+        (pecs.length ?
+          '<div class="card" style="margin-bottom:.75rem"><div class="card-hd"><div class="card-titulo">Peças</div></div>'+
+          pecs.map(function(i){ return '<div class="os-item">'+
+            '<div style="display:flex;justify-content:space-between">'+
+              '<div><span style="font-weight:600">'+i.descricao+'</span>'+
+              (i.tipo_peca ? ' <span class="badge b-manut" style="font-size:.6rem">'+i.tipo_peca+'</span>' : '')+
+              '</div>'+
+              '<span style="font-weight:700;color:var(--green)">'+brl(i.valor_total)+'</span>'+
+            '</div>'+
+            '<div style="font-size:.72rem;color:var(--muted);margin-top:.15rem">'+i.quantidade+'x × '+brl(i.valor_unitario)+'</div>'+
+          '</div>'; }).join('')+'</div>' : '')+
+        (fotos.length ?
+          '<div class="card" style="margin-bottom:.75rem"><div class="card-hd"><div class="card-titulo">Fotos do diagnóstico</div></div>'+
+          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.35rem;padding:.75rem">'+
+          fotos.map(function(f){ return '<img src="data:image/jpeg;base64,'+f.foto_base64+'" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:.4rem;cursor:pointer" onclick="verFoto(this.src)">';}).join('')+
+          '</div></div>' : '')+
+        '<div style="background:var(--ink2);color:#fff;border-radius:var(--r);padding:1rem;text-align:right">'+
+          '<div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-bottom:.2rem">Total da OS</div>'+
+          '<div style="font-size:1.4rem;font-weight:800;color:var(--amber)">'+brl(os.valor_total)+'</div>'+
+        '</div>';
+
+      var tel = window._telOf||'';
+      var msgWA = 'Olá! Tenho dúvidas sobre a OS #'+os.numero+' do veículo '+(os.veiculos?os.veiculos.placa:'')+'.';
+      var rodape = tel ? '<a class="btn btn-wa btn-full" href="https://wa.me/55'+tel+'?text='+encodeURIComponent(msgWA)+'" target="_blank">Falar com a oficina</a>' : '';
+      rodape += '<button class="btn btn-secondary btn-full" onclick="fecharModal()">Fechar</button>';
+
+      abrirModal('OS #'+os.numero, corpo, rodape);
+    });
+}
+
+function verFoto(src){
+  abrirModal('Foto do diagnóstico','<img src="'+src+'" style="width:100%;border-radius:var(--r)">','<button class="btn btn-secondary btn-full" onclick="fecharModal()">Fechar</button>');
+}
+
+// ── PÁGINA HISTÓRICO ─────────────────────────────────────
+function pgHistorico(){
+  var el = document.getElementById('pg-historico');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div><span>Carregando...</span></div>';
+
+  if(!_veics.length){
+    el.innerHTML = '<div class="empty"><div class="empty-ico">🚗</div><div class="empty-msg">Nenhum veículo cadastrado.</div></div>';
+    return;
+  }
+
+  sb().from('ordens_servico')
+    .select('id,numero,status,valor_total,data_entrada,data_conclusao,garantia_dias,avaliacao,veiculos(placa,modelo,marca),os_itens(tipo,descricao,tipo_peca)')
+    .eq('cliente_id',_cli.id)
+    .order('data_entrada',{ascending:false})
+    .then(function(res){
+      var lista = res.data||[];
+
+      // Separar por veículo
+      var html = '';
+      _veics.forEach(function(v){
+        var osVeic = lista.filter(function(o){ return o.veiculos && o.veiculos.placa===v.placa; });
+        html +=
+          '<div class="card" style="margin-bottom:.75rem">'+
+            '<div class="card-hd">'+
+              '<div style="display:flex;align-items:center;gap:.6rem">'+
+                '<span class="placa">'+v.placa+'</span>'+
+                '<span style="font-weight:700;font-size:.88rem">'+(v.marca||'')+' '+(v.modelo||'')+'</span>'+
+              '</div>'+
+              '<span style="font-size:.72rem;color:var(--muted)">'+osVeic.length+' OS</span>'+
+            '</div>'+
+            (osVeic.length===0
+              ? '<div class="empty" style="padding:1.25rem"><div class="empty-msg">Sem histórico para este veículo.</div></div>'
+              : osVeic.map(function(os){
+                  var svcs = (os.os_itens||[]).filter(function(i){return i.tipo==='servico';});
+                  var tel = window._telOf||'';
+                  var msgRep = 'Olá! Gostaria de agendar novamente: '+(svcs.length?svcs[0].descricao:'serviço')+' para o veículo '+v.placa+'.';
+                  // Garantia
+                  var garantTxt = '';
+                  if(os.status==='pago' && os.garantia_dias && os.data_conclusao){
+                    var dtFim = new Date(os.data_conclusao);
+                    dtFim.setDate(dtFim.getDate()+(os.garantia_dias||90));
+                    var diff = Math.round((dtFim-new Date())/86400000);
+                    garantTxt = diff>0
+                      ? '<span style="font-size:.68rem;color:var(--green);font-weight:700">🛡 Garantia: '+diff+'d restantes</span>'
+                      : '<span style="font-size:.68rem;color:var(--muted2);font-weight:600">🛡 Garantia vencida</span>';
+                  }
+                  return '<div class="os-item">'+
+                    '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.3rem">'+
+                      '<div><div class="os-num">OS #'+os.numero+'</div><div class="os-data">'+dataBR(os.data_entrada)+'</div></div>'+
+                      '<span class="badge '+badgeStatus(os.status)+'">'+labelStatus(os.status)+'</span>'+
+                    '</div>'+
+                    svcs.map(function(i){ return '<div class="os-svc">🔧 '+i.descricao+'</div>'; }).join('')+
+                    '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.5rem">'+
+                      '<div>'+
+                        '<div style="font-weight:800;color:var(--green)">'+brl(os.valor_total)+'</div>'+
+                        (garantTxt?'<div style="margin-top:.18rem">'+garantTxt+'</div>':'')+
+                      '</div>'+
+                      '<div style="display:flex;gap:.35rem;align-items:center">'+
+                        (os.avaliacao ? '<div style="font-size:.82rem">★ '+os.avaliacao+'</div>' : '')+
+                        (os.status==='pago' && !os.avaliacao ? '<button class="btn btn-sm btn-secondary" onclick="avaliarOS(\''+os.id+'\',\''+os.numero+'\')">Avaliar</button>' : '')+
+                        (os.status==='pago' && tel ? '<a class="btn btn-sm btn-wa" href="https://wa.me/55'+tel+'?text='+encodeURIComponent(msgRep)+'" target="_blank">Repetir</a>' : '')+
+                      '</div>'+
+                    '</div>'+
+                  '</div>';
+                }).join('')
+            )+
+            '<div style="padding:.75rem 1rem;border-top:1px solid var(--border);display:flex;gap:.45rem;flex-wrap:wrap">'+
+              (window._telOf ? '<a class="btn btn-sm btn-primary" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent('Olá! Gostaria de solicitar revisão para o veículo *'+v.placa+'*.')+'" target="_blank">Solicitar revisão</a>' : '')+
+            '</div>'+
+          '</div>';
+      });
+
+      el.innerHTML = html || '<div class="empty"><div class="empty-ico">📋</div><div class="empty-msg">Sem histórico encontrado.</div></div>';
+    });
+}
+
+function badgeStatus(s){
+  var m = {na_fila:'b-fila',em_manutencao:'b-manut',aguardando_peca:'b-aguard',pronto_retirada:'b-pronto',pago:'b-pago',cancelado:'b-cancelado'};
+  return m[s]||'b-fila';
+}
+function labelStatus(s){
+  var m = {na_fila:'Na Fila',em_manutencao:'Em Manutenção',aguardando_peca:'Aguard. Peça',pronto_retirada:'Pronto',pago:'Concluído',cancelado:'Cancelado'};
+  return m[s]||s;
+}
+
+function avaliarOS(osId, num){
+  var corpo =
+    '<div style="text-align:center;padding:.5rem 0">'+
+      '<div style="font-weight:700;margin-bottom:.25rem">OS #'+num+'</div>'+
+      '<div style="font-size:.82rem;color:var(--muted);margin-bottom:.75rem">Como foi o serviço?</div>'+
+      '<div class="star-row" id="stars-'+osId+'">'+
+        [1,2,3,4,5].map(function(i){ return '<button class="star" onclick="selStar(\''+osId+'\','+i+')">★</button>'; }).join('')+
+      '</div>'+
+      '<textarea id="coment-'+osId+'" placeholder="Comentário opcional..." style="width:100%;padding:.65rem .85rem;border:1.5px solid var(--border);border-radius:var(--r);font-size:.88rem;font-family:var(--font);resize:none;min-height:72px;outline:none;margin-top:.5rem;transition:.2s" onfocus="this.style.borderColor=\'var(--amber)\'" onblur="this.style.borderColor=\'var(--border)\'"></textarea>'+
+    '</div>';
+  var rodape =
+    '<button class="btn btn-primary btn-full" onclick="enviarAval(\''+osId+'\')">Enviar Avaliação</button>'+
+    '<button class="btn btn-secondary btn-full" onclick="fecharModal()">Cancelar</button>';
+  abrirModal('Avaliar Serviço', corpo, rodape);
+}
+
+var _stars = {};
+function selStar(osId, nota){
+  _stars[osId] = nota;
+  var wrap = document.getElementById('stars-'+osId);
+  if(!wrap) return;
+  wrap.querySelectorAll('.star').forEach(function(b,i){ b.classList.toggle('on',i<nota); });
+}
+
+function enviarAval(osId){
+  var nota = _stars[osId];
+  if(!nota){ toast('Selecione uma nota','e'); return; }
+  var coment = (document.getElementById('coment-'+osId)||{}).value||'';
+  sb().from('ordens_servico').update({avaliacao:nota,comentario_avaliacao:coment.trim()}).eq('id',osId).then(function(res){
+    if(res.error){ toast('Erro ao enviar','e'); return; }
+    toast('Avaliação enviada! Obrigado ⭐');
+    fecharModal();
+    recarregarPagina('historico');
+  });
+}
+
+// ── PÁGINA AGENDAMENTO ───────────────────────────────────
+function pgAgendamento(){
+  var el = document.getElementById('pg-agendamento');
+
+  sb().from('servicos_publicos').select('id,nome,descricao,preco_de,preco_ate,tempo_medio_min').eq('ativo',true).order('ordem').then(function(res){
+    var servs = res.data||[];
+
+    var veicOpts = _veics.map(function(v){
+      return '<option value="'+v.id+'">'+v.placa+' — '+(v.marca||'')+' '+(v.modelo||'')+'</option>';
+    }).join('');
+
+    var servOpts = servs.map(function(s){
+      var preco = s.preco_de ? ' — a partir de '+brl(s.preco_de) : '';
+      return '<option value="'+s.id+'">'+s.nome+preco+'</option>';
+    }).join('');
+
+    // Calcular data mínima (amanhã)
+    var amanha = new Date(); amanha.setDate(amanha.getDate()+1);
+    var dataMin = amanha.toISOString().substring(0,10);
+
+    el.innerHTML =
+      '<div class="card" style="margin-bottom:.75rem">'+
+        '<div class="card-hd"><div class="card-titulo">Novo Agendamento</div></div>'+
+        '<div class="card-body agend-form">'+
+          '<div id="agend-msg"></div>'+
+          (_veics.length===0
+            ? '<div class="alert alert-warning">Você não tem veículos cadastrados. Fale com a oficina para cadastrar.</div>'
+            : '')+
+          '<div class="form-group">'+
+            '<label>Veículo</label>'+
+            '<select id="ag-veic">'+
+              '<option value="">Selecione o veículo...</option>'+veicOpts+
+            '</select>'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<label>Serviço desejado</label>'+
+            '<select id="ag-serv">'+
+              '<option value="">Selecione o serviço...</option>'+servOpts+
+              '<option value="outro">Outro / Não sei ainda</option>'+
+            '</select>'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<label>Data preferida</label>'+
+            '<input type="date" id="ag-data" min="'+dataMin+'" value="'+dataMin+'">'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<label>Horário preferido</label>'+
+            '<select id="ag-hora">'+
+              '<option value="manha">Manhã (8h–12h)</option>'+
+              '<option value="tarde">Tarde (13h–17h)</option>'+
+              '<option value="qualquer">Qualquer horário</option>'+
+            '</select>'+
+          '</div>'+
+          '<div class="form-group">'+
+            '<label>Descreva o problema ou o que deseja fazer</label>'+
+            '<textarea id="ag-desc" placeholder="Ex: Carro fazendo barulho ao frear, quero trocar o óleo..."></textarea>'+
+          '</div>'+
+          '<button class="btn btn-primary btn-full btn-lg" onclick="enviarAgendamento()" id="btn-ag">Solicitar Agendamento</button>'+
+          '<div style="font-size:.72rem;color:var(--muted);margin-top:.5rem;text-align:center">A oficina entrará em contato para confirmar data e horário.</div>'+
+        '</div>'+
+      '</div>'+
+
+      // Agendamentos existentes
+      '<div id="meus-agend"></div>';
+
+    carregarMeusAgend();
+  });
+}
+
+function carregarMeusAgend(){
+  var el = document.getElementById('meus-agend');
+  if(!el) return;
+  sb().from('agendamentos').select('*,veiculos(placa,modelo,marca)').eq('cliente_id',_cli.id).order('data_desejada',{ascending:false}).limit(5).then(function(res){
+    var lista = res.data||[];
+    if(!lista.length){ el.innerHTML=''; return; }
+    var html = '<div class="sec-title" style="margin:0 0 .65rem">Meus agendamentos</div>';
+    lista.forEach(function(ag){
+      var corStatus = {pendente:'var(--amber)',confirmado:'var(--green)',cancelado:'var(--muted2)'};
+      html +=
+        '<div class="card" style="margin-bottom:.5rem">'+
+          '<div class="card-body">'+
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+              '<div>'+
+                '<div style="font-weight:700">'+(ag.servico_nome||'Serviço')+'</div>'+
+                '<div style="font-size:.75rem;color:var(--muted);margin-top:.15rem">'+
+                  (ag.veiculos?ag.veiculos.placa+' — '+(ag.veiculos.modelo||''):'')+'<br>'+
+                  dataBR(ag.data_desejada)+(ag.hora_preferida?' · '+{manha:'Manhã',tarde:'Tarde',qualquer:'Qualquer horário'}[ag.hora_preferida]:'')+
+                '</div>'+
+              '</div>'+
+              '<span style="font-size:.7rem;font-weight:800;color:'+(corStatus[ag.status]||'var(--muted)')+';text-transform:uppercase;letter-spacing:.06em">'+ag.status+'</span>'+
+            '</div>'+
+            (ag.observacoes_oficina ? '<div class="alert alert-info" style="margin-top:.6rem;padding:.5rem .75rem;font-size:.78rem">'+ag.observacoes_oficina+'</div>' : '')+
+          '</div>'+
+        '</div>';
+    });
+    el.innerHTML = html;
+  });
+}
+
+function enviarAgendamento(){
+  var veicId = document.getElementById('ag-veic').value;
+  var servId = document.getElementById('ag-serv').value;
+  var data   = document.getElementById('ag-data').value;
+  var hora   = document.getElementById('ag-hora').value;
+  var desc   = document.getElementById('ag-desc').value.trim();
+  var msg    = document.getElementById('agend-msg');
+
+  if(!veicId){ toast('Selecione o veículo','e'); return; }
+  if(!servId){ toast('Selecione o serviço','e'); return; }
+  if(!data)  { toast('Selecione uma data','e'); return; }
+
+  var servSel = document.getElementById('ag-serv');
+  var servNome = servSel.options[servSel.selectedIndex].text.split(' — ')[0];
+  var veicSel  = document.getElementById('ag-veic');
+  var veicInfo = veicSel.options[veicSel.selectedIndex].text;
+
+  var btn = document.getElementById('btn-ag');
+  btn.disabled = true; btn.textContent = 'Enviando...';
+
+  sb().from('agendamentos').insert({
+    cliente_id:    _cli.id,
+    veiculo_id:    veicId,
+    servico_id:    servId!=='outro' ? servId : null,
+    servico_nome:  servNome,
+    data_desejada: data,
+    hora_preferida:hora,
+    descricao:     desc||null,
+    status:        'pendente'
+  }).then(function(res){
+    btn.disabled = false; btn.textContent = 'Solicitar Agendamento';
+    if(res.error){ toast('Erro ao enviar: '+res.error.message,'e'); return; }
+
+    // Notificar via WA se tiver telefone da oficina
+    var tel = window._telOf||'';
+    if(tel){
+      var msgOf = '[Agendamento via Portal] Cliente: '+_cli.nome+' ('+_cli.cpf+') solicitou '+servNome+' para o veículo '+veicInfo+' em '+dataBR(data)+'. Contato: '+(_cli.telefone||'não informado')+(desc?'. Obs: '+desc:'');
+      // Abre WA automaticamente para notificar a oficina
+      window.open('https://wa.me/55'+tel+'?text='+encodeURIComponent(msgOf),'_blank');
+    }
+
+    msg.innerHTML = '<div class="agend-status ok">✅ Agendamento solicitado! A oficina entrará em contato para confirmar.</div>';
+    document.getElementById('ag-veic').value = '';
+    document.getElementById('ag-serv').value = '';
+    document.getElementById('ag-desc').value = '';
+    recarregarPagina('agendamento');
+    toast('Agendamento enviado!');
+  });
+}
+
+// ── PÁGINA PONTOS ────────────────────────────────────────
+function pgPontos(){
+  var el = document.getElementById('pg-pontos');
+  el.innerHTML = '<div class="loading"><div class="spinner"></div><span>Carregando...</span></div>';
+
   Promise.all([
     sb().from('recompensas_config').select('*').limit(1),
     sb().from('recompensas_catalogo').select('*').eq('ativo',true).order('pontos_necessarios'),
-    sb().from('recompensas_resgates').select('pontos_usados,created_at,recompensas_catalogo(nome)').eq('cliente_id',cli.id).order('created_at',{ascending:false})
+    sb().from('recompensas_resgates').select('pontos_usados,created_at,recompensas_catalogo(nome)').eq('cliente_id',_cli.id).order('created_at',{ascending:false}),
+    sb().from('clientes').select('total_gasto').eq('id',_cli.id).single()
   ]).then(function(results){
-    var cfg      = results[0].data?.[0] || {pontos_por_real:1, nivel_prata:500, nivel_ouro:1500};
+    var cfg      = results[0].data?.[0] || {pontos_por_real:1,nivel_prata:500,nivel_ouro:1500};
     var catalogo = results[1].data||[];
     var resgates = results[2].data||[];
+    var totalGasto = Number((results[3].data||{}).total_gasto||0);
 
-    var ganhos  = Math.floor(Number(cli.total_gasto||0) * Number(cfg.pontos_por_real||1));
+    var ganhos  = Math.floor(totalGasto * Number(cfg.pontos_por_real||1));
     var usados  = resgates.reduce(function(s,r){return s+Number(r.pontos_usados||0);},0);
-    var saldo   = Math.max(0, ganhos - usados);
+    var saldo   = Math.max(0,ganhos-usados);
     var nivelPrata = Number(cfg.nivel_prata||500);
     var nivelOuro  = Number(cfg.nivel_ouro||1500);
-    var nivel   = saldo >= nivelOuro ? 'Ouro' : saldo >= nivelPrata ? 'Prata' : 'Bronze';
-    var nivelCls= nivel.toLowerCase();
-
-    // Barra de progresso
-    var proximo = nivel==='Ouro' ? nivelOuro : nivel==='Prata' ? nivelOuro : nivelPrata;
-    var base    = nivel==='Ouro' ? nivelPrata : 0;
-    var pct     = Math.min(100, Math.round((saldo - base) / (proximo - base) * 100));
-    var faltam  = Math.max(0, proximo - saldo);
-
-    var barraHtml = nivel==='Ouro'
-      ? '<div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-top:.75rem">Nível máximo atingido! 🏆</div>'
-      : '<div class="pts-barra-wrap"><div class="pts-barra" style="width:'+pct+'%"></div></div>'+
-        '<div class="pts-barra-info">'+
-        '<span>'+saldo+' pts</span>'+
-        '<span>Faltam '+faltam+' para '+( nivel==='Bronze'?'Prata':'Ouro')+'</span>'+
-        '</div>';
-
-    // Catálogo
-    var catHtml = catalogo.map(function(b){
-      var disp = saldo >= b.pontos_necessarios;
-      return '<div class="beneficio-card '+(disp?'disponivel':'bloqueado')+'">'+
-        '<div class="beneficio-icon">'+(disp?'🎁':'🔒')+'</div>'+
-        '<div style="flex:1">'+
-        '<div class="beneficio-nome">'+b.nome+'</div>'+
-        (b.descricao?'<div style="font-size:.73rem;color:var(--muted)">'+b.descricao+'</div>':'')+
-        '</div>'+
-        '<div class="beneficio-pts '+(disp?'ok':'no')+'">'+
-        b.pontos_necessarios+' pts'+
-        (disp?'<br><span style="font-size:.68rem">Disponível!</span>':'<br><span style="font-size:.68rem">Faltam '+(b.pontos_necessarios-saldo)+'</span>')+
-        '</div>'+
-        '</div>';
-    }).join('');
-
-    // Histórico de resgates
-    var histHtml = resgates.length===0
-      ? '<div style="font-size:.8rem;color:var(--muted);text-align:center;padding:.75rem">Nenhum resgate ainda.</div>'
-      : resgates.map(function(r){
-          return '<div style="display:flex;justify-content:space-between;font-size:.8rem;padding:.45rem 0;border-bottom:1px solid var(--border)">'+
-            '<span>'+( r.recompensas_catalogo?.nome||'—')+'</span>'+
-            '<span style="color:var(--red);font-weight:700">-'+r.pontos_usados+' pts</span>'+
-            '</div>';
-        }).join('');
+    var nivel   = saldo>=nivelOuro?'Ouro':saldo>=nivelPrata?'Prata':'Bronze';
+    var proximo = nivel==='Ouro'?nivelOuro:nivel==='Prata'?nivelOuro:nivelPrata;
+    var base    = nivel==='Ouro'?nivelPrata:0;
+    var pct     = nivel==='Ouro'?100:Math.min(100,Math.round((saldo-base)/(proximo-base)*100));
+    var faltam  = Math.max(0,proximo-saldo);
 
     var html =
-      '<div class="pts-card">'+
-      '<div class="pts-valor">'+saldo+'</div>'+
-      '<div class="pts-label">Pontos disponíveis</div>'+
-      '<span class="pts-nivel '+nivelCls+'">'+(nivel==='Bronze'?'🥉':nivel==='Prata'?'🥈':'🥇')+' '+nivel+'</span>'+
-      barraHtml+
-      '</div>';
+      '<div class="pts-hero">'+
+        '<div class="pts-num">'+saldo+'</div>'+
+        '<div class="pts-label">pontos disponíveis</div>'+
+        '<div class="nivel-badge nivel-'+nivel.toLowerCase()+'">'+
+          {Bronze:'🥉',Prata:'🥈',Ouro:'🥇'}[nivel]+' '+nivel+
+        '</div>'+
+        (nivel!=='Ouro' ?
+          '<div class="pts-barra-wrap"><div class="pts-barra" style="width:'+pct+'%"></div></div>'+
+          '<div class="pts-barra-info"><span>'+saldo+' pts</span><span>Faltam '+faltam+' para '+{Bronze:'Prata',Prata:'Ouro'}[nivel]+'</span></div>'
+          : '<div style="font-size:.72rem;color:rgba(255,255,255,.35);margin-top:.65rem">Nível máximo atingido! 🏆</div>'+
+            '<div class="pts-barra-wrap"><div class="pts-barra" style="width:100%"></div></div>'
+        )+
+      '</div>'+
 
-    if(catalogo.length){
-      html += '<div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin-bottom:.5rem">Benefícios disponíveis</div>'+catHtml;
-    }
+      (catalogo.length ?
+        '<div class="sec-title">Benefícios disponíveis</div>'+
+        '<div class="card" style="margin-bottom:.75rem">'+
+          catalogo.map(function(b){
+            var disp = saldo>=b.pontos_necessarios;
+            return '<div class="beneficio-card '+(disp?'disp':'')+'">'+
+              '<div class="beneficio-ico">'+(disp?'🎁':'🔒')+'</div>'+
+              '<div style="flex:1">'+
+                '<div class="beneficio-nome">'+b.nome+'</div>'+
+                (b.descricao?'<div class="beneficio-desc">'+b.descricao+'</div>':'')+
+              '</div>'+
+              '<div class="beneficio-pts '+(disp?'ok':'no')+'">'+
+                b.pontos_necessarios+' pts'+
+                (disp ? '<br><span style="font-size:.65rem">✓ Disponível</span>' : '<br><span style="font-size:.65rem">Faltam '+(b.pontos_necessarios-saldo)+'</span>')+
+              '</div>'+
+            '</div>';
+          }).join('')+
+        '</div>' : '')+
 
-    if(resgates.length){
-      html += '<div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin:.85rem 0 .5rem">Histórico de resgates</div>'+
-        '<div class="card" style="padding:.5rem 1rem">'+histHtml+'</div>';
-    }
+      '<div style="background:var(--bg2);border-radius:var(--r);padding:.85rem 1rem;font-size:.78rem;color:var(--muted)">'+
+        '💡 Você ganha <strong>'+(cfg.pontos_por_real||1)+' ponto(s)</strong> a cada R$ 1,00 gasto na oficina. '+
+        'Para resgatar seus benefícios, fale com a recepção.'+
+      '</div>'+
 
-    html += '<div style="font-size:.75rem;color:var(--muted);text-align:center;margin-top:1rem">'+
-      'Você ganhou '+ganhos+' pontos no total. '+(ganhos>0?'Continue usando nossos serviços!':'Traga seu veículo e comece a acumular!')+
-      '</div>';
-
-    var el = document.getElementById('c-recomp');
-    if(el) el.innerHTML = html;
-  });
-}
-function abrirVeiculoPorOS(osId){
-  sb().from('ordens_servico').select('veiculo_id,veiculos(*),clientes(*)').eq('id',osId).single().then(function(res){
-    if(res.data && res.data.veiculos) abrirVeiculo(res.data.veiculos, res.data.clientes);
-  });
-}
-
-// TELA VEÍCULO
-var _veicAtual = null;
-
-function abrirVeiculo(veic, cli){
-  _veicAtual = veic;
-  _clienteAtual = cli||_clienteAtual;
-  var primeiroNome = (_clienteAtual && _clienteAtual.nome) ? _clienteAtual.nome.split(' ')[0] : 'Voltar';
-  document.getElementById('back-label').textContent = primeiroNome;
-  var el = document.getElementById('veiculo-content');
-  el.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  document.getElementById('tela-busca').classList.add('hidden');
-  document.getElementById('tela-cliente').classList.add('hidden');
-  document.getElementById('tela-veiculo').classList.remove('hidden');
-  window.scrollTo(0,0);
-  renderVeiculo(el, veic, _clienteAtual);
-}
-
-function renderVeiculo(el, veic, cli){
-  Promise.all([
-    sb().from('ordens_servico').select('*,os_itens(*)').eq('veiculo_id',veic.id).order('data_entrada',{ascending:false}),
-    sb().from('plano_preventivo').select('*').eq('veiculo_id',veic.id).order('proxima_revisao'),
-    sb().from('configuracoes').select('chave,valor')
-  ]).then(function(results){
-    var osList  = results[0].data||[];
-    var prevList= results[1].data||[];
-    var cfgArr  = results[2].data||[];
-    var cfg = {};
-    cfgArr.forEach(function(c){ cfg[c.chave]=c.valor; });
-    var nomeOf = cfg['nome_mecanica']||'Oficina';
-    var telOf  = (cfg['telefone_mecanica']||'').replace(/\D/g,'');
-
-    var osAtiva = osList.find(function(o){ return ['na_fila','em_manutencao','aguardando_peca','pronto_retirada'].indexOf(o.status)>=0; });
-
-    var statusInfo = {
-      'na_fila':        {emoji:'🕐',txt:'Na Fila',              desc:'Seu veículo está na fila de atendimento.',cls:'na_fila'},
-      'em_manutencao':  {emoji:'🔧',txt:'Em Manutenção',        desc:'Nossos mecânicos estão trabalhando agora.',cls:'em_manutencao'},
-      'aguardando_peca':{emoji:'⏳',txt:'Aguardando Peça',      desc:'Aguardando chegada de uma peça.',cls:'aguardando_peca'},
-      'pronto_retirada':{emoji:'✅',txt:'Pronto para Retirada!',desc:'Seu veículo está pronto. Pode vir buscar!',cls:'pronto_retirada'}
-    };
-
-    var html = '';
-
-    // Card do veículo
-    html += '<div class="card" style="margin-bottom:.8rem">'+
-      '<div class="card-body">'+
-      '<div style="display:flex;align-items:center;gap:.85rem">'+
-      '<div class="placa-display">'+veic.placa+'</div>'+
-      '<div>'+
-      '<div style="font-weight:800;font-size:1rem">'+(veic.marca||'')+' '+(veic.modelo||'')+'</div>'+
-      '<div style="font-size:.75rem;color:var(--muted);margin-top:.1rem;font-weight:500">'+
-      (veic.ano||'')+(veic.cor?' · '+veic.cor:'')+(veic.combustivel?' · '+veic.combustivel:'')+
-      '</div></div></div>'+
-      '</div></div>';
-
-    // Status OS ativa
-    if(osAtiva){
-      var s = statusInfo[osAtiva.status]||{emoji:'🔧',txt:osAtiva.status,desc:'',cls:''};
-      html += '<div class="status-box '+s.cls+'">'+
-        '<div class="status-emoji">'+s.emoji+'</div>'+
-        '<div class="s-titulo">'+s.txt+'</div>'+
-        '<div class="s-sub">'+s.desc+'</div>'+
-        (osAtiva.data_previsao?'<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">Previsão: '+dataBR(osAtiva.data_previsao)+'</div>':'')+
-        '<div style="font-size:.72rem;color:var(--muted);margin-top:.2rem">OS '+osAtiva.numero+'</div>'+
-        '</div>';
-    }
-
-    // WhatsApp agendar
-    if(telOf){
-      var msgWA = 'Olá '+nomeOf+'! Gostaria de agendar uma revisão para o veículo '+veic.placa+(veic.marca?' ('+veic.marca+' '+veic.modelo+')':'')+'.'
-      html += '<a class="btn btn-whatsapp btn-full btn-lg" style="margin-bottom:.85rem" href="https://wa.me/55'+telOf+'?text='+encodeURIComponent(msgWA)+'" target="_blank">Agendar Revisão via WhatsApp</a>';
-    }
-
-    // TABS
-    html += '<div class="tabs">'+
-      '<button class="tab active" onclick="swTab(\'t-hist\',this)">Histórico</button>'+
-      '<button class="tab" onclick="swTab(\'t-prev\',this)">Preventivo</button>'+
-      '<button class="tab" onclick="swTab(\'t-gar\',this)">Garantias</button>'+
-      '<button class="tab" onclick="swTab(\'t-aval\',this)">Avaliar</button>'+
-      '</div>';
-
-    // TAB GARANTIAS
-    var hoje2 = new Date();
-    var osComGarantia = osList.filter(function(o){ return o.status==='pago' && o.garantia_dias; });
-    var garHtml = '';
-    if(!osComGarantia.length){
-      garHtml = '<div class="empty"><div class="empty-icon">🛡️</div><div class="empty-msg">Nenhuma garantia ativa encontrada.</div></div>';
-    } else {
-      osComGarantia.forEach(function(os){
-        var dtPag = new Date(os.data_pagamento||os.data_entrada||os.created_at||Date.now());
-        var dtFim = new Date(dtPag); dtFim.setDate(dtFim.getDate()+(os.garantia_dias||90));
-        var diffDias = Math.round((dtFim - hoje2)/86400000);
-        var ativa = diffDias >= 0;
-        garHtml += '<div class="garantia-card'+(ativa?'':' vencida')+'">'+
-          '<div class="garantia-icon">'+(ativa?'🛡️':'❌')+'</div>'+
-          '<div style="flex:1">'+
-          '<div class="garantia-os">OS '+os.numero+(ativa?' — Em vigor':' — Encerrada')+'</div>'+
-          '<div class="garantia-validade">'+(ativa?'Válida até ':' Expirou em ')+dtFim.toLocaleDateString('pt-BR')+' ('+( os.garantia_dias||90)+' dias)</div>'+
-          (ativa && window._telOf?'<a class="btn btn-secondary btn-sm" style="margin-top:.45rem;display:inline-flex" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent('Olá! Meu veículo '+veic.placa+' está na garantia (OS '+os.numero+') e gostaria de acionar.')+'" target="_blank">Acionar garantia</a>':'')+
-          '</div></div>';
-      });
-    }
-
-    // TAB HISTÓRICO
-    var badgeMap = {'na_fila':'b-fila','em_manutencao':'b-manut','aguardando_peca':'b-aguard','pronto_retirada':'b-pronto','pago':'b-pago','cancelado':'b-cancelado'};
-    var labelMap = {'na_fila':'Na Fila','em_manutencao':'Em Manutenção','aguardando_peca':'Aguard. Peça','pronto_retirada':'Pronto','pago':'Pago','cancelado':'Cancelado'};
-
-    var histHtml = '';
-    if(!osList.length){
-      histHtml = '<div class="empty"><div class="empty-icon">📋</div><div class="empty-msg">Nenhuma OS encontrada para este veículo.</div></div>';
-    } else {
-      osList.forEach(function(os){
-        var svcs = (os.os_itens||[]).filter(function(i){return i.tipo==='servico';});
-        var pecs = (os.os_itens||[]).filter(function(i){return i.tipo==='peca';});
-        var svcsDesc = svcs.map(function(i){return i.descricao;}).join(', ');
-        var waHistMsg = svcsDesc
-          ? 'Olá! Fiz um serviço anteriormente ('+svcsDesc+') e gostaria de agendar novamente para o veículo *'+veic.placa+'*. Podem me passar disponibilidade?'
-          : 'Olá! Gostaria de agendar um serviço para o veículo *'+veic.placa+'*. Podem me passar disponibilidade?';
-        histHtml += '<div class="os-item">'+
-          '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.4rem">'+
-          '<div><div class="os-num">OS '+os.numero+'</div>'+
-          '<div class="os-data">'+dataBR(os.data_entrada)+'</div></div>'+
-          '<span class="badge '+(badgeMap[os.status]||'')+'">'+((labelMap[os.status])||os.status)+'</span>'+
-          '</div>'+
-          (svcs.length?svcs.map(function(i){return '<div class="os-serv-row">🔧 '+i.descricao+'</div>';}).join(''):'')+
-          (pecs.length?pecs.map(function(i){
-            var tipoBadge = i.tipo_peca ? ' <span style="font-size:.65rem;background:#dbeafe;color:#1d4ed8;padding:.12rem .4rem;border-radius:999px;font-weight:700">'+i.tipo_peca+'</span>' : '';
-            return '<div class="os-serv-row">🔩 '+i.descricao+tipoBadge+'</div>';
-          }).join(''):'')+
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.65rem">'+
-          '<div class="os-total">'+brl(os.valor_total)+'</div>'+
-          '<div style="display:flex;align-items:center;gap:.5rem">'+
-          (os.avaliacao?'<div style="font-size:.85rem">'+'★'.repeat(os.avaliacao)+'</div>':'')+
-          (os.status==='pago' && window._telOf?'<a class="btn btn-whatsapp btn-sm" style="font-size:.7rem;padding:.28rem .6rem" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent(waHistMsg)+'" target="_blank">Repetir</a>':'')+
-          '</div></div></div>';
-      });
-    }
-
-    // TAB PREVENTIVO
-    var prevHtml = '';
-    if(!prevList.length){
-      prevHtml = '<div class="empty"><div class="empty-icon">🛡️</div><div class="empty-msg">Nenhum item no plano preventivo.</div></div>';
-    } else {
-      var hojeDate = new Date(hoje());
-      prevList.forEach(function(p){
-        var cor='var(--green)', txt='Em dia', badgeCls='b-pronto';
-        if(p.proxima_revisao){
-          var d = new Date(p.proxima_revisao);
-          var diff = Math.round((d-hojeDate)/86400000);
-          if(diff<0)    { cor='var(--red)';   txt=Math.abs(diff)+'d atrasado'; badgeCls='b-cancelado'; }
-          else if(diff<=30){ cor='var(--amber)'; txt='Vence em '+diff+'d';   badgeCls='b-aguard'; }
-          else          { cor='var(--green)'; txt='OK';                      badgeCls='b-pronto'; }
-        }
-        prevHtml += '<div class="prev-item">'+
-          '<div class="prev-dot" style="background:'+cor+'"></div>'+
-          '<div style="flex:1">'+
-          '<div class="prev-nome">'+p.item+'</div>'+
-          '<div class="prev-data">Última: '+dataBR(p.ultima_revisao)+' · Próxima: '+dataBR(p.proxima_revisao)+'</div>'+
-          '</div>'+
-          '<span class="badge '+badgeCls+'" style="margin-left:.5rem">'+txt+'</span>'+
-          '</div>';
-      });
-    }
-    if(telOf){
-      prevHtml += '<div style="padding:.85rem 1.1rem;border-top:1px solid var(--border)">'+
-        '<a class="btn btn-whatsapp btn-full" href="https://wa.me/55'+telOf+'?text='+encodeURIComponent('Olá! Gostaria de agendar a revisão do veículo '+veic.placa+'.')+'" target="_blank">Agendar Revisão via WhatsApp</a>'+
-        '</div>';
-    }
-
-    // TAB AVALIAR
-    var osSemAval = osList.filter(function(o){ return o.status==='pago'&&!o.avaliacao; });
-    var avalHtml = '';
-    if(!osSemAval.length){
-      avalHtml = '<div class="empty"><div class="empty-icon">⭐</div><div class="empty-msg">Nenhuma OS pendente de avaliação.<br>Obrigado pelo seu feedback!</div></div>';
-    } else {
-      osSemAval.forEach(function(os){
-        avalHtml += '<div style="padding:.9rem;border:1.5px solid var(--border);border-radius:.65rem;margin-bottom:.65rem">'+
-          '<div style="font-weight:800;font-size:.9rem;margin-bottom:.1rem">OS '+os.numero+'</div>'+
-          '<div style="font-size:.73rem;color:var(--muted);margin-bottom:.65rem;font-weight:500">'+dataBR(os.data_conclusao||os.data_entrada)+'</div>'+
-          '<div style="font-size:.82rem;font-weight:700;text-align:center;margin-bottom:.35rem">Como foi o serviço?</div>'+
-          '<div class="star-wrap" id="stars-'+os.id+'">'+
-          [1,2,3,4,5].map(function(i){ return '<button class="star-btn" onclick="selecionarStar(\''+os.id+'\','+i+')">★</button>'; }).join('')+
-          '</div>'+
-          '<textarea id="coment-'+os.id+'" placeholder="Comentário opcional..." style="width:100%;padding:.6rem .85rem;border:1.5px solid var(--border);border-radius:.55rem;font-size:.85rem;font-family:inherit;resize:none;min-height:68px;outline:none;margin-bottom:.5rem;transition:.2s" onfocus="this.style.borderColor=\'var(--amber)\'" onblur="this.style.borderColor=\'var(--border)\'"></textarea>'+
-          '<button class="btn btn-primary btn-full" onclick="enviarAval(\''+os.id+'\')">Enviar Avaliação</button>'+
-          '</div>';
-      });
-    }
-
-    html += '<div id="t-hist" class="tab-content active"><div class="card">'+histHtml+'</div></div>'+
-            '<div id="t-prev" class="tab-content"><div class="card">'+prevHtml+'</div></div>'+
-            '<div id="t-gar"  class="tab-content">'+garHtml+'</div>'+
-            '<div id="t-aval" class="tab-content">'+avalHtml+'</div>';
-
-    html += '<div class="footer">'+nomeOf+'</div>';
+      (resgates.length ?
+        '<div class="sec-title" style="margin-top:.85rem">Histórico de resgates</div>'+
+        '<div class="card">'+
+          resgates.map(function(r){
+            return '<div class="os-item">'+
+              '<div style="display:flex;justify-content:space-between">'+
+                '<span style="font-weight:600">'+(r.recompensas_catalogo?r.recompensas_catalogo.nome:'—')+'</span>'+
+                '<span style="color:var(--red);font-weight:700">-'+r.pontos_usados+' pts</span>'+
+              '</div>'+
+              '<div class="os-data">'+dataBR((r.created_at||'').substring(0,10))+'</div>'+
+            '</div>';
+          }).join('')+
+        '</div>' : '');
 
     el.innerHTML = html;
   });
 }
 
-function swTab(id, btn){
-  document.querySelectorAll('#veiculo-content .tab-content').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('#veiculo-content .tab').forEach(function(t){t.classList.remove('active');});
-  var el = document.getElementById(id);
-  if(el) el.classList.add('active');
-  btn.classList.add('active');
-}
+// ── PÁGINA PERFIL ────────────────────────────────────────
+function pgPerfil(){
+  var el = document.getElementById('pg-perfil');
+  var nome = _cli.nome||'—';
+  var primeiroNome = nome.split(' ')[0];
 
-// AVALIAÇÃO
-var _stars = {};
-function selecionarStar(osId, nota){
-  _stars[osId] = nota;
-  var wrap = document.getElementById('stars-'+osId);
-  if(!wrap) return;
-  wrap.querySelectorAll('.star-btn').forEach(function(btn,i){ btn.classList.toggle('ativo', i<nota); });
-}
+  el.innerHTML =
+    '<div class="card" style="margin-bottom:.75rem">'+
+      '<div class="card-body" style="text-align:center;padding:1.5rem 1rem">'+
+        '<div class="perfil-avatar">'+primeiroNome.charAt(0).toUpperCase()+'</div>'+
+        '<div style="font-size:1.05rem;font-weight:800;letter-spacing:-.02em">'+nome+'</div>'+
+        '<div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;font-family:var(--mono)">'+(_cli.cpf||'')+'</div>'+
+      '</div>'+
+      '<div style="padding:.25rem 1rem .75rem">'+
+        '<div class="info-row"><span class="info-lbl">Telefone</span><span class="info-val">'+(_cli.telefone||'—')+'</span></div>'+
+        '<div class="info-row"><span class="info-lbl">E-mail</span><span class="info-val">'+(_cli.email||'—')+'</span></div>'+
+        '<div class="info-row"><span class="info-lbl">Total gasto</span><span class="info-val" style="color:var(--green)">'+brl(_cli.total_gasto||0)+'</span></div>'+
+        '<div class="info-row"><span class="info-lbl">Última visita</span><span class="info-val">'+dataBR(_cli.ultima_visita)+'</span></div>'+
+        '<div class="info-row"><span class="info-lbl">Status</span><span class="info-val"><span class="badge b-'+(_cli.status||'novo')+'">'+(_cli.status||'Novo').toUpperCase()+'</span></span></div>'+
+        '<div class="info-row"><span class="info-lbl">Veículos</span><span class="info-val">'+_veics.length+'</span></div>'+
+      '</div>'+
+    '</div>'+
 
-function enviarAval(osId){
-  var nota = _stars[osId];
-  if(!nota){ toast('Selecione uma nota de 1 a 5 estrelas','error'); return; }
-  var coment = document.getElementById('coment-'+osId)?document.getElementById('coment-'+osId).value.trim():'';
-  sb().from('ordens_servico').update({avaliacao:nota,comentario_avaliacao:coment}).eq('id',osId).then(function(res){
-    if(res.error){ toast('Erro ao enviar','error'); return; }
-    toast('Avaliação enviada! Obrigado');
-    if(_veicAtual) renderVeiculo(document.getElementById('veiculo-content'),_veicAtual,_clienteAtual);
-  });
-}
+    (_veics.length ?
+      '<div class="sec-title">Meus veículos</div>'+
+      _veics.map(function(v){
+        return '<div class="card" style="margin-bottom:.5rem">'+
+          '<div class="card-body">'+
+            '<div style="display:flex;align-items:center;gap:.65rem">'+
+              '<span class="placa">'+v.placa+'</span>'+
+              '<div>'+
+                '<div style="font-weight:700">'+(v.marca||'')+' '+(v.modelo||'')+'</div>'+
+                '<div style="font-size:.72rem;color:var(--muted)">'+(v.ano||'')+' · '+(v.cor||'')+' · '+(v.combustivel||'')+'</div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>';
+      }).join('') : '')+
 
-// NAVEGAÇÃO
-function voltarBusca(){
-  document.getElementById('tela-busca').classList.remove('hidden');
-  document.getElementById('tela-cliente').classList.add('hidden');
-  document.getElementById('tela-veiculo').classList.add('hidden');
-  document.getElementById('busca-resultado').innerHTML='';
-  document.getElementById('busca-input').value='';
-  window.scrollTo(0,0);
-}
+    '<div class="alert alert-info">Para atualizar seus dados ou cadastrar um novo veículo, entre em contato com a oficina.</div>'+
 
-function voltarCliente(){
-  if(_clienteAtual){
-    document.getElementById('tela-busca').classList.add('hidden');
-    document.getElementById('tela-cliente').classList.remove('hidden');
-    document.getElementById('tela-veiculo').classList.add('hidden');
-    // Recarregar tela cliente
-    mostrarCliente(_clienteAtual);
-  } else {
-    voltarBusca();
-  }
-  window.scrollTo(0,0);
+    (window._telOf ?
+      '<a class="btn btn-wa btn-full btn-lg" href="https://wa.me/55'+window._telOf+'?text='+encodeURIComponent('Olá! Sou '+(_cli.nome||'')+' (CPF: '+(_cli.cpf||'')+') e gostaria de atualizar meus dados cadastrais.')+'" target="_blank">'+
+        'Falar com a oficina'+
+      '</a>' : '')+
+
+    '<button class="btn btn-danger btn-full" style="margin-top:.65rem" onclick="sair()">Sair da conta</button>';
 }
 </script>
 </body>
