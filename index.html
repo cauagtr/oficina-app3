@@ -444,7 +444,16 @@ var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 var LANDING_URL = './landing_oficina.html'; // URL da vitrine pública
 
 var _sb = null;
-function sb(){ if(!_sb) _sb = supabase.createClient(SUPA_URL, SUPA_KEY); return _sb; }
+function sb(){
+  if(!_sb) _sb = supabase.createClient(SUPA_URL, SUPA_KEY, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+  return _sb;
+}
 
 // Estado global
 var _cli = null;
